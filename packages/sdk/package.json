@@ -1,0 +1,32 @@
+{
+  "name": "@lootexchange/sdk",
+  "version": "0.0.1",
+  "description": "Loot Exchange SDK",
+  "keywords": [
+    "ethereum",
+    "exchange",
+    "loot",
+    "sdk"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist && rm tsconfig.tsbuildinfo",
+    "prepublishOnly": "yarn clean && yarn build"
+  },
+  "dependencies": {
+    "ethers": "^5.4.6"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.1",
+    "typescript": "^4.4.3"
+  }
+}

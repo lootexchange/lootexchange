@@ -1,0 +1,15 @@
+{
+  "name": "@lootexchange/monorepo",
+  "private": true,
+  "description": "Loot Exchange monorepo",
+  "license": "MIT",
+  "workspaces": [
+    "apps/web",
+    "packages/sdk"
+  ],
+  "engines": {
+    "node": ">=15",
+    "yarn": ">=1.22.0",
+    "npm": "please-use-yarn"
+  }
+}

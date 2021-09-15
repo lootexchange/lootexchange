@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+
+# Secrets
+.env
+
+# Typescript artifacts
+dist
+tsconfig.tsbuildinfo
+
+# Logs
+yarn-debug.log*
+yarn-error.log*
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Npm
+.npmrc
