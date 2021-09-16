@@ -1,13 +1,10 @@
 import { defaultAbiCoder } from "@ethersproject/abi";
 import { Signer } from "@ethersproject/abstract-signer";
 import { arrayify, splitSignature } from "@ethersproject/bytes";
-import { AddressZero } from "@ethersproject/constants";
-import { Contract } from "@ethersproject/contracts";
 import { keccak256 } from "@ethersproject/solidity";
+import { verifyMessage } from "@ethersproject/wallet";
 
-import { Order, Side } from "./types";
-
-import ExchangeAbi from "./abis/Exchange.json";
+import { Order } from "../types";
 
 const WYVERN_ORDER_FIELDS = [
   "address", // exchange
@@ -41,10 +38,10 @@ const SIGNATURE_FIELDS = [
   "bytes32", // s
 ];
 
-export default class Wyvern {
+export default class OrderHelper {
   // --------------- Public ---------------
 
-  public normalizeOrder(order: Order): Order {
+  public static normalize(order: Order): Order {
     // Convert all strings to lowercase and all bignumbers to strings
     return {
       exchange: order.exchange.toLowerCase(),
@@ -73,7 +70,7 @@ export default class Wyvern {
     };
   }
 
-  public encodeOrder(order: Order): string {
+  public static encode(order: Order): string {
     return defaultAbiCoder.encode(
       [
         // Skip `makerProtocolFee`, `takerProtocolFee` and `feeMethod`
@@ -82,9 +79,7 @@ export default class Wyvern {
       ],
       [
         // Skip `makerProtocolFee`, `takerProtocolFee` and `feeMethod`
-        ...this.toRawWyvernOrder(order).filter(
-          (_, index) => ![5, 6, 8].includes(index)
-        ),
+        ...this.toRaw(order).filter((_, index) => ![5, 6, 8].includes(index)),
         order.v,
         order.r,
         order.s,
@@ -92,7 +87,7 @@ export default class Wyvern {
     );
   }
 
-  public decodeOrder(order: string): Order {
+  public static decode(order: string): Order {
     const result = defaultAbiCoder.decode(
       [
         // Remove `makerProtocolFee`, `takerProtocolFee` and `feeMethod`
@@ -129,10 +124,10 @@ export default class Wyvern {
     };
   }
 
-  public async signOrder(signer: Signer, order: Order): Promise<Order> {
+  public static async sign(signer: Signer, order: Order): Promise<Order> {
     const rawWyvernOrderHash = keccak256(
       WYVERN_ORDER_FIELDS,
-      this.toRawWyvernOrder(order)
+      this.toRaw(order)
     );
 
     // Sign the order hash and populate the signature fields
@@ -146,97 +141,23 @@ export default class Wyvern {
     return order;
   }
 
-  public async matchOrders(relayer: Signer, buyOrder: Order, sellOrder: Order) {
-    if (buyOrder.side !== Side.BUY) {
-      throw new Error("Invalid buy order side");
-    }
-    if (sellOrder.side !== Side.SELL) {
-      throw new Error("Invalid sell order side");
-    }
+  public static verifySignature(order: Order): boolean {
+    const rawWyvernOrderHash = keccak256(
+      WYVERN_ORDER_FIELDS,
+      this.toRaw(order)
+    );
 
-    if (buyOrder.exchange.toLowerCase() !== sellOrder.exchange.toLowerCase()) {
-      throw new Error("Mismatching exchange");
-    }
-
-    const addrs = [
-      buyOrder.exchange,
-      buyOrder.maker,
-      buyOrder.taker,
-      buyOrder.feeRecipient,
-      buyOrder.target,
-      buyOrder.staticTarget,
-      buyOrder.paymentToken,
-      sellOrder.exchange,
-      sellOrder.maker,
-      sellOrder.taker,
-      sellOrder.feeRecipient,
-      sellOrder.target,
-      sellOrder.staticTarget,
-      sellOrder.paymentToken,
-    ];
-
-    const uints = [
-      buyOrder.makerRelayerFee,
-      buyOrder.takerRelayerFee,
-      0, // makerProtocolFee is always 0
-      0, // takerProtocolFee is always 0
-      buyOrder.basePrice,
-      buyOrder.extra,
-      buyOrder.listingTime,
-      buyOrder.expirationTime,
-      buyOrder.salt,
-      sellOrder.makerRelayerFee,
-      sellOrder.takerRelayerFee,
-      0, // makerProtocolFee is always 0
-      0, // takerProtocolFee is always 0
-      sellOrder.basePrice,
-      sellOrder.extra,
-      sellOrder.listingTime,
-      sellOrder.expirationTime,
-      sellOrder.salt,
-    ];
-
-    const feeMethodsSidesKindsHowToCalls = [
-      1, // feeMethod is always 1 (SplitFee)
-      buyOrder.side,
-      buyOrder.saleKind,
-      buyOrder.howToCall,
-      1, // feeMethod is always 1 (SplitFee)
-      sellOrder.side,
-      sellOrder.saleKind,
-      sellOrder.howToCall,
-    ];
-
-    return new Contract(buyOrder.exchange, ExchangeAbi as any)
-      .connect(relayer)
-      .atomicMatch_(
-        addrs,
-        uints,
-        feeMethodsSidesKindsHowToCalls,
-        buyOrder.calldata,
-        sellOrder.calldata,
-        buyOrder.replacementPattern,
-        sellOrder.replacementPattern,
-        buyOrder.staticExtradata,
-        sellOrder.staticExtradata,
-        [buyOrder.v, sellOrder.v],
-        [
-          buyOrder.r,
-          buyOrder.s,
-          sellOrder.r,
-          sellOrder.s,
-          "0x0000000000000000000000000000000000000000000000000000000000000000",
-        ],
-        {
-          value:
-            sellOrder.paymentToken === AddressZero ? sellOrder.basePrice : 0,
-        }
-      );
+    const signerAddress = verifyMessage(arrayify(rawWyvernOrderHash), {
+      v: order.v,
+      r: order.r,
+      s: order.s,
+    });
+    return signerAddress.toLowerCase() === order.maker.toLowerCase();
   }
 
   // --------------- Private ---------------
 
-  private toRawWyvernOrder(order: Order): any[] {
+  private static toRaw(order: Order): any[] {
     // Construct raw order including all fields needed by Wyvern
     return [
       order.exchange,

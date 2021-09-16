@@ -1,12 +1,21 @@
-import Approver from "./approver";
-import Wyvern from "./wyvern";
+import SingleItemErc721OrderBuilder from "./builders/erc721/single-item";
+
+import ApprovalHelper from "./helpers/approval";
+import OrderHelper from "./helpers/order";
+import WyvernHelper from "./helpers/wyvern";
 
 import { Order } from "./types";
 
-import SingleItemERC721OrderBuilder from "./builders/erc721/single-item";
-
 const Builders = {
-  SingleItemERC721Order: SingleItemERC721OrderBuilder,
+  Erc721: {
+    SingleItem: SingleItemErc721OrderBuilder,
+  },
 };
 
-export { Approver, Builders, Order, Wyvern };
+const Helpers = {
+  Approval: ApprovalHelper,
+  Order: OrderHelper,
+  Wyvern: WyvernHelper,
+};
+
+export { Builders, Helpers, Order };

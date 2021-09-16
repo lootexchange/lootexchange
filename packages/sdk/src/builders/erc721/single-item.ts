@@ -5,7 +5,7 @@ import { randomBytes } from "@ethersproject/random";
 
 import { HowToCall, Order, Side, SaleKind } from "../../types";
 
-import ERC721Abi from "../../abis/ERC721.json";
+import Erc721Abi from "../../abis/ERC721.json";
 
 const REPLACEMENT_PATTERN_BUY =
   "0x00000000" + "f".repeat(64) + "0".repeat(64) + "0".repeat(64);
@@ -26,7 +26,39 @@ type RequiredOrderParams = {
   salt: BigNumberish;
 };
 
-export default class SingleItemERC721OrderBuilder {
+export default class SingleItemErc721OrderBuilder {
+  // --------------- Public ---------------
+
+  public static isSell(order: Order, tokenId: string): boolean {
+    // Build a mock order that is for sure well-formatted
+    const built = this.sell({
+      ...order,
+      tokenId,
+      fee: 0,
+    });
+
+    // Make sure the built order's fields match the given order
+    return (
+      order.calldata === built.calldata &&
+      order.replacementPattern === built.replacementPattern
+    );
+  }
+
+  public static isBuy(order: Order, tokenId: string): boolean {
+    // Build a mock order that is for sure well-formatted
+    const built = this.buy({
+      ...order,
+      tokenId,
+      fee: 0,
+    });
+
+    // Make sure the built order's fields match the given order
+    return (
+      order.calldata === built.calldata &&
+      order.replacementPattern === built.replacementPattern
+    );
+  }
+
   public static sell(params: RequiredOrderParams): Order {
     return {
       exchange: params.exchange,
@@ -39,7 +71,7 @@ export default class SingleItemERC721OrderBuilder {
       saleKind: SaleKind.FIXED_PRICE,
       target: params.target,
       howToCall: HowToCall.CALL,
-      calldata: new Interface(ERC721Abi as any).encodeFunctionData(
+      calldata: new Interface(Erc721Abi as any).encodeFunctionData(
         "transferFrom",
         [params.maker, AddressZero, params.tokenId]
       ),
@@ -70,7 +102,7 @@ export default class SingleItemERC721OrderBuilder {
       saleKind: SaleKind.FIXED_PRICE,
       target: params.target,
       howToCall: HowToCall.CALL,
-      calldata: new Interface(ERC721Abi as any).encodeFunctionData(
+      calldata: new Interface(Erc721Abi as any).encodeFunctionData(
         "transferFrom",
         [AddressZero, params.maker, params.tokenId]
       ),
@@ -97,7 +129,7 @@ export default class SingleItemERC721OrderBuilder {
       throw new Error("Invalid buy order replacement pattern");
     }
 
-    const buyCalldata = new Interface(ERC721Abi as any).decodeFunctionData(
+    const buyCalldata = new Interface(Erc721Abi as any).decodeFunctionData(
       "transferFrom",
       buyOrder.calldata
     );
@@ -122,7 +154,7 @@ export default class SingleItemERC721OrderBuilder {
       saleKind: SaleKind.FIXED_PRICE,
       target: buyOrder.target,
       howToCall: HowToCall.CALL,
-      calldata: new Interface(ERC721Abi as any).encodeFunctionData(
+      calldata: new Interface(Erc721Abi as any).encodeFunctionData(
         "transferFrom",
         [seller, AddressZero, buyCalldata.tokenId]
       ),
@@ -149,7 +181,7 @@ export default class SingleItemERC721OrderBuilder {
       throw new Error("Invalid sell order replacement pattern");
     }
 
-    const sellCalldata = new Interface(ERC721Abi as any).decodeFunctionData(
+    const sellCalldata = new Interface(Erc721Abi as any).decodeFunctionData(
       "transferFrom",
       sellOrder.calldata
     );
@@ -174,7 +206,7 @@ export default class SingleItemERC721OrderBuilder {
       saleKind: SaleKind.FIXED_PRICE,
       target: sellOrder.target,
       howToCall: HowToCall.CALL,
-      calldata: new Interface(ERC721Abi as any).encodeFunctionData(
+      calldata: new Interface(Erc721Abi as any).encodeFunctionData(
         "transferFrom",
         [AddressZero, buyer, sellCalldata.tokenId]
       ),
