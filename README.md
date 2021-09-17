@@ -1,6 +1,17 @@
-# Loot Exchange Monorepo
+# Loot Exchange
 
-This repository contains the Loot Exchange web app and SDK.
+[Loot.Exchange](https://www.loot.exchange) is a marketplace dedicated to the Loot universe. It's designed to be open and composable, so that anyone can build on top, or integrate it into their game.
+
+It uses off-chain signed orders, similar to Open Sea, except the orders are stored to Polygon for data availability. Anyone can trustlessly use a subgraph or custom indexer to reconstruct the order book. Orders are settled using the Wyvern Exchange, exactly the same as Open Sea.
+
+This design has the following advantages:
+
+- Open and composable
+- No new contracts to write or audit. Using the same contract that handles all Open Sea volume 
+- Anyone who has approved for Open Sea trading does not need to re-approve
+- The order book can aggregate both Open Sea and Loot.Exchange orders for complete liquidity
+- Zero platform fees. Royalties can be directed to a community treasury (if one emerges)
+- No API keys or rate limiting
 
 ### Structure
 
@@ -10,6 +21,7 @@ This repository is structured as a Yarn 2 monorepo, consisting of the following 
 
 - [`web`](./apps/web): web client
 - [`sdk`](./packages/sdk): SDK for exchange interactions
+- [`docs`](./apps/docs): API and SDK documentation (coming soon)
 
 ### Setup
 
