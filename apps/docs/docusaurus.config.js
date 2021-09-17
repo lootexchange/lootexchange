@@ -22,7 +22,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/lootexchange/lootexchange/edit/main/apps/docs/e',
+          editUrl: 'https://github.com/lootexchange/lootexchange/edit/main/apps/docs/',
         },
         blog: {
           showReadingTime: true,
