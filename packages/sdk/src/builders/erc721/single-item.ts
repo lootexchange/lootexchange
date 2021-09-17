@@ -1,9 +1,9 @@
 import { Interface } from "@ethersproject/abi";
-import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { BigNumberish } from "@ethersproject/bignumber";
 import { AddressZero } from "@ethersproject/constants";
-import { randomBytes } from "@ethersproject/random";
 
 import { HowToCall, Order, Side, SaleKind } from "../../types";
+import { getListingTime, getSalt } from "../utils";
 
 import Erc721Abi from "../../abis/ERC721.json";
 
@@ -164,9 +164,9 @@ export default class SingleItemErc721OrderBuilder {
       paymentToken: buyOrder.paymentToken,
       basePrice: buyOrder.basePrice,
       extra: 0,
-      listingTime: Math.floor(Date.now() / 1000),
+      listingTime: getListingTime(),
       expirationTime: 0,
-      salt: BigNumber.from(randomBytes(32)),
+      salt: getSalt(),
       v: 0,
       r: "0x0000000000000000000000000000000000000000000000000000000000000000",
       s: "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -216,9 +216,9 @@ export default class SingleItemErc721OrderBuilder {
       paymentToken: sellOrder.paymentToken,
       basePrice: sellOrder.basePrice,
       extra: 0,
-      listingTime: Math.floor(Date.now() / 1000),
+      listingTime: getListingTime(),
       expirationTime: 0,
-      salt: BigNumber.from(randomBytes(32)),
+      salt: getSalt(),
       v: 0,
       r: "0x0000000000000000000000000000000000000000000000000000000000000000",
       s: "0x0000000000000000000000000000000000000000000000000000000000000000",
