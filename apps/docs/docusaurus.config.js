@@ -44,7 +44,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         title: 'Loot.Exchange',
         logo: {
           alt: 'Loot.Exchange',
-          src: 'img/logo.svg',
+          src: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/crossed-swords_2694-fe0f.png',
         },
         items: [
           {
