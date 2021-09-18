@@ -1,6 +1,6 @@
 # Loot Exchange
 
-[Loot.Exchange](https://www.loot.exchange) is a marketplace dedicated to the Loot universe. It's designed to be open and composable, so that anyone can build on top, or integrate it into their game.
+Loot Exchange is a marketplace dedicated to the Loot universe. It's designed to be open and composable, so that anyone can build on top, or integrate it into their game.
 
 It uses off-chain signed orders, similar to Open Sea, except the orders are stored to Polygon for data availability. Anyone can trustlessly use a subgraph or custom indexer to reconstruct the order book. Orders are settled using the Wyvern Exchange, exactly the same as Open Sea.
 
