@@ -1,4 +1,4 @@
-# Loot Exchange
+# WORK IN PROGRESS!!
 
 Loot Exchange is a marketplace dedicated to the Loot universe. It's designed to be open and composable, so that anyone can build on top, or integrate it into their game.
 
