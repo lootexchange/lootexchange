@@ -1,19 +1,33 @@
-# WORK IN PROGRESS!!
+# The Loot Exchange
 
-Loot Exchange is a marketplace dedicated to the Loot universe. It's designed to be open and composable, so that anyone can build on top, or integrate it into their game.
+[The Loot Exchange](https://loot.exchange) is a marketplace dedicated to the Loot Universe. It's built by the community, for the community. Contribution is strongly encouraged.
 
-It uses off-chain signed orders, similar to Open Sea, except the orders are stored to Polygon for data availability. Anyone can trustlessly use a subgraph or custom indexer to reconstruct the order book. Orders are settled using the Wyvern Exchange, exactly the same as Open Sea.
+## Notable Features
 
-This design has the following advantages:
+- Community can decide on royalties, and where they go. Have your say in the poll here
+- Designed for Loot. Includes UX touches like character art and rarity color-coding that general-purpose marketplaces lack
+- Can support Loot-specific standards like Extensions and Synthetics
+- Includes both Open Sea orders and native Loot Exchange orders. This helps to avoid fragmented liquidity
 
-- Open and composable
-- No new contracts to write or audit. Using the same contract that handles all Open Sea volume 
-- Anyone who has approved for Open Sea trading does not need to re-approve
-- The order book can aggregate both Open Sea and Loot.Exchange orders for complete liquidity
-- Zero platform fees. Royalties can be directed to a community treasury (if one emerges)
-- No API keys or rate limiting
+## Progress
 
-### Structure
+- [x] Front-End prototype
+- [x] Metadata and Order APIs
+- [x] SDK for signing and submitting orders
+- [x] Support for original Loot Bags
+- [ ] Selling UX
+- [ ] Fully functional on Rinkeby
+- [ ] Initial mainnet launch
+- [ ] Support for More Loot and other derivatives
+- [ ] Support for Extensions
+- [ ] L2 / Multichain
+
+## Get Involved
+
+- Participate in the poll to decide on Royalties
+- Reach out in the #loot-marketplace-dev Discord channel 
+
+## Project Structure
 
 The project is still in active development, which means that things might change quickly (eg. structure, configuration). Proceed with caution.
 
@@ -21,9 +35,7 @@ This repository is structured as a Yarn 2 monorepo, consisting of the following 
 
 - [`web`](./apps/web): web client
 - [`sdk`](./packages/sdk): SDK for exchange interactions
-- [`docs`](./apps/docs): API and SDK documentation (coming soon)
-
-### Setup
+- [`docs`](./apps/docs): API and SDK documentation (WIP)
 
 Since this project is set up as a Yarn 2 monorepo, make sure to always use `yarn` instead of `npm`, otherwise some things might not work properly.
 
