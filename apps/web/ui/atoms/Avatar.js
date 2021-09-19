@@ -1,7 +1,7 @@
 import { Box } from "@ui";
 import ReactHashAvatar from "react-hash-avatar";
 
-const Avatar = ({ address = "test", size = 30, ...props }) => (
+const Avatar = ({ address = "test", size = 30, avatar, ...props }) => (
   <Box
     width={size}
     height={size}
@@ -9,7 +9,14 @@ const Avatar = ({ address = "test", size = 30, ...props }) => (
     overflow="hidden"
     {...props}
   >
-    <ReactHashAvatar name={address} width={size} height={size} />
+    {avatar ? (
+      <img
+        src={avatar}
+        style={{ width: size, height: size, objectFit: "cover" }}
+      />
+    ) : (
+      <ReactHashAvatar name={address} width={size} height={size} />
+    )}
   </Box>
 );
 

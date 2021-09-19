@@ -1,5 +1,7 @@
 import { Box, Avatar } from "@ui";
 import styled from "@emotion/styled";
+import useCurrentUser from "@hooks/useCurrentUser";
+import ethers from "../../../ethers";
 
 const AccountContainer = ({ ...props }) => (
   <Box
@@ -13,22 +15,28 @@ const AccountContainer = ({ ...props }) => (
     fontFamily="body"
     fontWeight={600}
     sx={{
-      textOverflow: "ellipsis"
+      textOverflow: "ellipsis",
+      cursor: "pointer"
     }}
     {...props}
   />
 );
 
 const Account = () => {
-  const currentUser = {
-    name: "lunarmayor.eth",
-    address: "xasdfasdfsdf"
+  const currentUser = useCurrentUser();
+
+  const loginWithWalletConnect = async () => {
+    await ethers.logIn();
+    setCurrentUser(ethers.user);
   };
 
   if (!currentUser) {
     return (
-      <AccountContainer style={{ paddingRight: 24 }}>
-        Connect to Wallet
+      <AccountContainer
+        onClick={loginWithWalletConnect}
+        style={{ paddingRight: 24 }}
+      >
+        Connect Wallet
       </AccountContainer>
     );
   }
@@ -38,6 +46,7 @@ const Account = () => {
       <AccountContainer>{currentUser.name}</AccountContainer>
       <Avatar
         size={30}
+        avatar={currentUser.avatar}
         address={currentUser.address}
         position="absolute"
         right="8px"

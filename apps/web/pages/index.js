@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import { Flex, Box, Grid, Select } from "@ui";
+import { FaEye, FaFilter, FaArrowDown } from "react-icons/fa";
+import { Flex, Box, Grid, Select, Image } from "@ui";
 import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
 import NFT from "@ui/organisms/NFT";
-import { FaEye, FaFilter, FaArrowDown } from "react-icons/fa";
+
 import useBagData from "../hooks/useBags";
 import useInfinteList from "../hooks/useInfiniteList";
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// needs an end state
 const useInfinteList = (items, number) => {
   const [list, setList] = useState([]);
   const [offset, setOffset] = useState(0);

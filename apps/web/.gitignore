@@ -19,6 +19,18 @@
 .DS_Store
 *.pem
 
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+
+
 # debug
 npm-debug.log*
 yarn-debug.log*

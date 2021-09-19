@@ -1,4 +1,5 @@
 import { Flex, Box, H1, P } from "@ui";
+import useCurrentUser from "@hooks/useCurrentUser";
 
 import SearchInput from "./SearchInput";
 import Account from "./Account";
@@ -8,6 +9,8 @@ const NavItem = ({ ...props }) => (
 );
 
 const Header = () => {
+  const currentUser = useCurrentUser();
+
   return (
     <Flex
       p={3}
@@ -24,10 +27,11 @@ const Header = () => {
         <NavItem ml={4}>Explore</NavItem>
         <NavItem ml={4}>Projects</NavItem>
       </Flex>
-      <Flex mr={4}>
-        <NavItem>My Loot</NavItem>
-      </Flex>
-
+      {currentUser && (
+        <Flex mr={4}>
+          <NavItem>My Loot</NavItem>
+        </Flex>
+      )}
       <Account />
     </Flex>
   );
