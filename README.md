@@ -4,7 +4,7 @@
 
 ## Notable Features
 
-- Community can decide on royalties, and where they go. Have your say in the poll here
+- Community can decide on royalties, and where they go. Have your say in the poll (coming soon!)
 - Designed for Loot. Includes UX touches like character art and rarity color-coding that general-purpose marketplaces lack
 - Can support Loot-specific standards like Extensions and Synthetics
 - Includes both Open Sea orders and native Loot Exchange orders. This helps to avoid fragmented liquidity
