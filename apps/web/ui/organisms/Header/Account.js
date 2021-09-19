@@ -1,6 +1,10 @@
 import { Box, Avatar } from "@ui";
 import styled from "@emotion/styled";
 import useCurrentUser from "@hooks/useCurrentUser";
+
+import { useRecoilState } from "recoil";
+import { currentUser as currentUserAtom } from "../../../atoms";
+
 import ethers from "../../../ethers";
 
 const AccountContainer = ({ ...props }) => (
@@ -23,7 +27,7 @@ const AccountContainer = ({ ...props }) => (
 );
 
 const Account = () => {
-  const currentUser = useCurrentUser();
+  const [currentUser, setCurrentUser] = useRecoilState(currentUserAtom);
 
   const loginWithWalletConnect = async () => {
     await ethers.logIn();
