@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { FaEye, FaFilter, FaArrowDown } from "react-icons/fa";
 import { Flex, Box, Grid, Select, Image } from "@ui";
 import Header from "@ui/organisms/Header";
@@ -66,7 +67,11 @@ const Home = () => {
       <Box p={3} pt={0}>
         <Grid>
           {list.map(bag => (
-            <NFT bag={bag} lens={lens} key={bag.id} />
+            <Link href={`/bags/${bag.id}`} key={bag.id}>
+              <a>
+                <NFT bag={bag} lens={lens} />
+              </a>
+            </Link>
           ))}
         </Grid>
       </Box>

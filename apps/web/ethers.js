@@ -29,6 +29,23 @@ class Eth {
     };
   }
 
+  async getAvatar(ens) {
+    if (ens) {
+      const resolver = await this.provider.getResolver(ens);
+      let avatar = await resolver.getText("avatar");
+      return avatar;
+    }
+  }
+
+  async getEnsName(address) {
+    if (this.provider) {
+      let ens = await this.provider.lookupAddress(address);
+      return ens;
+    }
+
+    return null;
+  }
+
   async connect() {
     this.modal = new Web3Modal({
       network: "mainnet", // optional

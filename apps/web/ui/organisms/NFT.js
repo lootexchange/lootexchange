@@ -4,7 +4,6 @@ import { Flex, Box, Pane, P, Image } from "@ui";
 import { FaEye, FaList } from "react-icons/fa";
 
 import ether from "../../public/ether.png";
-console.log(ether);
 
 // gotta clean this up
 const NftContainer = styled.div`
@@ -32,7 +31,7 @@ const OpenContainer = styled.div`
   align-items: center;
 `;
 
-const NFT = ({ bag, lens, noName }) => {
+const NFT = ({ bag, lens, noData }) => {
   const [viz, setViz] = useState(true);
   let image = lens === "loot" ? bag.image : bag.characterImage;
 
@@ -72,21 +71,23 @@ const NFT = ({ bag, lens, noName }) => {
           }}
         />
       </NftContainer>
-      <Box p={3} style={{ borderTop: "2px solid rgba(255, 255, 255, 0.1)" }}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <P>{bag.name}</P>
-          <Flex alignItems="center">
-            {bag.isForSale && (
-              <>
-                <Image src={ether} width={18} height={14} />
-                <P color="textPrimary" fontWeight="700" fontSize={16}>
-                  {bag.price}
-                </P>
-              </>
-            )}
+      {!noData && (
+        <Box p={3} style={{ borderTop: "2px solid rgba(255, 255, 255, 0.1)" }}>
+          <Flex justifyContent="space-between" alignItems="center">
+            <P>{bag.name}</P>
+            <Flex alignItems="center">
+              {bag.isForSale && (
+                <>
+                  <Image src={ether} width={18} height={14} />
+                  <P color="textPrimary" fontWeight="700" fontSize={16}>
+                    {bag.price}
+                  </P>
+                </>
+              )}
+            </Flex>
           </Flex>
-        </Flex>
-      </Box>
+        </Box>
+      )}
     </Pane>
   );
 };
