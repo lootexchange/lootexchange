@@ -29,7 +29,7 @@ Use the Base URL of [https://api.loot.exchange/](https://api.loot.exchange/) and
 
 - [collections](https://api.loot.exchange/collections) - get list of supported collections
 - [collection/:address/info](https://api.loot.exchange/collection/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/info) - get full information about a collection
-- [collection/:address/tokens](https://api.loot.exchange/collection/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7?id=1&id=2) - get list of tokens in a collection
+- [collection/:address/tokens](https://api.loot.exchange/collection/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?id=1&id=2) - get list of tokens in a collection
 - [collection/:address/prices](https://api.loot.exchange/collection/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/prices) - compact list of items for sale
 - [collection/:address/attributes](https://api.loot.exchange/collection/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/attributes) - compact list attributes, for filtering
 - [collection/:address/metadata](https://api.loot.exchange/collection/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/metadata) - compact list metadata, for client-side rendering
