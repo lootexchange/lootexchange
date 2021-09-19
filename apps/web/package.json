@@ -1,44 +1,36 @@
 {
+  "name": "loot-client",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "lint": "next lint"
+  },
+  "resolutions": {
+    "@emotion/core": "^11.0.0",
+    "@emotion/styled": "^11.0.0"
   },
   "dependencies": {
-    "axios": "^0.21.4",
-    "cors": "^2.8.5",
-    "next": "latest",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@emotion/react": "^11.4.1",
+    "@rebass/forms": "^4.0.6",
+    "emotion-theming": "^11.0.0",
+    "fast-sort": "^3.0.2",
+    "graphql-hooks": "^5.4.0",
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hash-avatar": "1.0.0-beta.0",
+    "react-icons": "^4.2.0",
+    "react-window": "^1.8.6",
+    "rebass": "^4.0.7",
+    "recoil": "^0.4.1",
+    "reflexbox": "^4.0.6",
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
-    "@georgeroman/wyvern-v2-sdk": "^0.0.3",
-    "@headlessui/react": "^1.4.1",
-    "@heroicons/react": "^1.0.4",
-    "@types/cors": "^2",
-    "@types/node": "^12.12.21",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "@types/react-table": "^7.7.2",
-    "@types/sharp": "^0",
-    "@walletconnect/web3-provider": "^1.6.5",
-    "autoprefixer": "^10.3.2",
-    "ethereum-blockies-base64": "^1.0.2",
-    "ethers": "^5.4.6",
-    "match-sorter": "^6.3.0",
-    "postcss": "^8.3.6",
-    "react-icons": "^4.2.0",
-    "react-table": "^7.7.0",
-    "sharp": "^0.29.1",
-    "slugify": "^1.6.0",
-    "swr": "^1.0.0",
-    "tailwindcss": "^2.2.7",
-    "typescript": "4.0",
-    "web3-react": "^5.0.5",
-    "web3modal": "^1.9.4",
-    "wyvern-js": "^3.0.0-rc3",
-    "wyvern-schemas": "^0.6.15"
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2"
   }
 }
