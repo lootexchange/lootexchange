@@ -19,3 +19,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+tr,
+th {
+  text-align: left;
+}
+
+td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}

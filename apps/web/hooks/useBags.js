@@ -26,8 +26,6 @@ const useBags = ({ sort, filter }) => {
         };
       });
 
-      console.log(withPrices);
-
       setBags(withPrices);
     };
 

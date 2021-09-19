@@ -1,7 +1,7 @@
 import { Flex, Box, H1, P } from "@ui";
 import useCurrentUser from "@hooks/useCurrentUser";
 
-import SearchInput from "./SearchInput";
+import SearchInput from "./GlobalSearch";
 import Account from "./Account";
 
 const NavItem = ({ ...props }) => (

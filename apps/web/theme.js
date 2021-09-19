@@ -1,4 +1,4 @@
-export default {
+const theme = {
   colors: {
     background: "black",
     backgroundSecondary: "#333333",
@@ -12,6 +12,11 @@ export default {
     heading: "Serif"
   },
 
+  sizes: {
+    large: 1300,
+    medium: 650
+  },
+
   fontWeights: {
     heading: 100
   },
@@ -22,3 +27,5 @@ export default {
     container: 2
   }
 };
+
+export default theme;

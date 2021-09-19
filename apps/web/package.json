@@ -19,20 +19,25 @@
     "emotion-theming": "^11.0.0",
     "ethers": "^5.4.7",
     "fast-sort": "^3.0.2",
+    "fuse.js": "^6.4.6",
     "graphql-hooks": "^5.4.0",
+    "moment": "^2.29.1",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hash-avatar": "1.0.0-beta.0",
     "react-icons": "^4.2.0",
+    "react-modal": "^3.14.3",
     "react-window": "^1.8.6",
     "rebass": "^4.0.7",
     "recoil": "^0.4.1",
     "reflexbox": "^4.0.6",
     "styled-system": "^5.1.5",
+    "use-debounce": "^7.0.0",
     "web3modal": "^1.9.4"
   },
   "devDependencies": {
+    "@types/react-modal": "^3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2"
   }

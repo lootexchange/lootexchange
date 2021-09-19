@@ -5,7 +5,8 @@
     "paths": {
       "@ui": ["ui"],
       "@ui/*": ["ui/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@utils": ["utils.js"]
     }
   }
 }
