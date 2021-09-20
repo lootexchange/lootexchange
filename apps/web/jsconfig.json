@@ -3,9 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@ethers": ["ethers.js"],
+      "@hooks/*": ["hooks/*"],
       "@ui": ["ui"],
       "@ui/*": ["ui/*"],
-      "@hooks/*": ["hooks/*"],
       "@utils": ["utils.js"]
     }
   }

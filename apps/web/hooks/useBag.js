@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import * as ethers from "ethers";
 import { useManualQuery } from "graphql-hooks";
-import bags from "../data/loot.json";
-import eth from "../ethers";
-import { shortenAddress } from "@utils";
+import { useState, useEffect } from "react";
+
+import eth from "@ethers";
 import useCurrentUser from "@hooks/useCurrentUser";
+import { shortenAddress } from "@utils";
+
+import bags from "../data/loot.json";
 
 const BAG_QUERY = `query BagQuery($id: ID!) {
   bag(id: $id) {
@@ -16,18 +19,17 @@ const BAG_QUERY = `query BagQuery($id: ID!) {
 
   transfers(where: { bag: $id }) {
     from{
-   address
-  }
-  to {
-    address
- }
-  timestamp
-  txHash
-
+      address
+    }
+    to {
+      address
+    }
+    timestamp
+    txHash
   }
 }`;
 
-const useBag = id => {
+const useBag = (id) => {
   const [bag, setBag] = useState(null);
   const [fetchedEns, setFetchedEns] = useState(false);
   const currentUser = useCurrentUser();
@@ -36,16 +38,29 @@ const useBag = id => {
 
   useEffect(() => {
     const getBag = async () => {
-      let bagData = bags.find(b => b.id == id);
+      const bagData = bags.find((b) => b.id == id);
 
       const { data } = await fetchBag({
-        variables: { id }
+        variables: { id },
       });
 
-      let ownerAddress = data.bag.currentOwner.address;
+      const ownerAddress = data.bag.currentOwner.address;
 
-      let response = await fetch("/api/prices");
-      let prices = await response.json();
+      const prices = await fetch("/api/prices").then((response) =>
+        response.json()
+      );
+      const orders = await fetch(`/api/orders?tokenId=${id}`).then((response) =>
+        response.json()
+      );
+
+      // Sort the sell orders by base price
+      const sellOrders = orders.sells.sort((a, b) =>
+        ethers.BigNumber.from(a.basePrice)
+          .sub(ethers.BigNumber.from(b.basePrice))
+          .lte(0)
+          ? -1
+          : 1
+      );
 
       setBag({
         ...data.bag,
@@ -53,7 +68,8 @@ const useBag = id => {
         shortName: shortenAddress(ownerAddress),
         isForSale: !!prices[id],
         price: prices[id],
-        transfers: data.transfers
+        transfers: data.transfers,
+        sellOrder: sellOrders.length ? sellOrders[0] : null,
       });
     };
 
@@ -72,7 +88,7 @@ const useBag = id => {
       setBag({
         ...bag,
         ownerAvatar: avatar,
-        shortName: ens || shortenAddress(ownerAddress)
+        shortName: ens || shortenAddress(ownerAddress),
       });
     };
 

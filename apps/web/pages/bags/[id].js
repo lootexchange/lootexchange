@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
+import { Builders, Helpers } from "@lootexchange/sdk";
+import moment from "moment";
+import { useRouter } from "next/router";
 
-import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
-import Header from "@ui/organisms/Header";
+import { Flex, Box, Image, Pane, H2, H3, P, Button } from "@ui";
 import BackArrow from "@ui/organisms/BackArrow";
+import Header from "@ui/organisms/Header";
 import NFT from "@ui/organisms/NFT";
 import Owner from "@ui/organisms/Owner";
-import ether from "../../public/ether.png";
 
+import eth from "@ethers";
 import { shortenAddress } from "@utils";
-import moment from "moment";
+
+import ether from "../../public/ether.png";
 
 const BuyButton = styled(Button)`
   transition: background-color 300ms ease-in-out, color 250ms ease-in-out;
@@ -69,8 +71,8 @@ const Bag = () => {
                   bag.foot,
                   bag.hand,
                   bag.neck,
-                  bag.ring
-                ].map(item => (
+                  bag.ring,
+                ].map((item) => (
                   <P key={item} color="white" mb={3} fontSize={16}>
                     {item}
                   </P>
@@ -92,7 +94,25 @@ const Bag = () => {
                     </Box>
                     <H2 fontSize={24}>{bag.price}</H2>
                   </Flex>
-                  <BuyButton bg="#ffffff69" color="white">
+                  <BuyButton
+                    bg="#ffffff69"
+                    color="white"
+                    onClick={async () => {
+                      if (!eth.signer) {
+                        await eth.connect();
+                      } else {
+                        const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
+                          await eth.signer.getAddress(),
+                          bag.sellOrder
+                        );
+                        await Helpers.Wyvern.match(
+                          eth.signer,
+                          buyOrder,
+                          bag.sellOrder
+                        );
+                      }
+                    }}
+                  >
                     Buy Now
                   </BuyButton>
                 </Box>
@@ -125,7 +145,7 @@ const Bag = () => {
               <tbody>
                 {bag.transfers
                   .sort((a, b) => b.timestamp - a.timestamp)
-                  .map(transfer => {
+                  .map((transfer) => {
                     return (
                       <tr key={transfer.timestamp}>
                         <td>
