@@ -2,6 +2,7 @@ import { Interface } from "@ethersproject/abi";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { AddressZero } from "@ethersproject/constants";
 
+import OrderHelper from "../../helpers/order";
 import { HowToCall, Order, Side, SaleKind } from "../../types";
 import { getListingTime, getSalt } from "../utils";
 
@@ -24,6 +25,9 @@ type RequiredOrderParams = {
   listingTime: BigNumberish;
   expirationTime: BigNumberish;
   salt: BigNumberish;
+  v?: number;
+  r?: string;
+  s?: string;
 };
 
 export default class SingleItemErc721OrderBuilder {
@@ -60,7 +64,7 @@ export default class SingleItemErc721OrderBuilder {
   }
 
   public static sell(params: RequiredOrderParams): Order {
-    return {
+    return OrderHelper.normalize({
       exchange: params.exchange,
       maker: params.maker,
       taker: AddressZero,
@@ -84,14 +88,18 @@ export default class SingleItemErc721OrderBuilder {
       listingTime: params.listingTime,
       expirationTime: params.expirationTime,
       salt: params.salt,
-      v: 0,
-      r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-      s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    };
+      v: params.v || 0,
+      r:
+        params.r ||
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+      s:
+        params.s ||
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+    });
   }
 
   public static buy(params: RequiredOrderParams): Order {
-    return {
+    return OrderHelper.normalize({
       exchange: params.exchange,
       maker: params.maker,
       taker: AddressZero,
@@ -115,10 +123,14 @@ export default class SingleItemErc721OrderBuilder {
       listingTime: params.listingTime,
       expirationTime: params.expirationTime,
       salt: params.salt,
-      v: 0,
-      r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-      s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    };
+      v: params.v || 0,
+      r:
+        params.r ||
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+      s:
+        params.s ||
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+    });
   }
 
   public static matchingSell(seller: string, buyOrder: Order): Order {
@@ -143,7 +155,7 @@ export default class SingleItemErc721OrderBuilder {
       throw new Error("Invalid buy order calldata");
     }
 
-    return {
+    return OrderHelper.normalize({
       exchange: buyOrder.exchange,
       maker: seller,
       taker: buyOrder.maker,
@@ -170,7 +182,7 @@ export default class SingleItemErc721OrderBuilder {
       v: 0,
       r: "0x0000000000000000000000000000000000000000000000000000000000000000",
       s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    };
+    });
   }
 
   public static matchingBuy(buyer: string, sellOrder: Order): Order {
@@ -195,7 +207,7 @@ export default class SingleItemErc721OrderBuilder {
       throw new Error("Invalid sell order calldata");
     }
 
-    return {
+    return OrderHelper.normalize({
       exchange: sellOrder.exchange,
       maker: buyer,
       taker: sellOrder.maker,
@@ -222,6 +234,6 @@ export default class SingleItemErc721OrderBuilder {
       v: 0,
       r: "0x0000000000000000000000000000000000000000000000000000000000000000",
       s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    };
+    });
   }
 }

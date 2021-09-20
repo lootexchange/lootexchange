@@ -147,12 +147,16 @@ export default class OrderHelper {
       this.toRaw(order)
     );
 
-    const signerAddress = verifyMessage(arrayify(rawWyvernOrderHash), {
-      v: order.v,
-      r: order.r,
-      s: order.s,
-    });
-    return signerAddress.toLowerCase() === order.maker.toLowerCase();
+    try {
+      const signerAddress = verifyMessage(arrayify(rawWyvernOrderHash), {
+        v: order.v,
+        r: order.r,
+        s: order.s,
+      });
+      return signerAddress.toLowerCase() === order.maker.toLowerCase();
+    } catch {
+      return false;
+    }
   }
 
   // --------------- Private ---------------
