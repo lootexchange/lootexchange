@@ -3,6 +3,7 @@
   "private": true,
   "description": "Loot Exchange web client",
   "scripts": {
+    "vercel-build": "cross-env NEXTJS_BUILD_TARGET=serverless next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3",
+    "cross-env": "^7.0.3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2"
   }
