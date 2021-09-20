@@ -1,7 +1,7 @@
 {
-  "name": "docs",
-  "version": "0.0.0",
+  "name": "@lootexchange/docs",
   "private": true,
+  "description": "Loot Exchange docs",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",

@@ -4,9 +4,8 @@
   "description": "Loot Exchange monorepo",
   "license": "MIT",
   "workspaces": [
-    "apps/web",
-    "apps/docs",
-    "packages/sdk"
+    "apps/*",
+    "packages/*"
   ],
   "engines": {
     "node": ">=15",

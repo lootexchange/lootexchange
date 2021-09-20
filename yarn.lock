@@ -2760,19 +2760,69 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lootexchange/docs@workspace:apps/docs":
+  version: 0.0.0-use.local
+  resolution: "@lootexchange/docs@workspace:apps/docs"
+  dependencies:
+    "@docusaurus/core": 2.0.0-beta.6
+    "@docusaurus/preset-classic": 2.0.0-beta.6
+    "@mdx-js/react": ^1.6.21
+    "@svgr/webpack": ^5.5.0
+    clsx: ^1.1.1
+    file-loader: ^6.2.0
+    prism-react-renderer: ^1.2.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+    url-loader: ^4.1.1
+  languageName: unknown
+  linkType: soft
+
 "@lootexchange/monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "@lootexchange/monorepo@workspace:."
   languageName: unknown
   linkType: soft
 
-"@lootexchange/sdk@workspace:packages/sdk":
+"@lootexchange/sdk@workspace:*, @lootexchange/sdk@workspace:packages/sdk":
   version: 0.0.0-use.local
   resolution: "@lootexchange/sdk@workspace:packages/sdk"
   dependencies:
     "@types/node": ^16.9.1
     ethers: ^5.4.6
     typescript: ^4.4.3
+  languageName: unknown
+  linkType: soft
+
+"@lootexchange/web@workspace:apps/web":
+  version: 0.0.0-use.local
+  resolution: "@lootexchange/web@workspace:apps/web"
+  dependencies:
+    "@emotion/react": ^11.4.1
+    "@lootexchange/sdk": "workspace:*"
+    "@rebass/forms": ^4.0.6
+    "@types/react-modal": ^3
+    "@walletconnect/web3-provider": ^1.6.5
+    emotion-theming: ^11.0.0
+    eslint: 7.32.0
+    eslint-config-next: 11.1.2
+    ethers: ^5.4.7
+    fast-sort: ^3.0.2
+    fuse.js: ^6.4.6
+    graphql-hooks: ^5.4.0
+    moment: ^2.29.1
+    next: 11.1.2
+    react: 17.0.2
+    react-dom: 17.0.2
+    react-hash-avatar: 1.0.0-beta.0
+    react-icons: ^4.2.0
+    react-modal: ^3.14.3
+    react-window: ^1.8.6
+    rebass: ^4.0.7
+    recoil: ^0.4.1
+    reflexbox: ^4.0.6
+    styled-system: ^5.1.5
+    use-debounce: ^7.0.0
+    web3modal: ^1.9.4
   languageName: unknown
   linkType: soft
 
@@ -6905,23 +6955,6 @@ __metadata:
   checksum: 80130b665379ecd991687ae079fbee25d091e03e4c4cef41e7643b977849ac48c2f56bfcb3727e53594d29029b833749811110d9f3fbee1b26a6e6f8096a5cef
   languageName: node
   linkType: hard
-
-"docs@workspace:apps/docs":
-  version: 0.0.0-use.local
-  resolution: "docs@workspace:apps/docs"
-  dependencies:
-    "@docusaurus/core": 2.0.0-beta.6
-    "@docusaurus/preset-classic": 2.0.0-beta.6
-    "@mdx-js/react": ^1.6.21
-    "@svgr/webpack": ^5.5.0
-    clsx: ^1.1.1
-    file-loader: ^6.2.0
-    prism-react-renderer: ^1.2.1
-    react: ^17.0.1
-    react-dom: ^17.0.1
-    url-loader: ^4.1.1
-  languageName: unknown
-  linkType: soft
 
 "doctrine@npm:^2.1.0":
   version: 2.1.0
@@ -11129,38 +11162,6 @@ fsevents@^1.2.7:
   checksum: 6517e24e0cad87ec9888f500c5b5947032cdfe6ef65e1c1936a0c48a524b81e65542c9c3edc91c97d5bddc806ee2a985dbc79be89215d613b1de5db6d1cfe6f4
   languageName: node
   linkType: hard
-
-"loot-client@workspace:apps/web":
-  version: 0.0.0-use.local
-  resolution: "loot-client@workspace:apps/web"
-  dependencies:
-    "@emotion/react": ^11.4.1
-    "@rebass/forms": ^4.0.6
-    "@types/react-modal": ^3
-    "@walletconnect/web3-provider": ^1.6.5
-    emotion-theming: ^11.0.0
-    eslint: 7.32.0
-    eslint-config-next: 11.1.2
-    ethers: ^5.4.7
-    fast-sort: ^3.0.2
-    fuse.js: ^6.4.6
-    graphql-hooks: ^5.4.0
-    moment: ^2.29.1
-    next: 11.1.2
-    react: 17.0.2
-    react-dom: 17.0.2
-    react-hash-avatar: 1.0.0-beta.0
-    react-icons: ^4.2.0
-    react-modal: ^3.14.3
-    react-window: ^1.8.6
-    rebass: ^4.0.7
-    recoil: ^0.4.1
-    reflexbox: ^4.0.6
-    styled-system: ^5.1.5
-    use-debounce: ^7.0.0
-    web3modal: ^1.9.4
-  languageName: unknown
-  linkType: soft
 
 "lower-case@npm:^2.0.2":
   version: 2.0.2
