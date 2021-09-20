@@ -3,6 +3,10 @@
   "private": true,
   "description": "Loot Exchange monorepo",
   "license": "MIT",
+  "scripts": {
+    "deps:check": "npm-check-updates --deep --dep prod,dev,optional",
+    "deps:update": "npm-check-updates -u --deep --dep prod,dev,optional"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -11,5 +15,12 @@
     "node": ">=15",
     "yarn": ">=1.22.0",
     "npm": "please-use-yarn"
+  },
+  "resolutions": {
+    "@emotion/core": "^11.0.0",
+    "@emotion/styled": "^11.0.0"
+  },
+  "devDependencies": {
+    "npm-check-updates": "^11.8.5"
   }
 }
