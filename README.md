@@ -38,22 +38,23 @@ Use the Base URL of [https://api.loot.exchange/](https://api.loot.exchange/) and
 
 If you are planning to use the API, let us know so that we can cater to your use case.
 
-## Project Structure
+## Project Structure and Setup
 
 The project is still in active development, which means that things might change quickly (eg. structure, configuration). Proceed with caution.
 
 This repository is structured as a Yarn 2 monorepo, consisting of the following packages:
 
+- [`docs`](./apps/docs): API and SDK documentation (WIP)
 - [`web`](./apps/web): web client
 - [`sdk`](./packages/sdk): SDK for exchange interactions
-- [`docs`](./apps/docs): API and SDK documentation (WIP)
 
 Since this project is set up as a Yarn 2 monorepo, make sure to always use `yarn` instead of `npm`, otherwise some things might not work properly.
 
-In the repository's root directory, run `yarn` to install all dependencies. Afterwards, specific package commands should be run in the corresponding package directory.
+In the repository's root directory, run `yarn` to install all dependencies across all monorepo's packages. Afterwards, specific package commands should be run in the corresponding package directory.
 
+The global commands `yarn deps:check` and `yarn deps:update` will help to maintain the same versions across the entire monorepo. After running `yarn deps:update`, a `yarn install` is required. To prevent having duplicates in the `yarn.lock`, you can run `yarn dedupe --check` and `yarn dedupe` to apply deduplication.
 
 ## Get Involved
 
 - Participate in the poll to decide on Royalties
-- Reach out in the #loot-marketplace-dev Discord channel 
+- Reach out in the #loot-marketplace-dev Discord channel
