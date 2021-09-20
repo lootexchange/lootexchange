@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { formatEther } from "@ethersproject/units";
 import useBag from "@hooks/useBag";
 import { Builders, Helpers } from "@lootexchange/sdk";
 import moment from "moment";
@@ -78,7 +79,7 @@ const Bag = () => {
                   </P>
                 ))}
               </Box>
-              {bag.isForSale && (
+              {bag.sellOrder && (
                 <Box p={[3, 3, 4]} bg="rgb(37 34 47)">
                   <H3 color="#ffffffc2" mb={2} fontSize={14}>
                     Current Price
@@ -93,7 +94,9 @@ const Bag = () => {
                         objectFit="contain"
                       />
                     </Box>
-                    <H2 fontSize={24}>{bag.price}</H2>
+                    <H2 fontSize={24}>
+                      {formatEther(bag.sellOrder.basePrice)}
+                    </H2>
                   </Flex>
                   <BuyButton
                     bg="#ffffff69"
