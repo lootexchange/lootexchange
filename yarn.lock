@@ -2740,7 +2740,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lootexchange/sdk@^0.0.4, @lootexchange/sdk@workspace:packages/sdk":
+"@lootexchange/sdk@workspace:*, @lootexchange/sdk@workspace:packages/sdk":
   version: 0.0.0-use.local
   resolution: "@lootexchange/sdk@workspace:packages/sdk"
   dependencies:
@@ -2755,7 +2755,7 @@ __metadata:
   resolution: "@lootexchange/web@workspace:apps/web"
   dependencies:
     "@emotion/react": ^11.4.1
-    "@lootexchange/sdk": ^0.0.4
+    "@lootexchange/sdk": "workspace:*"
     "@rebass/forms": ^4.0.6
     "@types/react-modal": ^3
     "@walletconnect/web3-provider": ^1.6.5
@@ -2768,7 +2768,6 @@ __metadata:
     graphql-hooks: ^5.4.0
     moment: ^2.29.1
     next: 11.1.2
-    next-transpile-modules: ^8.0.0
     react: 17.0.2
     react-dom: 17.0.2
     react-hash-avatar: 1.0.0-beta.0
@@ -7253,16 +7252,6 @@ __metadata:
   dependencies:
     once: ^1.4.0
   checksum: 530a5a5a1e517e962854a31693dbb5c0b2fc40b46dad2a56a2deec656ca040631124f4795823acc68238147805f8b021abbe221f4afed5ef3c8e8efc2024908b
-  languageName: node
-  linkType: hard
-
-"enhanced-resolve@npm:^5.7.0":
-  version: 5.8.3
-  resolution: "enhanced-resolve@npm:5.8.3"
-  dependencies:
-    graceful-fs: ^4.2.4
-    tapable: ^2.2.0
-  checksum: d79fbe531106448b768bb0673fb623ec0202d7ee70373ab7d4f4745d5dfe0806f38c9db7e7da8c941288fe475ab3d538db3791fce522056eeea40ca398c9e287
   languageName: node
   linkType: hard
 
@@ -11921,16 +11910,6 @@ fsevents@^1.2.7:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
-  languageName: node
-  linkType: hard
-
-"next-transpile-modules@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "next-transpile-modules@npm:8.0.0"
-  dependencies:
-    enhanced-resolve: ^5.7.0
-    escalade: ^3.1.1
-  checksum: 5535e385fd3a4efa25c46b472b2555436c9f3c0fa27f1a80f0c84f5d4c419981ded6896b03d0b418e7476d30bb41714ca0657204daa7c257a002b77a02b7783a
   languageName: node
   linkType: hard
 

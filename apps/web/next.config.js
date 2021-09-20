@@ -1,5 +1,6 @@
-const withTM = require("next-transpile-modules")(["@lootexchange/sdk"]);
-
-module.exports = withTM({
+module.exports = {
   reactStrictMode: true,
-});
+  experimental: {
+    externalDir: true,
+  },
+};
