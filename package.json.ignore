@@ -8,8 +8,9 @@
     "deps:update": "npm-check-updates -u --deep --dep prod,dev,optional"
   },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/docs",
+    "apps/web",
+    "packages/sdk"
   ],
   "engines": {
     "node": ">=14",

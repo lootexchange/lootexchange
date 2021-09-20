@@ -52,8 +52,6 @@ Since this project is set up as a Yarn 2 monorepo, make sure to always use `yarn
 
 In the repository's root directory, run `yarn` to install all dependencies across all monorepo's packages. Afterwards, specific package commands should be run in the corresponding package directory.
 
-Until we can work our way towards deploying to Vercel from the monorepo, we're hacking the `apps` sub-packages with their own `.yarn`, `.yarnrc.yml` and `yarn.lock` files. This means that local package referencing is not available on deployment. Local development should still be possible though.
-
 The global commands `yarn deps:check` and `yarn deps:update` will help to maintain the same versions across the entire monorepo. After running `yarn deps:update`, a `yarn install` is required. To prevent having duplicates in the `yarn.lock`, you can run `yarn dedupe --check` and `yarn dedupe` to apply deduplication.
 
 ## Get Involved
