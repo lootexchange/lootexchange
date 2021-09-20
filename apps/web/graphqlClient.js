@@ -1,5 +1,6 @@
 import { GraphQLClient } from "graphql-hooks";
 
+console.log(`CHAIN ID: ${process.env.NEXT_PUBLIC_CHAIN_ID}`);
 const config = {
   url:
     process.env.NEXT_PUBLIC_CHAIN_ID == "4"
