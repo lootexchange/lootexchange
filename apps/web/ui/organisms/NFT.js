@@ -31,7 +31,7 @@ const OpenContainer = styled.div`
   align-items: center;
 `;
 
-const NFT = ({ bag, lens, noData }) => {
+const NFT = ({ bag, lens, noData, ...props }) => {
   const [viz, setViz] = useState(true);
   let image = lens === "loot" ? bag.image : bag.characterImage;
 
@@ -40,7 +40,7 @@ const NFT = ({ bag, lens, noData }) => {
   }, [lens]);
 
   return (
-    <Pane>
+    <Pane {...props}>
       {lens != "loot" && (
         <OpenContainer
           onClick={e => {

@@ -4,7 +4,7 @@ import { Button as RButton } from "rebass";
 const Button = props => (
   <RButton
     fontFamily="body"
-    bg="white"
+    bg="rgb(41 63 215)"
     color="black"
     fontSize={18}
     px={4}

@@ -15,10 +15,11 @@ import moment from "moment";
 
 const BuyButton = styled(Button)`
   transition: background-color 300ms ease-in-out, color 250ms ease-in-out;
+  background: rgb(41 63 215);
 
   &:hover {
-    background: white;
-    color: #7549ff;
+    background: rgb(61 83 235);
+    color: white;
   }
 `;
 
@@ -42,7 +43,12 @@ const Bag = () => {
               mr={[0, 4, 4]}
               mb={[3, 0, 0]}
             >
-              <NFT bag={bag} lens="characters" noData />
+              <NFT
+                bag={bag}
+                lens="characters"
+                noData
+                height={["unset", "unset", "100%"]}
+              />
             </Box>
             <Pane flex={1} display="flex" flexDirection="column" bg="#161617">
               <Box p={[3, 3, 4]} flex={1}>
@@ -71,7 +77,7 @@ const Bag = () => {
                 ))}
               </Box>
               {bag.isForSale && (
-                <Box p={[3, 3, 4]} bg="#7549ff">
+                <Box p={[3, 3, 4]} bg="rgb(37 34 47)">
                   <H3 color="#ffffffc2" mb={2} fontSize={14}>
                     Current Price
                   </H3>
@@ -101,36 +107,40 @@ const Bag = () => {
               Transfers
             </H3>
             <table style={{ borderCollapse: "collapse", width: "100%" }}>
-              <tr
-                style={{ borderBottom: "2px solid rgba(255, 255, 255, 0.1)" }}
-              >
-                <th>
-                  <P>From</P>
-                </th>
-                <th>
-                  <P>To</P>
-                </th>
-                <th>
-                  <P>Date</P>
-                </th>
-              </tr>
-              {bag.transfers
-                .sort((a, b) => b.timestamp - a.timestamp)
-                .map(transfer => {
-                  return (
-                    <tr key={transfer.timestamp}>
-                      <td>
-                        <P>{shortenAddress(transfer.from.address)}</P>
-                      </td>
-                      <td>
-                        <P>{shortenAddress(transfer.to.address)}</P>
-                      </td>
-                      <td>
-                        <P>{moment.unix(transfer.timestamp).fromNow()}</P>
-                      </td>
-                    </tr>
-                  );
-                })}
+              <thead>
+                <tr
+                  style={{ borderBottom: "2px solid rgba(255, 255, 255, 0.1)" }}
+                >
+                  <th>
+                    <P>From</P>
+                  </th>
+                  <th>
+                    <P>To</P>
+                  </th>
+                  <th>
+                    <P>Date</P>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {bag.transfers
+                  .sort((a, b) => b.timestamp - a.timestamp)
+                  .map(transfer => {
+                    return (
+                      <tr key={transfer.timestamp}>
+                        <td>
+                          <P>{shortenAddress(transfer.from.address)}</P>
+                        </td>
+                        <td>
+                          <P>{shortenAddress(transfer.to.address)}</P>
+                        </td>
+                        <td>
+                          <P>{moment.unix(transfer.timestamp).fromNow()}</P>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
             </table>
           </Box>
         )}
