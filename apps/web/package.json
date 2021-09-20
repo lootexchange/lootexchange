@@ -3,15 +3,18 @@
   "private": true,
   "description": "Loot Exchange web client",
   "scripts": {
-    "vercel-build": "cross-env NEXTJS_BUILD_TARGET=serverless next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
+  "resolutions": {
+    "@emotion/core": "^11.0.0",
+    "@emotion/styled": "^11.0.0"
+  },
   "dependencies": {
     "@emotion/react": "^11.4.1",
-    "@lootexchange/sdk": "workspace:*",
+    "@lootexchange/sdk": "^0.0.4",
     "@rebass/forms": "^4.0.6",
     "@walletconnect/web3-provider": "^1.6.5",
     "emotion-theming": "^11.0.0",
@@ -36,7 +39,6 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3",
-    "cross-env": "^7.0.3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2"
   }

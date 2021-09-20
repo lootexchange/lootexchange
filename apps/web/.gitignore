@@ -29,8 +29,6 @@
 !.yarn/versions
 .pnp.*
 
-
-
 # debug
 npm-debug.log*
 yarn-debug.log*
