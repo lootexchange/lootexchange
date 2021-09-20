@@ -22,7 +22,6 @@
 
 # Yarn
 .yarn/*
-.yarn/install-state.gz
 !.yarn/patches
 !.yarn/releases
 !.yarn/plugins
