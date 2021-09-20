@@ -86,6 +86,7 @@ const Bag = () => {
                   <Flex mb={3}>
                     <Box width={30} height={30} mr={2}>
                       <Image
+                        alt="ETH"
                         src={ether}
                         width={30}
                         height={30}
@@ -101,6 +102,15 @@ const Bag = () => {
                       if (!eth.signer) {
                         await eth.connect();
                       } else {
+                        // No need to check approvals as the tx would fail
+                        // if the correct sell approval is missing. What's
+                        // needed is error handling in case the transaction
+                        // fails. The tx could fail for several reasons, but
+                        // a common failure scenario is insuffient funds,
+                        // which fortunately can be trakced down in a similar
+                        // way as described below
+                        // https://twitter.com/smpalladino/status/1436350919243862016?s=20
+
                         const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
                           await eth.signer.getAddress(),
                           bag.sellOrder

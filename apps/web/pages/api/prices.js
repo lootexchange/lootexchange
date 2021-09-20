@@ -1,7 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import fetch from "node-fetch";
 
-export default async (req, res) => {
+const api = async (req, res) => {
   let response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/prices`
   );
@@ -9,3 +8,5 @@ export default async (req, res) => {
 
   res.status(200).json(json);
 };
+
+export default api;
