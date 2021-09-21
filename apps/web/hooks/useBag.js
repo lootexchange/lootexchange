@@ -46,15 +46,12 @@ const useBag = (id) => {
 
       const ownerAddress = data.bag.currentOwner.address;
 
-      const prices = await fetch("/api/prices").then((response) =>
-        response.json()
-      );
       const orders = await fetch(`/api/orders?tokenId=${id}`).then((response) =>
         response.json()
       );
 
       // Sort the sell orders by base price
-      const sellOrders = orders.sells.sort((a, b) =>
+      const sellOrders = orders.orders.sells.sort((a, b) =>
         ethers.BigNumber.from(a.basePrice)
           .sub(ethers.BigNumber.from(b.basePrice))
           .lte(0)
@@ -66,8 +63,8 @@ const useBag = (id) => {
         ...data.bag,
         ...bagData,
         shortName: shortenAddress(ownerAddress),
-        isForSale: !!prices[id],
-        price: prices[id],
+        isForSale: sellOrders.length !== 0,
+        price: Number(ethers.utils.formatEther(sellOrders[0].basePrice)),
         transfers: data.transfers,
         sellOrder: sellOrders.length ? sellOrders[0] : null,
       });
