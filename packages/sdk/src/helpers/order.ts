@@ -1,6 +1,7 @@
 import { defaultAbiCoder } from "@ethersproject/abi";
 import { Signer } from "@ethersproject/abstract-signer";
 import { arrayify, splitSignature } from "@ethersproject/bytes";
+import { hashMessage } from "@ethersproject/hash";
 import { keccak256 } from "@ethersproject/solidity";
 import { verifyMessage } from "@ethersproject/wallet";
 
@@ -68,6 +69,15 @@ export default class OrderHelper {
       r: order.r,
       s: order.s,
     };
+  }
+
+  public static hash(order: Order): string {
+    const rawWyvernOrderHash = keccak256(
+      WYVERN_ORDER_FIELDS,
+      this.toRaw(order)
+    );
+    // Return the EIP191 prefix hash
+    return hashMessage(arrayify(rawWyvernOrderHash));
   }
 
   public static encode(order: Order): string {

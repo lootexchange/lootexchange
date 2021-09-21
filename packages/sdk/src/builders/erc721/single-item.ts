@@ -33,6 +33,18 @@ type RequiredOrderParams = {
 export default class SingleItemErc721OrderBuilder {
   // --------------- Public ---------------
 
+  public static extractTokenId(order: Order): string | undefined {
+    try {
+      const result = new Interface(Erc721Abi as any).decodeFunctionData(
+        "transferFrom",
+        order.calldata
+      );
+      return result.tokenId.toString();
+    } catch {
+      return undefined;
+    }
+  }
+
   public static isSell(order: Order, tokenId: string): boolean {
     // Build a mock order that is for sure well-formatted
     const built = this.sell({
