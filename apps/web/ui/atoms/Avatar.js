@@ -11,6 +11,7 @@ const Avatar = ({ address = "test", size = 30, avatar, ...props }) => (
   >
     {avatar ? (
       <img
+        alt={"avatar for " + address}
         src={avatar}
         style={{ width: size, height: size, objectFit: "cover" }}
       />
