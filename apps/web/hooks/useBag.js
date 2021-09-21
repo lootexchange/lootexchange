@@ -64,7 +64,10 @@ const useBag = (id) => {
         ...bagData,
         shortName: shortenAddress(ownerAddress),
         isForSale: sellOrders.length !== 0,
-        price: Number(ethers.utils.formatEther(sellOrders[0].basePrice)),
+        price:
+          sellOrders.length !== 0
+            ? Number(ethers.utils.formatEther(sellOrders[0].basePrice))
+            : 0,
         transfers: data.transfers,
         sellOrder: sellOrders.length ? sellOrders[0] : null,
       });
