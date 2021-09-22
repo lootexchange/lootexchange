@@ -7,7 +7,6 @@ const useExchangeRate = () => {
     const fetchExchangeRate = async () => {
       let response = await fetch("/api/exchangeRate");
       let json = await response.json();
-      console.log(json);
       setExchangeRate(json.data.rates.USD);
     };
 
