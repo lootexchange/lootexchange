@@ -23,3 +23,6 @@ yarn-error.log*
 
 # Npm
 .npmrc
+
+# Misc
+.DS_Store
