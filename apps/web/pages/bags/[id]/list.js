@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
 import useCurrentUser from "@hooks/useCurrentUser";
 import Tilt from "react-parallax-tilt";
-import { Builders, Helpers } from "@lootexchange/sdk";
 
 import {
   Flex,
@@ -14,6 +13,7 @@ import {
   H2,
   H3,
   P,
+  Input,
   Checkbox,
   Button,
   H1,
@@ -32,6 +32,8 @@ import Link from "next/link";
 import eth from "../../../ethers";
 
 import useExchangeRate from "@hooks/useExchangeRate";
+
+import { Price, ItemCard } from "./purchase";
 
 import { shortenAddress, formatMoney } from "@utils";
 import moment from "moment";
@@ -60,54 +62,24 @@ const CancelButton = styled(Button)`
   }
 `;
 
-export const Price = ({ cost, sub }) => (
-  <Flex flexDirection="column" justifyContent="flexEnd" alignItems="flex-end">
-    <Box>
-      <Flex>
-        <Image src={ether} width={48 / 2} height={48 / 2} />
-        <P ml={1} fontSize={20}>
-          {cost}
-        </P>
-      </Flex>
-    </Box>
-    <P fontSize={14} color="rgba(255,255,255,0.8)" mt={2}>
-      ({sub})
-    </P>
-  </Flex>
-);
-
-export const ItemCard = ({ bag, price, exchangeRate }) => (
-  <Flex>
-    <Pane width={100} mr={3}>
-      <img
-        src={bag.image}
-        style={{
-          width: "100%",
-          padding: 10
-        }}
-      />
-    </Pane>
-    <Box flex={1}>
-      <P my={2} color="#b1b1ff" fontSize={12}>
-        Loot (for Adventurers)
-      </P>
-      <P>{bag.name}</P>
-      <Owner
-        mt={3}
-        name={bag.shortName}
-        address={bag.currentOwner.address}
-        avatar={bag.ownerAvatar}
-      />
-    </Box>
-    {price && <Price cost={price} sub={formatMoney(price * exchangeRate)} />}
-  </Flex>
-);
-
-const ReviewStep = ({ bag, exchangeRate }) => (
+const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
   <>
-    <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
-    <Hr my={4} />
+    <ItemCard bag={bag} />
 
+    <Hr my={4} />
+    <P mb={3}>What do you want to list your bag for?</P>
+    <Box position="relative">
+      <Box position="absolute" left="8px" top={12}>
+        <Image src={ether} width={48 / 2} height={48 / 2} />
+      </Box>
+      <Input
+        pl={36}
+        value={listPrice}
+        onChange={e => setListPrice(e.target.value)}
+      />
+    </Box>
+
+    <Hr my={4} />
     <H2 mb={4} fontSize={16}>
       Distribution
     </H2>
@@ -122,22 +94,22 @@ const ReviewStep = ({ bag, exchangeRate }) => (
           />
         </Flex>
       </Box>
-      <Price cost={bag.price * 0.975} sub="97.5%" />
+      <Price cost={listPrice} sub="100%" />
     </Flex>
 
     <Flex>
       <Box flex={1}>
         <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
         <Flex mt={3} justifyContent="space-between">
-          <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+          <Logo width={257 / 2.7} height={98 / 2.7} />
         </Flex>
       </Box>
-      <Price cost={bag.price * 0.025} sub="2.5%" />
+      <Price cost="0" sub="0%" />
     </Flex>
   </>
 );
 
-const WaitingForConfirmation = ({ bag, exchangeRate }) => {
+const WaitingForConfirmation = ({ bag }) => {
   let web3Provider = eth.provider.provider;
   let meta = web3Provider.walletMeta || {
     icons: [
@@ -147,7 +119,7 @@ const WaitingForConfirmation = ({ bag, exchangeRate }) => {
   };
   return (
     <>
-      <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
+      <ItemCard bag={bag} />
       <Hr my={4} mb={5} />
       <H2 mb={5} fontSize={30} textAlign="center" px={4}>
         Confirm the transaction in your wallet
@@ -164,9 +136,9 @@ const WaitingForConfirmation = ({ bag, exchangeRate }) => {
   );
 };
 
-const WaitingforTransaction = ({ bag, transaction, exchangeRate }) => (
+const WaitingforTransaction = ({ bag, transaction }) => (
   <>
-    <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
+    <ItemCard bag={bag} />
     <Hr my={4} mb={5} />
     <H2 mb={5} fontSize={30} textAlign="center" px={4}>
       Thank You. Just need to wait for the transaction to go through
@@ -178,12 +150,12 @@ const WaitingforTransaction = ({ bag, transaction, exchangeRate }) => (
   </>
 );
 
-const Confirmed = ({ bag, transaction }) => (
+const Confirmed = ({ bag, transaction, price, exchangeRate }) => (
   <>
-    <ItemCard bag={bag} />
+    <ItemCard bag={bag} price={price} exchangeRate={exchangeRate} />
     <Hr my={4} mb={5} />
     <H2 mb={5} fontSize={30} textAlign="center" px={4}>
-      Congrats. You got some loot!
+      Congrats. Your bag is listed on Loot Exchange!
     </H2>
     <Flex justifyContent="center" alignItems="center" flexDirection="column">
       <FaCheckCircle size={100} />
@@ -200,66 +172,38 @@ const STEPS = {
 
 const Purchase = () => {
   const router = useRouter();
+  const [listPrice, setListPrice] = useState(0);
   const currentUser = useCurrentUser();
   const [step, setStep] = useState(STEPS.review);
-  const { id } = router.query;
+  const { id, initialPrice } = router.query;
   let bag = useBag(id);
   let exchangeRate = useExchangeRate();
 
-  const purchase = async () => {
-      if (!eth.signer) {
-        await eth.connect();
-      } else {
-        // No need to check approvals as the tx would fail
-        // if the correct sell approval is missing. What's
-        // needed is error handling in case the transaction
-        // fails. The tx could fail for several reasons, but
-        // a common failure scenario is insuffient funds,
-        // which fortunately can be trakced down in a similar
-        // way as described below
-        // https://twitter.com/smpalladino/status/1436350919243862016?s=20
+  useEffect(() => {
+    if (initialPrice) {
+      setListPrice(initialPrice);
+    }
+  }, [initialPrice]);
 
-        
-        setStep(STEPS.waitingForConfirmation);
-        const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
-          await eth.signer.getAddress(),
-          bag.sellOrder
-        );
-        Helpers.Wyvern.match(
-          eth.signer,
-          buyOrder,
-          bag.sellOrder
-        ).then(async (tx)=>{
-          setStep(STEPS.waitingforTransaction);
-          let receipt = await tx.wait()
+  const list = () => {
+    if (step === STEPS.review) {
+      setStep(STEPS.waitingForConfirmation);
+
+      setTimeout(() => {
+        setStep(STEPS.waitingforTransaction);
+
+        setTimeout(() => {
           setStep(STEPS.completed);
-          console.log(receipt)
-        })
-        .catch(()=>{
-          // TODO: Maybe show an error (although most likely caused by user rejecting)
-          setStep(STEPS.review);
-        });
-
-
-      }
+        }, 3000);
+      }, 3000);
+    }
   };
-
-  if (step === STEPS.completed) {
-    bag = {
-      ...bag,
-      ownerAvatar: currentUser.avatar,
-      shortName: currentUser.name,
-      currentOwner: {
-        address: currentUser.address
-      }
-    };
-  }
 
   return (
     <Flex flex={1} bg="background" height="100%" overflow="hidden">
       <Box bg="#1e1e1e" flex={1} height={"100%"}>
         <Box p={3} position="absolute" top={0}>
-          <Logo width={Math.floor(257 / 2.3)} height={Math.floor(98 / 2.3)} />
+          <Logo width={257 / 2.3} height={98 / 2.3} />
         </Box>
         {bag && (
           <Flex
@@ -306,7 +250,7 @@ const Purchase = () => {
         p={4}
       >
         <Flex justifyContent="space-between" mb={4}>
-          <H2 fontSize={16}>Checkout</H2>
+          <H2 fontSize={16}>List your bag</H2>
           <Link href={`/bags/${bag && bag.id}`}>
             <a>
               <FaTimes />
@@ -317,17 +261,19 @@ const Purchase = () => {
           {bag &&
             {
               [STEPS.review]: (
-                <ReviewStep bag={bag} exchangeRate={exchangeRate} />
+                <ReviewStep
+                  bag={bag}
+                  listPrice={listPrice}
+                  setListPrice={setListPrice}
+                />
               ),
               [STEPS.waitingForConfirmation]: (
-                <WaitingForConfirmation bag={bag} exchangeRate={exchangeRate} />
+                <WaitingForConfirmation bag={bag} />
               ),
               [STEPS.waitingforTransaction]: (
-                <WaitingforTransaction bag={bag} exchangeRate={exchangeRate} />
+                <WaitingforTransaction bag={bag} />
               ),
-              [STEPS.completed]: (
-                <Confirmed bag={bag} exchangeRate={exchangeRate} />
-              )
+              [STEPS.completed]: <Confirmed bag={bag} />
             }[step]}
         </Box>
 
@@ -338,23 +284,9 @@ const Purchase = () => {
               Total
             </H2>
           </Box>
-          <Price
-            cost={bag ? bag.price : 0}
-            sub={bag ? formatMoney(bag.price * exchangeRate) : formatMoney(0)}
-          />
+          <Price cost={listPrice} sub={formatMoney(listPrice * exchangeRate)} />
         </Flex>
         <Flex mb={3} alignItems="center">
-          {false && (
-            <Box mr={3}>
-              <Checkbox type="checkbox" />
-            </Box>
-          )}
-          {step === STEPS.review && (
-            <P fontSize={12}>
-              By clicking this button, I agree to the terms and conditions
-            </P>
-          )}
-
           {step === STEPS.waitingForConfirmation && (
             <CancelButton>Cancel</CancelButton>
           )}
@@ -370,7 +302,7 @@ const Purchase = () => {
             </a>
           </Link>
         ) : (
-          <BuyButton onClick={purchase}>
+          <BuyButton onClick={list}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
                 <ReactLoading
@@ -381,7 +313,7 @@ const Purchase = () => {
                 />
               </Flex>
             ) : (
-              "Purchase"
+              "List on Loot Exchange"
             )}
           </BuyButton>
         )}

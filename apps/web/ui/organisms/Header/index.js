@@ -1,4 +1,4 @@
-import { Flex, Box, H1, P } from "@ui";
+import { Flex, Box, H1, P, Logo, Image } from "@ui";
 import useCurrentUser from "@hooks/useCurrentUser";
 
 import SearchInput from "./GlobalSearch";
@@ -18,7 +18,7 @@ const Header = () => {
       bg="background"
       alignItems="center"
     >
-      <H1>Loot</H1>
+      <Logo width={Math.floor(257 / 2.3)} height={Math.floor(98 / 2.3)} />
       <Flex mx={4} flex={1} alignItems="center">
         <SearchInput
           width="350px"
