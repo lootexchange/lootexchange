@@ -221,17 +221,21 @@ const Purchase = () => {
           await eth.signer.getAddress(),
           bag.sellOrder
         );
-        let tx = await Helpers.Wyvern.match(
+        Helpers.Wyvern.match(
           eth.signer,
           buyOrder,
           bag.sellOrder
-        );
+        ).then(async (tx)=>{
+          setStep(STEPS.waitingforTransaction);
+          let receipt = await tx.wait()
+          setStep(STEPS.completed);
+          console.log(receipt)
+        })
+        .catch(()=>{
+          // TODO: Maybe show an error (although most likely caused by user rejecting)
+          setStep(STEPS.review);
+        });
 
-
-        setStep(STEPS.waitingforTransaction);
-        let receipt = await tx.wait()
-        setStep(STEPS.completed);
-        console.log(receipt)
 
       }
   };
