@@ -204,6 +204,7 @@ const Purchase = () => {
 
   const purchase = async () => {
       if (!eth.signer) {
+        console.log('connect')
         await eth.connect();
       } else {
         // No need to check approvals as the tx would fail
@@ -215,16 +216,18 @@ const Purchase = () => {
         // way as described below
         // https://twitter.com/smpalladino/status/1436350919243862016?s=20
 
+        console.log('buy')
+        setStep(STEPS.waitingForConfirmation);
         const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
           await eth.signer.getAddress(),
           bag.sellOrder
         );
-        setStep(STEPS.waitingForConfirmation);
         await Helpers.Wyvern.match(
           eth.signer,
           buyOrder,
           bag.sellOrder
         );
+        
         setStep(STEPS.waitingforTransaction);
         // TODO: actually monitor the tx
         setTimeout(() => {
@@ -247,9 +250,7 @@ const Purchase = () => {
   return (
     <Flex flex={1} bg="background" height="100%" overflow="hidden">
       <Box bg="#1e1e1e" flex={1} height={"100%"}>
-        <Box p={3} position="absolute" top={0}>
-          <H1 style={{ fontSize: 24 }}>Loot</H1>
-        </Box>
+        <Header />
         {bag && (
           <Flex
             justifyContent="center"
