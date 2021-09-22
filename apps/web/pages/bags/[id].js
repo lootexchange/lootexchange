@@ -1,20 +1,18 @@
-import styled from "@emotion/styled";
-import { formatEther } from "@ethersproject/units";
-import useBag from "@hooks/useBag";
-import { Builders, Helpers } from "@lootexchange/sdk";
-import moment from "moment";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import styled from "@emotion/styled";
+import useBag from "@hooks/useBag";
 
-import { Flex, Box, Image, Pane, H2, H3, P, Button } from "@ui";
-import BackArrow from "@ui/organisms/BackArrow";
+import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
+import Link from "next/link";
 import Header from "@ui/organisms/Header";
+import BackArrow from "@ui/organisms/BackArrow";
 import NFT from "@ui/organisms/NFT";
 import Owner from "@ui/organisms/Owner";
-
-import eth from "@ethers";
-import { shortenAddress } from "@utils";
-
 import ether from "../../public/ether.png";
+
+import { shortenAddress } from "@utils";
+import moment from "moment";
 
 const BuyButton = styled(Button)`
   transition: background-color 300ms ease-in-out, color 250ms ease-in-out;
@@ -72,14 +70,14 @@ const Bag = () => {
                   bag.foot,
                   bag.hand,
                   bag.neck,
-                  bag.ring,
-                ].map((item) => (
+                  bag.ring
+                ].map(item => (
                   <P key={item} color="white" mb={3} fontSize={16}>
                     {item}
                   </P>
                 ))}
               </Box>
-              {bag.sellOrder && (
+              {bag.isForSale && (
                 <Box p={[3, 3, 4]} bg="rgb(37 34 47)">
                   <H3 color="#ffffffc2" mb={2} fontSize={14}>
                     Current Price
@@ -87,47 +85,19 @@ const Bag = () => {
                   <Flex mb={3}>
                     <Box width={30} height={30} mr={2}>
                       <Image
-                        alt="ETH"
                         src={ether}
                         width={30}
                         height={30}
                         objectFit="contain"
                       />
                     </Box>
-                    <H2 fontSize={24}>
-                      {formatEther(bag.sellOrder.basePrice)}
-                    </H2>
+                    <H2 fontSize={24}>{bag.price}</H2>
                   </Flex>
-                  <BuyButton
-                    bg="#ffffff69"
-                    color="white"
-                    onClick={async () => {
-                      if (!eth.signer) {
-                        await eth.connect();
-                      } else {
-                        // No need to check approvals as the tx would fail
-                        // if the correct sell approval is missing. What's
-                        // needed is error handling in case the transaction
-                        // fails. The tx could fail for several reasons, but
-                        // a common failure scenario is insuffient funds,
-                        // which fortunately can be trakced down in a similar
-                        // way as described below
-                        // https://twitter.com/smpalladino/status/1436350919243862016?s=20
-
-                        const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
-                          await eth.signer.getAddress(),
-                          bag.sellOrder
-                        );
-                        await Helpers.Wyvern.match(
-                          eth.signer,
-                          buyOrder,
-                          bag.sellOrder
-                        );
-                      }
-                    }}
-                  >
-                    Buy Now
-                  </BuyButton>
+                  <Link href={`/bags/${bag.id}/purchase`}>
+                    <BuyButton bg="#ffffff69" color="white">
+                      Buy Now
+                    </BuyButton>
+                  </Link>
                 </Box>
               )}
             </Pane>
@@ -158,7 +128,7 @@ const Bag = () => {
               <tbody>
                 {bag.transfers
                   .sort((a, b) => b.timestamp - a.timestamp)
-                  .map((transfer) => {
+                  .map(transfer => {
                     return (
                       <tr key={transfer.timestamp}>
                         <td>
