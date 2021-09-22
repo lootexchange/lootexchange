@@ -51,7 +51,7 @@ const useBag = (id) => {
       );
 
       // Sort the sell orders by base price
-      const sellOrders = orders.orders.sells.sort((a, b) =>
+      const sellOrders = orders.sort((a, b) =>
         ethers.BigNumber.from(a.basePrice)
           .sub(ethers.BigNumber.from(b.basePrice))
           .lte(0)
