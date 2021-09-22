@@ -1,12 +1,9 @@
-import * as ethers from "ethers";
-import { useManualQuery } from "graphql-hooks";
 import { useState, useEffect } from "react";
-
-import eth from "@ethers";
-import useCurrentUser from "@hooks/useCurrentUser";
-import { shortenAddress } from "@utils";
-
+import { useManualQuery } from "graphql-hooks";
 import bags from "../data/loot.json";
+import eth from "../ethers";
+import { shortenAddress } from "@utils";
+import useCurrentUser from "@hooks/useCurrentUser";
 
 const BAG_QUERY = `query BagQuery($id: ID!) {
   bag(id: $id) {
@@ -19,17 +16,18 @@ const BAG_QUERY = `query BagQuery($id: ID!) {
 
   transfers(where: { bag: $id }) {
     from{
-      address
-    }
-    to {
-      address
-    }
-    timestamp
-    txHash
+   address
+  }
+  to {
+    address
+ }
+  timestamp
+  txHash
+
   }
 }`;
 
-const useBag = (id) => {
+const useBag = id => {
   const [bag, setBag] = useState(null);
   const [fetchedEns, setFetchedEns] = useState(false);
   const currentUser = useCurrentUser();
@@ -38,38 +36,24 @@ const useBag = (id) => {
 
   useEffect(() => {
     const getBag = async () => {
-      const bagData = bags.find((b) => b.id == id);
+      let bagData = bags.find(b => b.id == id);
 
       const { data } = await fetchBag({
-        variables: { id },
+        variables: { id }
       });
 
-      const ownerAddress = data.bag.currentOwner.address;
+      let ownerAddress = data.bag.currentOwner.address;
 
-      const orders = await fetch(`/api/orders?tokenId=${id}`).then((response) =>
-        response.json()
-      );
-
-      // Sort the sell orders by base price
-      const sellOrders = orders.sort((a, b) =>
-        ethers.BigNumber.from(a.basePrice)
-          .sub(ethers.BigNumber.from(b.basePrice))
-          .lte(0)
-          ? -1
-          : 1
-      );
+      let response = await fetch("/api/prices");
+      let prices = await response.json();
 
       setBag({
         ...data.bag,
         ...bagData,
         shortName: shortenAddress(ownerAddress),
-        isForSale: sellOrders.length !== 0,
-        price:
-          sellOrders.length !== 0
-            ? Number(ethers.utils.formatEther(sellOrders[0].basePrice))
-            : 0,
-        transfers: data.transfers,
-        sellOrder: sellOrders.length ? sellOrders[0] : null,
+        isForSale: !!prices[id],
+        price: prices[id],
+        transfers: data.transfers
       });
     };
 
@@ -77,6 +61,7 @@ const useBag = (id) => {
       getBag();
     }
   }, [id]);
+  const bagId = bag && bag.id;
 
   useEffect(() => {
     const getEnsName = async () => {
@@ -84,18 +69,18 @@ const useBag = (id) => {
       let ens = await eth.getEnsName(ownerAddress);
       let avatar = await eth.getAvatar(ens);
 
-      setFetchedEns(true);
       setBag({
         ...bag,
+        isOwnBag: ownerAddress === currentUser.address,
         ownerAvatar: avatar,
-        shortName: ens || shortenAddress(ownerAddress),
+        shortName: ens || shortenAddress(ownerAddress)
       });
     };
 
-    if (currentUser && bag && !fetchedEns) {
+    if (currentUser && bag) {
       getEnsName();
     }
-  }, [currentUser, bag]);
+  }, [currentUser, bagId]);
 
   return bag;
 };

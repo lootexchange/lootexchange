@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
+import { FaInfoCircle } from "react-icons/fa";
 
 import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
 import Link from "next/link";
@@ -24,10 +25,99 @@ const BuyButton = styled(Button)`
   }
 `;
 
+const Price = ({ price }) => (
+  <>
+    <H3 color="#ffffffc2" mb={2} fontSize={14}>
+      Current Price
+    </H3>
+    <Flex mb={3}>
+      <Box width={30} height={30} mr={2}>
+        <Image src={ether} width={30} height={30} objectFit="contain" />
+      </Box>
+      <H2 fontSize={24}>{price}</H2>
+    </Flex>
+  </>
+);
+
+const PriceBox = ({ ...props }) => (
+  <Box p={[3, 3, 4]} bg="rgb(37 34 47)" {...props} />
+);
+
 const Bag = () => {
   const router = useRouter();
   const { id } = router.query;
   const bag = useBag(id);
+
+  const getCallToAction = () => {
+    if (!bag.isOwnBag && bag.isForSale) {
+      return (
+        <PriceBox>
+          <Price price={bag.price} />
+          <Link href={`/bags/${bag.id}/purchase`} passHref>
+            <BuyButton bg="#ffffff69" color="white">
+              Buy Now
+            </BuyButton>
+          </Link>
+        </PriceBox>
+      );
+    }
+
+    if (bag.isOwnBag && bag.isForSale && bag.isOnExchange) {
+      return (
+        <PriceBox>
+          <Price price={bag.price} />
+          <Flex>
+            <Link href={`/bags/${bag.id}/updatePrice`} passHref>
+              <BuyButton bg="#ffffff69" color="white" mr={2}>
+                Change Price
+              </BuyButton>
+            </Link>
+            <Link href={`/bags/${bag.id}/cancel`} passHref>
+              <BuyButton bg="#ffffff69" color="white" ml={2}>
+                Cancel Listing
+              </BuyButton>
+            </Link>
+          </Flex>
+        </PriceBox>
+      );
+    }
+
+    if (bag.isOwnBag && bag.isForSale && !bag.isOnExchange) {
+      return (
+        <PriceBox>
+          <Price price={bag.price} />
+          <Link href={`/bags/${bag.id}/sell?price=${bag.price}`} passHref>
+            <BuyButton bg="#ffffff69" color="white" mr={2}>
+              Relist on Loot Exchange
+            </BuyButton>
+          </Link>
+          <Flex mt={3}>
+            <Box mr={3}>
+              <FaInfoCircle />
+            </Box>
+            <P fontSize={12} lineHeight={1.9} mt={-1}>
+              You bag is listed on open sea. If you relist and someone buys your
+              bag from Loot exchange, you&apos;ll pay 0% in transaction fees!
+            </P>
+          </Flex>
+        </PriceBox>
+      );
+    }
+
+    if (bag.isOwnBag && !bag.isForSale) {
+      return (
+        <PriceBox>
+          <Link href={`/bags/${bag.id}/sell`} passHref>
+            <BuyButton bg="#ffffff69" color="white" mr={2}>
+              Sell
+            </BuyButton>
+          </Link>
+        </PriceBox>
+      );
+    }
+
+    return false;
+  };
 
   return (
     <Box flex={1} flexDirection="column" bg="background">
@@ -77,29 +167,7 @@ const Bag = () => {
                   </P>
                 ))}
               </Box>
-              {bag.isForSale && (
-                <Box p={[3, 3, 4]} bg="rgb(37 34 47)">
-                  <H3 color="#ffffffc2" mb={2} fontSize={14}>
-                    Current Price
-                  </H3>
-                  <Flex mb={3}>
-                    <Box width={30} height={30} mr={2}>
-                      <Image
-                        src={ether}
-                        width={30}
-                        height={30}
-                        objectFit="contain"
-                      />
-                    </Box>
-                    <H2 fontSize={24}>{bag.price}</H2>
-                  </Flex>
-                  <Link href={`/bags/${bag.id}/purchase`}>
-                    <BuyButton bg="#ffffff69" color="white">
-                      Buy Now
-                    </BuyButton>
-                  </Link>
-                </Box>
-              )}
+              {getCallToAction()}
             </Pane>
           </Flex>
         )}

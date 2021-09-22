@@ -17,6 +17,7 @@ export { default as Input } from "./atoms/Input";
 export { default as Select } from "./atoms/Select";
 
 // elements
+export { default as Logo } from "./atoms/Logo";
 export { default as Avatar } from "./atoms/Avatar";
 export { default as Image } from "next/image";
 export { default as Button } from "./atoms/Button";
