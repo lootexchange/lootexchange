@@ -1,5 +1,5 @@
 export const shortenAddress = address => {
-  return address.slice(0, 3) + "..." + address.slice(-4, -1);
+  return address.slice(0, 3) + "..." + address.slice(-3);
 };
 
 export const formatMoney = money =>

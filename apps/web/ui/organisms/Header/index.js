@@ -1,5 +1,6 @@
 import { Flex, Box, H1, P, Logo, Image } from "@ui";
 import useCurrentUser from "@hooks/useCurrentUser";
+import Link from "next/link";
 
 import SearchInput from "./GlobalSearch";
 import Account from "./Account";
@@ -29,7 +30,11 @@ const Header = () => {
       </Flex>
       {currentUser && (
         <Flex mr={4}>
-          <NavItem>My Loot</NavItem>
+          <Link href={`/adventurers/${currentUser.address}`}>
+            <a>
+              <NavItem>My Loot</NavItem>
+            </a>
+          </Link>
         </Flex>
       )}
       <Account />
