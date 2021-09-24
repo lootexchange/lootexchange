@@ -13,7 +13,7 @@ const useBags = ({ sort, filter }) => {
 
   useEffect(() => {
     const getPrices = async () => {
-      let response = await fetch("/api/prices");
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/prices`);
       let prices = await response.json();
 
       let withPrices = bags.map(bag => {

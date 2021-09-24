@@ -44,7 +44,7 @@ const useBag = id => {
 
       let ownerAddress = data.bag.currentOwner.address;
 
-      let response = await fetch("/api/prices");
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/prices`);
       let prices = await response.json();
 
       setBag({
