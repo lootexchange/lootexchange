@@ -40,9 +40,10 @@ const useBag = id => {
       let bagData = loot().find(b => b.id == id);
 
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/token/${id}/info`
+        `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
       );
       let token = await response.json();
+      console.log(token);
 
       setBag({
         ...token.data.token,
