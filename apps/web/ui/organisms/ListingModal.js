@@ -111,7 +111,7 @@ export default function ListingModal({ signer, collection, tokenId, listPrice })
             .then((tx) => {
               setStep1({
                 ...step1,
-                tx: `https://rinkeby.etherscan.io/tx/${tx.hash}`,
+                tx: `https://${process.env.NEXT_PUBLIC_CHAIN_ID==4?'rinkeby':'www'}.etherscan.io/tx/${tx.hash}`,
               })
               tx.wait().then(() =>
                 proxyRegistryContract
@@ -126,8 +126,7 @@ export default function ListingModal({ signer, collection, tokenId, listPrice })
                       pending: false,
                       success: true,
                       error: null,
-                      // TODO: Dynamically select explorer link based on current network
-                      tx: `https://rinkeby.etherscan.io/tx/${tx.hash}`,
+                      tx: `https://${process.env.NEXT_PUBLIC_CHAIN_ID==4?'rinkeby':'www'}.etherscan.io/tx/${tx.hash}`,
                     })
                   })
               )
@@ -266,7 +265,7 @@ export default function ListingModal({ signer, collection, tokenId, listPrice })
         })
         sellOrder = await Helpers.Order.sign(signer, sellOrder)
 
-        await axios.post('https://api.rinkeby.loot.exchange/orders', {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/orders`, {
           orders: [sellOrder],
         })
 
