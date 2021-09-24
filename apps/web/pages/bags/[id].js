@@ -127,7 +127,7 @@ const Bag = () => {
       <Header />
       <Box p={3} pt={[1, 1, 1, 3]} maxWidth="large" margin="auto">
         <Flex>
-          <BackArrow mb={3} />
+          <BackArrow to="/" mb={3} />
         </Flex>
         {bag && (
           <Flex flexWrap="wrap">

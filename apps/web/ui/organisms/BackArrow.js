@@ -7,7 +7,7 @@ const BackArrow = props => {
 
   return (
     <Flex
-      onClick={() => router.back()}
+      onClick={() => (props.to ? router.replace(props.to) : router.back())}
       alignItems="center"
       style={{ cursor: "pointer" }}
       {...props}
