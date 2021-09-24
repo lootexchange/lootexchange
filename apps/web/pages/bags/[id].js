@@ -147,13 +147,13 @@ const Bag = () => {
             <Pane flex={1} display="flex" flexDirection="column" bg="#161617">
               <Box p={[3, 3, 4]} flex={1}>
                 <H2 mb={2}>{bag.name}</H2>
-                <Link href={`/adventurers/${bag.currentOwner.address}`}>
+                <Link href={`/adventurers/${bag.owner}`}>
                   <a>
                     <Owner
                       mb={4}
                       large
                       name={bag.shortName}
-                      address={bag.currentOwner.address}
+                      address={bag.owner}
                       avatar={bag.ownerAvatar}
                     />
                   </a>

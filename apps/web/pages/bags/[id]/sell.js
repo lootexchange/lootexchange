@@ -90,7 +90,7 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
         <Flex mt={3} justifyContent="space-between">
           <Owner
             name={bag.shortName}
-            address={bag.currentOwner.address}
+            address={bag.owner}
             avatar={bag.ownerAvatar}
           />
         </Flex>
@@ -236,7 +236,7 @@ const Purchase = () => {
               mt={4}
               large
               name={bag.shortName}
-              address={bag.currentOwner.address}
+              address={bag.owner}
               avatar={bag.ownerAvatar}
             />
           </Flex>

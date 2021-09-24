@@ -33,27 +33,26 @@ const useBag = id => {
   const currentUser = useCurrentUser();
 
   const [fetchBag] = useManualQuery(BAG_QUERY);
+  let start = Date.now()
 
   useEffect(() => {
     const getBag = async () => {
       let bagData = bags.find(b => b.id == id);
+      
 
-      const { data } = await fetchBag({
-        variables: { id }
-      });
+      console.log('start',(Date.now()-start)/1000)
 
-      let ownerAddress = data.bag.currentOwner.address;
-
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/prices`);
-      let prices = await response.json();
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/token/${id}/info`);
+      let token = await response.json();
+      console.log('token',(Date.now()-start)/1000)
+      console.log(token.data.token)
 
       setBag({
-        ...data.bag,
+        ...token.data.token,
         ...bagData,
-        shortName: shortenAddress(ownerAddress),
-        isForSale: !!prices[id],
-        price: prices[id],
-        transfers: data.transfers
+        shortName: shortenAddress(token.data.token.owner),
+        isForSale: !!token.data.token.listingPrice,
+        price: token.data.token.listingPrice
       });
     };
 
@@ -64,8 +63,25 @@ const useBag = id => {
   const bagId = bag && bag.id;
 
   useEffect(() => {
+    const getTransfers = async () => {
+      const { data } = await fetchBag({
+        variables: { id }
+      });
+      console.log('transfers',(Date.now()-start)/1000)
+      setBag({
+        ...bag,
+        transfers: data.transfers
+      });
+    };
+
+    if (bag) {
+      getTransfers();
+    }
+  }, [bagId]);
+
+  useEffect(() => {
     const getEnsName = async () => {
-      let ownerAddress = bag.currentOwner.address;
+      let ownerAddress = bag.owner;
       let ens = await eth.getEnsName(ownerAddress);
       let avatar = await eth.getAvatar(ens);
 
@@ -75,6 +91,7 @@ const useBag = id => {
         ownerAvatar: avatar,
         shortName: ens || shortenAddress(ownerAddress)
       });
+      console.log('ens',(Date.now()-start)/1000)
     };
 
     if (currentUser && bag) {
