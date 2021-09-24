@@ -45,14 +45,14 @@ const useBag = id => {
       let ownerAddress = data.bag.currentOwner.address;
 
       let response = await fetch("/api/prices");
-      let prices = await response.json().then((result) => result.data.prices);
+      let prices = await response.json().then((result) => result.data.listingInfos);
 
       setBag({
         ...data.bag,
         ...bagData,
         shortName: shortenAddress(ownerAddress),
         isForSale: !!prices[id],
-        price: prices[id] ? Number(prices[id].listingPrice) : 0,
+        price: prices[id] ? Number(prices[id].price) : 0,
         transfers: data.transfers
       });
     };

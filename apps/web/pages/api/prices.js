@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 const api = async (_req, res) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/pricestmp`
+    `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/listing-infos`
   );
   const json = await response.json();
 
