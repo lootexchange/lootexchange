@@ -38,18 +38,16 @@
     "reflexbox": "^4.0.6",
     "styled-system": "^5.1.5",
     "use-debounce": "^7.0.0",
-    "web3modal": "^1.9.4"
+    "web3modal": "^1.9.4",
+    "postcss": "^8.3.7",
+    "tailwindcss": "^2.2.15",
+    "@heroicons/react": "^1.0.4",
+    "autoprefixer": "^10.3.5",
+    "axios": "^0.21.4"
   },
   "devDependencies": {
-    "@georgeroman/wyvern-v2-sdk": "^0.0.20",
-    "@headlessui/react": "^1.4.1",
-    "@heroicons/react": "^1.0.4",
     "@types/react-modal": "^3",
-    "autoprefixer": "^10.3.5",
-    "axios": "^0.21.4",
     "eslint": "7.32.0",
-    "eslint-config-next": "11.1.2",
-    "postcss": "^8.3.7",
-    "tailwindcss": "^2.2.15"
+    "eslint-config-next": "11.1.2"
   }
 }

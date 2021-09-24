@@ -87,7 +87,7 @@ const Bag = () => {
         <PriceBox>
           <Price price={bag.price} />
           <Link
-            href={`/bags/${bag.id}/list?initialPrice=${bag.price}`}
+            href={`/bags/${bag.id}/sell?initialPrice=${bag.price}`}
             passHref
           >
             <BuyButton bg="#ffffff69" color="white" mr={2}>
@@ -110,7 +110,7 @@ const Bag = () => {
     if (bag.isOwnBag && !bag.isForSale) {
       return (
         <PriceBox>
-          <Link href={`/bags/${bag.id}/list`} passHref>
+          <Link href={`/bags/${bag.id}/sell`} passHref>
             <BuyButton bg="#ffffff69" color="white" mr={2}>
               Sell
             </BuyButton>
