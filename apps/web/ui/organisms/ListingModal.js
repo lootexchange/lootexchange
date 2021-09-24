@@ -296,6 +296,10 @@ export default function ListingModal({ signer, collection, tokenId, listPrice })
 
   function closeModal() {
     setIsOpen(false)
+    // Reset State
+    setStep1(initStep)
+    setStep2(initStep)
+    setStep3(initStep)
   }
 
   function openModal() {
