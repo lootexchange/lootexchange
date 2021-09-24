@@ -86,7 +86,10 @@ const Bag = () => {
       return (
         <PriceBox>
           <Price price={bag.price} />
-          <Link href={`/bags/${bag.id}/sell?price=${bag.price}`} passHref>
+          <Link
+            href={`/bags/${bag.id}/list?initialPrice=${bag.price}`}
+            passHref
+          >
             <BuyButton bg="#ffffff69" color="white" mr={2}>
               Relist on Loot Exchange
             </BuyButton>
@@ -107,7 +110,7 @@ const Bag = () => {
     if (bag.isOwnBag && !bag.isForSale) {
       return (
         <PriceBox>
-          <Link href={`/bags/${bag.id}/sell`} passHref>
+          <Link href={`/bags/${bag.id}/list`} passHref>
             <BuyButton bg="#ffffff69" color="white" mr={2}>
               Sell
             </BuyButton>
@@ -124,7 +127,7 @@ const Bag = () => {
       <Header />
       <Box p={3} pt={[1, 1, 1, 3]} maxWidth="large" margin="auto">
         <Flex>
-          <BackArrow mb={3} />
+          <BackArrow to="/" mb={3} />
         </Flex>
         {bag && (
           <Flex flexWrap="wrap">
@@ -144,13 +147,17 @@ const Bag = () => {
             <Pane flex={1} display="flex" flexDirection="column" bg="#161617">
               <Box p={[3, 3, 4]} flex={1}>
                 <H2 mb={2}>{bag.name}</H2>
-                <Owner
-                  mb={4}
-                  large
-                  name={bag.shortName}
-                  address={bag.currentOwner.address}
-                  avatar={bag.ownerAvatar}
-                />
+                <Link href={`/adventurers/${bag.currentOwner.address}`}>
+                  <a>
+                    <Owner
+                      mb={4}
+                      large
+                      name={bag.shortName}
+                      address={bag.currentOwner.address}
+                      avatar={bag.ownerAvatar}
+                    />
+                  </a>
+                </Link>
 
                 {[
                   bag.weapon,

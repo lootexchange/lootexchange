@@ -8,6 +8,7 @@ import Fuse from "fuse.js";
 import { ethers } from "ethers";
 import eth from "../../../ethers";
 import Input from "./SearchInput";
+import { shortenAddress } from "@utils";
 
 const fuse = new Fuse(Object.keys(items), { includeScore: true });
 
@@ -38,7 +39,7 @@ const ItemWrapper = styled(Box)`
 
 const routeMap = {
   bag: "bags",
-  address: "adventurer",
+  address: "adventurers",
   item: "item"
 };
 

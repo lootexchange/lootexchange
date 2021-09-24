@@ -8,6 +8,7 @@ const AuthWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useRecoilState(currentUserAtom);
   useEffect(() => {
     const connect = async () => {
+      eth.setCurrentUser = setCurrentUser;
       await eth.connect();
       setCurrentUser(eth.user);
     };
