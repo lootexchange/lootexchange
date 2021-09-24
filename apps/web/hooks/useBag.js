@@ -33,19 +33,13 @@ const useBag = id => {
   const currentUser = useCurrentUser();
 
   const [fetchBag] = useManualQuery(BAG_QUERY);
-  let start = Date.now()
 
   useEffect(() => {
     const getBag = async () => {
       let bagData = bags.find(b => b.id == id);
-      
-
-      console.log('start',(Date.now()-start)/1000)
 
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/token/${id}/info`);
       let token = await response.json();
-      console.log('token',(Date.now()-start)/1000)
-      console.log(token.data.token)
 
       setBag({
         ...token.data.token,
@@ -67,7 +61,6 @@ const useBag = id => {
       const { data } = await fetchBag({
         variables: { id }
       });
-      console.log('transfers',(Date.now()-start)/1000)
       setBag({
         ...bag,
         transfers: data.transfers
@@ -91,7 +84,6 @@ const useBag = id => {
         ownerAvatar: avatar,
         shortName: ens || shortenAddress(ownerAddress)
       });
-      console.log('ens',(Date.now()-start)/1000)
     };
 
     if (currentUser && bag) {
