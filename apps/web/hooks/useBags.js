@@ -22,7 +22,7 @@ const useBags = ({ sort, filter }) => {
         return {
           ...bag,
           isForSale: !!priceInfo,
-          price: priceInfo ? priceInfo.listingPrice : 0
+          price: priceInfo ? Number(priceInfo.listingPrice) : 0
         };
       });
 

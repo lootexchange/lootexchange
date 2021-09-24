@@ -52,7 +52,7 @@ const useBag = id => {
         ...bagData,
         shortName: shortenAddress(ownerAddress),
         isForSale: !!prices[id],
-        price: prices[id] ? prices[id].listingPrice : 0,
+        price: prices[id] ? Number(prices[id].listingPrice) : 0,
         transfers: data.transfers
       });
     };
