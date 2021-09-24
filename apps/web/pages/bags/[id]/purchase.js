@@ -203,45 +203,41 @@ const Purchase = () => {
   const currentUser = useCurrentUser();
   const [step, setStep] = useState(STEPS.review);
   const { id } = router.query;
-  let bag = useBag(id);
+  let { bag: bagData, owner } = useBag(id);
+  const bag = { ...bag, ...owner };
+
   let exchangeRate = useExchangeRate();
 
   const purchase = async () => {
-      if (!eth.signer) {
-        await eth.connect();
-      } else {
-        // No need to check approvals as the tx would fail
-        // if the correct sell approval is missing. What's
-        // needed is error handling in case the transaction
-        // fails. The tx could fail for several reasons, but
-        // a common failure scenario is insuffient funds,
-        // which fortunately can be trakced down in a similar
-        // way as described below
-        // https://twitter.com/smpalladino/status/1436350919243862016?s=20
+    if (!eth.signer) {
+      await eth.connect();
+    } else {
+      // No need to check approvals as the tx would fail
+      // if the correct sell approval is missing. What's
+      // needed is error handling in case the transaction
+      // fails. The tx could fail for several reasons, but
+      // a common failure scenario is insuffient funds,
+      // which fortunately can be trakced down in a similar
+      // way as described below
+      // https://twitter.com/smpalladino/status/1436350919243862016?s=20
 
-        
-        setStep(STEPS.waitingForConfirmation);
-        const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
-          await eth.signer.getAddress(),
-          bag.sellOrder
-        );
-        Helpers.Wyvern.match(
-          eth.signer,
-          buyOrder,
-          bag.sellOrder
-        ).then(async (tx)=>{
+      setStep(STEPS.waitingForConfirmation);
+      const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
+        await eth.signer.getAddress(),
+        bag.sellOrder
+      );
+      Helpers.Wyvern.match(eth.signer, buyOrder, bag.sellOrder)
+        .then(async tx => {
           setStep(STEPS.waitingforTransaction);
-          let receipt = await tx.wait()
+          let receipt = await tx.wait();
           setStep(STEPS.completed);
-          console.log(receipt)
+          console.log(receipt);
         })
-        .catch(()=>{
+        .catch(() => {
           // TODO: Maybe show an error (although most likely caused by user rejecting)
           setStep(STEPS.review);
         });
-
-
-      }
+    }
   };
 
   if (step === STEPS.completed) {

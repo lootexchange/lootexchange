@@ -20,17 +20,34 @@ export const getChainName = id => chainToName[id] || "Unknown";
 export const formatEth = bigNumber =>
   parseFloat(parseFloat(ethers.utils.formatUnits(bigNumber)).toFixed(4));
 
-
-export const loot = () =>{
-  let bags = []
-  for(let i=1; i<=7779; i++) {
+export const loot = () => {
+  let bags = [];
+  for (let i = 1; i <= 7779; i++) {
     bags.push({
-        "characterImage": `https://api.lootcharacter.com/imgs/bags/${('0000'+i).slice(-4)}.png`,
-        "id": i,
-        "image": `https://townsquare.vercel.app/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${i}.svg`,
-        "name": `Bag #${i}`,
-        "tokenId": i
-    })
+      characterImage: `https://api.lootcharacter.com/imgs/bags/${(
+        "0000" + i
+      ).slice(-4)}.png`,
+      id: i,
+      image: `https://townsquare.vercel.app/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${i}.svg`,
+      name: `Bag #${i}`,
+      tokenId: i
+    });
   }
-  return bags
-}
+  return bags;
+};
+
+export const abbreviateNumber = value => {
+  let newValue = value;
+  const suffixes = ["", "K", "M", "B", "T"];
+  let suffixNum = 0;
+
+  while (newValue >= 1000) {
+    newValue /= 1000;
+    suffixNum++;
+  }
+
+  newValue = parseFloat(newValue.toPrecision(3));
+
+  newValue += suffixes[suffixNum];
+  return newValue;
+};

@@ -43,13 +43,24 @@ const PriceBox = ({ ...props }) => (
   <Box p={[3, 3, 4]} bg="rgb(37 34 47)" {...props} />
 );
 
+const attributeDefaults = [
+  { value: "Weapon" },
+  { value: "Chest" },
+  { value: "Head" },
+  { value: "Waist" },
+  { value: "Foot" },
+  { value: "Hand" },
+  { value: "Neck" },
+  { value: "Ring" }
+];
+
 const Bag = () => {
   const router = useRouter();
   const { id } = router.query;
-  const bag = useBag(id);
+  const { bag, owner, transfers } = useBag(id);
 
   const getCallToAction = () => {
-    if (!bag.isOwnBag && bag.isForSale) {
+    if (!owner.isOwnBag && bag.isForSale) {
       return (
         <PriceBox>
           <Price price={bag.price} />
@@ -62,7 +73,7 @@ const Bag = () => {
       );
     }
 
-    if (bag.isOwnBag && bag.isForSale && bag.isOnExchange) {
+    if (owner.isOwnBag && bag.isForSale && bag.isOnExchange) {
       return (
         <PriceBox>
           <Price price={bag.price} />
@@ -82,7 +93,7 @@ const Bag = () => {
       );
     }
 
-    if (bag.isOwnBag && bag.isForSale && !bag.isOnExchange) {
+    if (owner.isOwnBag && bag.isForSale && !bag.isOnExchange) {
       return (
         <PriceBox>
           <Price price={bag.price} />
@@ -107,7 +118,7 @@ const Bag = () => {
       );
     }
 
-    if (bag.isOwnBag && !bag.isForSale) {
+    if (owner.isOwnBag && !bag.isForSale) {
       return (
         <PriceBox>
           <Link href={`/bags/${bag.id}/sell`} passHref>
@@ -152,14 +163,17 @@ const Bag = () => {
                     <Owner
                       mb={4}
                       large
-                      name={bag.shortName}
+                      name={owner.shortName}
                       address={bag.owner}
-                      avatar={bag.ownerAvatar}
+                      avatar={owner.ownerAvatar}
                     />
                   </a>
                 </Link>
 
-                {bag.attributes.map(item => (
+                {(bag.attributes.length
+                  ? bag.attributes
+                  : attributeDefaults
+                ).map(item => (
                   <P key={item.value} color="white" mb={3} fontSize={16}>
                     {item.value}
                   </P>
@@ -170,7 +184,7 @@ const Bag = () => {
           </Flex>
         )}
 
-        {bag && bag.transfers && (
+        {transfers && (
           <Box mt={4} mb={5}>
             <H3 fontSize={22} mb={3}>
               Transfers
@@ -192,7 +206,7 @@ const Bag = () => {
                 </tr>
               </thead>
               <tbody>
-                {bag.transfers
+                {transfers
                   .sort((a, b) => b.timestamp - a.timestamp)
                   .map(transfer => {
                     return (

@@ -33,8 +33,12 @@ const useWallet = address => {
 
   useEffect(() => {
     const getWallet = async () => {
-      let response = await fetch("/api/prices");
-      let prices = await response.json();
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/listing-infos`
+      );
+      let prices = await response
+        .json()
+        .then(result => result.data.listingInfos);
 
       const { data } = await fetchWallet({
         variables: { id: address.toLocaleLowerCase() }
@@ -42,16 +46,16 @@ const useWallet = address => {
 
       let { bags } = data.wallet;
 
-      let allBags = loot()
+      let allBags = loot();
       let withPrices = bags.map(bag => {
-        let price = prices[bag.id.toString()];
+        let priceInfo = prices[bag.id.toString()];
         let bagData = allBags.find(b => b.id == bag.id);
 
         return {
           ...bag,
           ...bagData,
-          isForSale: !!price,
-          price: price ? price : 0
+          isForSale: !!priceInfo,
+          price: priceInfo ? Number(priceInfo.price) : 0
         };
       });
 

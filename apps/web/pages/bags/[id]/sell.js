@@ -37,7 +37,7 @@ import { Price, ItemCard } from "./purchase";
 
 import { shortenAddress, formatMoney } from "@utils";
 import moment from "moment";
-import ListingModal from '@ui/organisms/ListingModal'
+import ListingModal from "@ui/organisms/ListingModal";
 
 // need to just make this style the actual button
 const BuyButton = styled(Button)`
@@ -177,7 +177,8 @@ const Purchase = () => {
   const currentUser = useCurrentUser();
   const [step, setStep] = useState(STEPS.review);
   const { id, initialPrice } = router.query;
-  let bag = useBag(id);
+  let { bag: bagData, owner } = useBag(id);
+  const bag = { ...bag, ...owner };
   let exchangeRate = useExchangeRate();
 
   useEffect(() => {
@@ -304,27 +305,28 @@ const Purchase = () => {
           </Link>
         ) : (
           <BuyButton>
-          {step !== STEPS.review ? (
-            <Flex justifyContent="center" alignItems="center">
-              <ReactLoading
-                type="cylon"
-                color="white"
-                width={55 - 32}
-                height={55 - 32}
-              />
-            </Flex>
-          ) : (
-            <>
-          {!!eth.provider && 
-            <ListingModal
-                signer={eth.provider.getSigner()}
-                collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
-                tokenId={id}
-                listPrice={listPrice}
-              />}
-            </>
-          )}
-        </BuyButton>
+            {step !== STEPS.review ? (
+              <Flex justifyContent="center" alignItems="center">
+                <ReactLoading
+                  type="cylon"
+                  color="white"
+                  width={55 - 32}
+                  height={55 - 32}
+                />
+              </Flex>
+            ) : (
+              <>
+                {!!eth.provider && (
+                  <ListingModal
+                    signer={eth.provider.getSigner()}
+                    collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
+                    tokenId={id}
+                    listPrice={listPrice}
+                  />
+                )}
+              </>
+            )}
+          </BuyButton>
         )}
       </Flex>
     </Flex>

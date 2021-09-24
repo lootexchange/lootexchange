@@ -28,6 +28,8 @@ const BAG_QUERY = `query BagQuery($id: ID!) {
 
 const useBag = id => {
   const [bag, setBag] = useState(null);
+  const [owner, setOwner] = useState({});
+  const [transfers, setTransfers] = useState([]);
   const [fetchedEns, setFetchedEns] = useState(false);
   const currentUser = useCurrentUser();
 
@@ -37,9 +39,10 @@ const useBag = id => {
     const getBag = async () => {
       let bagData = loot().find(b => b.id == id);
 
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/token/${id}/info`);
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/token/${id}/info`
+      );
       let token = await response.json();
-      console.log(token.data.token)
 
       setBag({
         ...token.data.token,
@@ -61,10 +64,7 @@ const useBag = id => {
       const { data } = await fetchBag({
         variables: { id }
       });
-      setBag({
-        ...bag,
-        transfers: data.transfers
-      });
+      setTransfers(data.transfers);
     };
 
     if (bag) {
@@ -78,7 +78,7 @@ const useBag = id => {
       let ens = await eth.getEnsName(ownerAddress);
       let avatar = await eth.getAvatar(ens);
 
-      setBag({
+      setOwner({
         ...bag,
         isOwnBag: ownerAddress === currentUser.address,
         ownerAvatar: avatar,
@@ -91,7 +91,11 @@ const useBag = id => {
     }
   }, [currentUser, bagId]);
 
-  return bag;
+  return {
+    bag,
+    transfers,
+    owner
+  };
 };
 
 export default useBag;

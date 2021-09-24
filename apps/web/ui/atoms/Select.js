@@ -37,6 +37,7 @@ const Select = ({
       bg="background"
       color="textPrimary"
       borderRadius="default"
+      borderWidth={1}
       borderColor="borderColorAlt"
       fontFamily="body"
       fontSize="14px"
