@@ -11,7 +11,7 @@ import axios from 'axios'
 import React, { Fragment, useEffect, useState } from 'react'
 import { HiCheck, HiX } from 'react-icons/hi'
 
-export default function ListingModal({ signer, collection, tokenId }) {
+export default function ListingModal({ signer, collection, tokenId, listPrice }) {
   let [isOpen, setIsOpen] = useState(false)
 
   let initStep = {
@@ -252,7 +252,7 @@ export default function ListingModal({ signer, collection, tokenId }) {
           tokenId: tokenId,
           paymentToken: AddressZero,
           // TODO: Dynamically set price
-          basePrice: parseEther('0.01'),
+          basePrice: parseEther(listPrice.toString()),
           // TODO: Dynamically (or not) set fee
           fee: 0,
           // The fee recipient on the maker's order should never be the zero address.

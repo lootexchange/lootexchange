@@ -320,6 +320,7 @@ const Purchase = () => {
                 signer={eth.provider.getSigner()}
                 collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
                 tokenId={id}
+                listPrice={listPrice}
               />}
             </>
           )}
