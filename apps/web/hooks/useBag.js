@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useManualQuery } from "graphql-hooks";
-import bags from "../data/loot.json";
 import eth from "../ethers";
-import { shortenAddress } from "@utils";
+import { shortenAddress, loot } from "@utils";
 import useCurrentUser from "@hooks/useCurrentUser";
 
 const BAG_QUERY = `query BagQuery($id: ID!) {
@@ -36,10 +35,11 @@ const useBag = id => {
 
   useEffect(() => {
     const getBag = async () => {
-      let bagData = bags.find(b => b.id == id);
+      let bagData = loot().find(b => b.id == id);
 
       let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/collection/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/token/${id}/info`);
       let token = await response.json();
+      console.log(token.data.token)
 
       setBag({
         ...token.data.token,

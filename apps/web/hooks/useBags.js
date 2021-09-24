@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import loot from "../data/loot.json";
+import { loot } from "@utils";
 import { sort } from "fast-sort";
 
 const sortByPrice = bags =>

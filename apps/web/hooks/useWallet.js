@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import loot from "../data/loot.json";
 import { useManualQuery } from "graphql-hooks";
 import { sort } from "fast-sort";
-import { shortenAddress } from "@utils";
+import { shortenAddress, loot } from "@utils";
 import useCurrentUser from "@hooks/useCurrentUser";
 import eth from "../ethers";
 
@@ -43,9 +42,10 @@ const useWallet = address => {
 
       let { bags } = data.wallet;
 
+      let allBags = loot()
       let withPrices = bags.map(bag => {
         let price = prices[bag.id.toString()];
-        let bagData = loot.find(b => b.id == bag.id);
+        let bagData = allBags.find(b => b.id == bag.id);
 
         return {
           ...bag,

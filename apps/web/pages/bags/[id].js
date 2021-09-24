@@ -159,18 +159,9 @@ const Bag = () => {
                   </a>
                 </Link>
 
-                {[
-                  bag.weapon,
-                  bag.chest,
-                  bag.head,
-                  bag.waist,
-                  bag.foot,
-                  bag.hand,
-                  bag.neck,
-                  bag.ring
-                ].map(item => (
-                  <P key={item} color="white" mb={3} fontSize={16}>
-                    {item}
+                {bag.attributes.map(item => (
+                  <P key={item.value} color="white" mb={3} fontSize={16}>
+                    {item.value}
                   </P>
                 ))}
               </Box>
