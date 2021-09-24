@@ -14,15 +14,15 @@ const useBags = ({ sort, filter }) => {
   useEffect(() => {
     const getPrices = async () => {
       let response = await fetch("/api/prices");
-      let prices = await response.json();
+      let prices = await response.json().then((result) => result.data.prices);
 
       let withPrices = bags.map(bag => {
-        let price = prices[bag.id.toString()];
+        let priceInfo = prices[bag.id.toString()];
 
         return {
           ...bag,
-          isForSale: !!price,
-          price: price ? price : 0
+          isForSale: !!priceInfo,
+          price: priceInfo ? priceInfo.listingPrice : 0
         };
       });
 
