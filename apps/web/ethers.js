@@ -112,6 +112,8 @@ class Eth {
     this.setupNetworkWatcher(rawProvider);
     await this.setupUser();
 
+    this.setCurrentUser(this.user);
+
     this.loaded = true;
 
     return true;

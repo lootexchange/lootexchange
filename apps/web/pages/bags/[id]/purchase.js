@@ -219,6 +219,9 @@ const Purchase = () => {
   let bag = { ...bagData, ...owner };
 
   let exchangeRate = useExchangeRate();
+  const login = async () => {
+    await eth.logIn();
+  };
 
   let purchase = async () => {
     if (!eth.signer) {
@@ -359,7 +362,9 @@ const Purchase = () => {
           )}
           {step === STEPS.review && (
             <P fontSize={12}>
-              By clicking this button, I agree to the terms and conditions
+              {currentUser
+                ? "By clicking this button, I agree to the terms and conditions"
+                : "You need to connect your wallet before proceeding"}
             </P>
           )}
 
@@ -377,7 +382,7 @@ const Purchase = () => {
               <BuyButton>Go to Bag</BuyButton>
             </a>
           </Link>
-        ) : (
+        ) : currentUser ? (
           <BuyButton onClick={purchase}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
@@ -392,6 +397,8 @@ const Purchase = () => {
               "Purchase"
             )}
           </BuyButton>
+        ) : (
+          <BuyButton onClick={login}>Connect wallet</BuyButton>
         )}
       </Flex>
     </Flex>

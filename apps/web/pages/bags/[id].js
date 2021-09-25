@@ -165,7 +165,11 @@ const Bag = () => {
                 mb={4}
                 display="flex"
                 flexDirection="column"
-                bg={bag.isForSale ? "rgb(37 34 47)" : "rgb(22 22 22)"}
+                bg={
+                  bag.isForSale || owner.isOwnBag
+                    ? "rgb(37 34 47)"
+                    : "rgb(22 22 22)"
+                }
               >
                 <Box p={[3, 3, 4]} flex={1} position="relative">
                   <Flex justifyContent="space-between">
