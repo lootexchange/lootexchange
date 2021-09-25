@@ -51,14 +51,14 @@ const PriceBox = ({ ...props }) => (
 );
 
 const attributeDefaults = [
-  { label: "Weapon", value: '"Grim Shout" Grave Wand of Skill +1' },
-  { label: "Chest", value: "Ancient Helm" },
-  { label: "Head", value: "Ancient Helm" },
-  { label: "Waist", value: "Hard Leather Belt" },
-  { label: "Foot", value: "Ornate Greaves of Anger" },
-  { label: "Hand", value: "Gloves" },
-  { label: "Neck", value: "Necklace of Enlightenment" },
-  { label: "Ring", value: "Gold Ring" }
+  { key: "Weapon", value: '"Grim Shout" Grave Wand of Skill +1' },
+  { key: "Chest", value: "Ancient Helm" },
+  { key: "Head", value: "Ancient Helm" },
+  { key: "Waist", value: "Hard Leather Belt" },
+  { key: "Foot", value: "Ornate Greaves of Anger" },
+  { key: "Hand", value: "Gloves" },
+  { key: "Neck", value: "Necklace of Enlightenment" },
+  { key: "Ring", value: "Gold Ring" }
 ];
 
 const Bag = () => {
@@ -227,7 +227,7 @@ const Bag = () => {
                     >
                       <Box flex={1}>
                         <P fontSize={14} color="rgba(255,255,255, 0.8)" mr={3}>
-                          {item.label}
+                          {item.key}
                         </P>
                         <P color="white" fontSize={16} fontWeight={600}>
                           {item.value}
