@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle, FaTag } from "react-icons/fa";
 
 import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
 import Link from "next/link";
@@ -12,6 +12,12 @@ import NFT from "@ui/organisms/NFT";
 import Source from "@ui/organisms/Source";
 import Owner from "@ui/organisms/Owner";
 import ether from "../../public/ether.png";
+import {
+  itemRarity,
+  rarityColor,
+  rarityDescription,
+  lootRarity
+} from "loot-rarity";
 
 import { shortenAddress } from "@utils";
 import moment from "moment";
@@ -41,24 +47,27 @@ const Price = ({ price }) => (
 );
 
 const PriceBox = ({ ...props }) => (
-  <Box p={[3, 3, 4]} bg="rgb(37 34 47)" {...props} />
+  <Box p={[3, 3, 4]} pt={[0, 0, 0]} bg="rgb(37 34 47)" {...props} />
 );
 
 const attributeDefaults = [
-  { value: "Weapon" },
-  { value: "Chest" },
-  { value: "Head" },
-  { value: "Waist" },
-  { value: "Foot" },
-  { value: "Hand" },
-  { value: "Neck" },
-  { value: "Ring" }
+  { label: "Weapon", value: '"Grim Shout" Grave Wand of Skill +1' },
+  { label: "Chest", value: "Ancient Helm" },
+  { label: "Head", value: "Ancient Helm" },
+  { label: "Waist", value: "Hard Leather Belt" },
+  { label: "Foot", value: "Ornate Greaves of Anger" },
+  { label: "Hand", value: "Gloves" },
+  { label: "Neck", value: "Necklace of Enlightenment" },
+  { label: "Ring", value: "Gold Ring" }
 ];
 
 const Bag = () => {
   const router = useRouter();
   const { id } = router.query;
   const { bag, owner, transfers } = useBag(id);
+
+  let attributes =
+    bag && bag.attributes.length ? bag.attributes : attributeDefaults;
 
   const getCallToAction = () => {
     if (!owner.isOwnBag && bag.isForSale) {
@@ -149,42 +158,98 @@ const Bag = () => {
               mr={[0, 4, 4]}
               mb={[3, 0, 0]}
             >
-              <NFT
-                bag={bag}
-                lens="characters"
-                noData
-                height={["unset", "unset", "100%"]}
-              />
+              <NFT bag={bag} lens="characters" noData />
             </Box>
-            <Pane flex={1} display="flex" flexDirection="column" bg="#161617">
-              <Box p={[3, 3, 4]} flex={1} position="relative">
-                <Flex justifyContent="space-between">
-                  <H2 mb={2}>{bag.name}</H2>
-                  <Source source={bag.source} size={30} />
-                </Flex>
-                <Link href={`/adventurers/${bag.owner}`}>
-                  <a>
-                    <Owner
-                      mb={4}
-                      large
-                      name={owner.shortName}
-                      address={bag.owner}
-                      avatar={owner.ownerAvatar}
-                    />
-                  </a>
-                </Link>
+            <Flex flexDirection="column" flex={1}>
+              <Pane
+                mb={4}
+                display="flex"
+                flexDirection="column"
+                bg={bag.isForSale ? "rgb(37 34 47)" : "rgb(22 22 22)"}
+              >
+                <Box p={[3, 3, 4]} flex={1} position="relative">
+                  <Flex justifyContent="space-between">
+                    <H2 mb={2}>{bag.name}</H2>
+                    {bag.source && <Source source={bag.source} size={30} />}
+                  </Flex>
 
-                {(bag.attributes.length
-                  ? bag.attributes
-                  : attributeDefaults
-                ).map(item => (
-                  <P key={item.value} color="white" mb={3} fontSize={16}>
-                    {item.value}
-                  </P>
-                ))}
-              </Box>
-              {getCallToAction()}
-            </Pane>
+                  <Link href={`/adventurers/${bag.owner}`}>
+                    <a>
+                      <Owner
+                        large
+                        name={owner.shortName}
+                        address={bag.owner}
+                        avatar={owner.ownerAvatar}
+                      />
+                    </a>
+                  </Link>
+                </Box>
+
+                {getCallToAction()}
+              </Pane>
+              <Pane
+                flex={1}
+                display="flex"
+                flexDirection="column"
+                bg="rgb(22 22 22)"
+              >
+                <Box>
+                  <Flex p={[3, 3, 4]} alignItems="center">
+                    <FaTag size={20} />
+                    <H2 ml={3} fontSize={22}>
+                      Attributes
+                    </H2>
+                    <Box flex={1} />
+                    <Flex alignItems="center">
+                      <P color="rgba(255,255,255,0.9)">
+                        {rarityDescription(
+                          lootRarity(attributes.map(a => a.value))
+                        )}
+                      </P>
+                      <Box
+                        width={12}
+                        height={12}
+                        borderRadius="50%"
+                        ml={2}
+                        bg={rarityColor(
+                          lootRarity(attributes.map(a => a.value))
+                        )}
+                      />
+                    </Flex>
+                  </Flex>
+                  {attributes.map(item => (
+                    <Flex
+                      key={item.value}
+                      py={3}
+                      px={4}
+                      alignItems="ceter"
+                      borderTop="1px solid rgba(255,255,255,0.1)"
+                    >
+                      <Box flex={1}>
+                        <P fontSize={14} color="rgba(255,255,255, 0.8)" mr={3}>
+                          {item.label}
+                        </P>
+                        <P color="white" fontSize={16} fontWeight={600}>
+                          {item.value}
+                        </P>
+                      </Box>
+                      <Flex alignItems="center">
+                        <P color="rgba(255,255,255,0.9)">
+                          {rarityDescription(itemRarity(item.value))}
+                        </P>
+                        <Box
+                          width={12}
+                          height={12}
+                          borderRadius="50%"
+                          ml={2}
+                          bg={rarityColor(item.value)}
+                        />
+                      </Flex>
+                    </Flex>
+                  ))}
+                </Box>
+              </Pane>
+            </Flex>
           </Flex>
         )}
 
