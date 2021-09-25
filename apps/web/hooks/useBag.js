@@ -81,7 +81,7 @@ const useBag = id => {
       let orders = await response.json();
       console.log(orders.data.orders[0])
       if(orders.data && orders.data.orders) {
-        setOwner({
+        setBag({
           ...bag,
           sellOrder: orders.data.orders[0]
         });

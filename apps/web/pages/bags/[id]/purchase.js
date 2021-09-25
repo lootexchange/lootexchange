@@ -216,7 +216,7 @@ const Purchase = () => {
   const [step, setStep] = useState(STEPS.review);
   const { id } = router.query;
   let { bag: bagData, owner } = useBag(id);
-  const bag = { ...bagData, ...owner };
+  let bag = { ...bagData, ...owner };
 
   let exchangeRate = useExchangeRate();
 
