@@ -29,12 +29,20 @@ Use the Base URL of [https://api.loot.exchange/](https://api.loot.exchange/) and
 
 - [/collections](https://api.loot.exchange/collections) - get list of supported collections
 - [/collections/:address](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7) - get full information about a collection
-- [/collections/:address/tokens](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?id=1&id=2) - get list of tokens in a collection
+- [/collections/:address/tokens](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens) - get list of tokens in a collection
 - [/collections/:address/listing-infos](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/listing-infos) - compact list of items for sale
 - [/collections/:address/attributes](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/attributes) - compact list attributes, for filtering
 - [/collections/:address/metadata](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/metadata) - compact list metadata, for client-side rendering
 - [/collections/:address/tokens/:tokenId](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens/3) - get info about a single token
 - [/collections/:address/tokens/:tokenId/orders](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens/3/orders) - get orders for a single token
+
+The tokens API supports filters and pagination:
+
+- [tokens](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens) - all tokens, sorted by id
+- [tokens?limit=20&offset=40](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?limit=20&offset=4) - pagination
+- [tokens?id=10&id=11](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?id=1&id=2) - request specific tokens
+- [tokens?forSale=true](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?forSale=true) - on sale items, sort by price
+- [tokens?_weapon=Wand&_neck=Amulet](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?_weapon=Wand&_neck=Amulet) - on sale items, sort by price
 
 If you are planning to use the API, let us know so that we can cater to your use case.
 
