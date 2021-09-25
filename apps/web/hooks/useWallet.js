@@ -54,6 +54,7 @@ const useWallet = address => {
         return {
           ...bag,
           ...bagData,
+          source: !!priceInfo ? priceInfo.source : null,
           isForSale: !!priceInfo,
           price: priceInfo ? Number(priceInfo.price) : 0
         };
