@@ -122,17 +122,29 @@ const ReviewStep = ({ bag, exchangeRate }) => (
           />
         </Flex>
       </Box>
-      <Price cost={bag.price * 0.975} sub="97.5%" />
+      {bag.source === "LootExchange" ? (
+        <Price cost={bag.price * 0.99} sub="99%" />
+      ) : (
+        <Price cost={bag.price * 0.975} sub="97.5%" />
+      )}
     </Flex>
 
     <Flex>
       <Box flex={1}>
         <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
         <Flex mt={3} justifyContent="space-between">
-          <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+          {bag.source === "LootExchange" ? (
+            <Logo width={257 / 2.7} height={98 / 2.7} />
+          ) : (
+            <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+          )}
         </Flex>
       </Box>
-      <Price cost={bag.price * 0.025} sub="2.5%" />
+      {bag.source === "LootExchange" ? (
+        <Price cost={bag.price * 0.01} sub="1%" />
+      ) : (
+        <Price cost={bag.price * 0.025} sub="2.5%" />
+      )}
     </Flex>
   </>
 );
@@ -204,11 +216,11 @@ const Purchase = () => {
   const [step, setStep] = useState(STEPS.review);
   const { id } = router.query;
   let { bag: bagData, owner } = useBag(id);
-  const bag = { ...bag, ...owner };
+  const bag = { ...bagData, ...owner };
 
   let exchangeRate = useExchangeRate();
 
-  const purchase = async () => {
+  let purchase = async () => {
     if (!eth.signer) {
       await eth.connect();
     } else {

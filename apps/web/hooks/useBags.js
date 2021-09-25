@@ -26,6 +26,7 @@ const useBags = ({ sort, filter, ids }) => {
         return {
           ...bag,
           isForSale: !!priceInfo,
+          source: !!priceInfo ? priceInfo.source : null,
           price: priceInfo ? Number(priceInfo.price) : 0
         };
       });

@@ -49,6 +49,7 @@ const useBag = id => {
         ...token.data.token,
         ...bagData,
         shortName: shortenAddress(token.data.token.owner),
+        source: token.data.token.listingSource,
         isForSale: !!token.data.token.listingPrice,
         price: token.data.token.listingPrice
       });

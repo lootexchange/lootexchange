@@ -9,6 +9,7 @@ import Link from "next/link";
 import Header from "@ui/organisms/Header";
 import BackArrow from "@ui/organisms/BackArrow";
 import NFT from "@ui/organisms/NFT";
+import Source from "@ui/organisms/Source";
 import Owner from "@ui/organisms/Owner";
 import ether from "../../public/ether.png";
 
@@ -73,7 +74,7 @@ const Bag = () => {
       );
     }
 
-    if (owner.isOwnBag && bag.isForSale && bag.isOnExchange) {
+    if (owner.isOwnBag && bag.isForSale && bag.source === "LootExchange") {
       return (
         <PriceBox>
           <Price price={bag.price} />
@@ -93,7 +94,7 @@ const Bag = () => {
       );
     }
 
-    if (owner.isOwnBag && bag.isForSale && !bag.isOnExchange) {
+    if (owner.isOwnBag && bag.isForSale && !bag.source === "LootExchange") {
       return (
         <PriceBox>
           <Price price={bag.price} />
@@ -156,8 +157,11 @@ const Bag = () => {
               />
             </Box>
             <Pane flex={1} display="flex" flexDirection="column" bg="#161617">
-              <Box p={[3, 3, 4]} flex={1}>
-                <H2 mb={2}>{bag.name}</H2>
+              <Box p={[3, 3, 4]} flex={1} position="relative">
+                <Flex justifyContent="space-between">
+                  <H2 mb={2}>{bag.name}</H2>
+                  <Source source={bag.source} size={30} />
+                </Flex>
                 <Link href={`/adventurers/${bag.owner}`}>
                   <a>
                     <Owner

@@ -178,7 +178,7 @@ const Purchase = () => {
   const [step, setStep] = useState(STEPS.review);
   const { id, initialPrice } = router.query;
   let { bag: bagData, owner } = useBag(id);
-  const bag = { ...bag, ...owner };
+  const bag = { ...bagData, ...owner };
   let exchangeRate = useExchangeRate();
 
   useEffect(() => {
@@ -318,6 +318,7 @@ const Purchase = () => {
               <>
                 {!!eth.provider && (
                   <ListingModal
+                    onComplete={() => setStep(STEPS.completed)}
                     signer={eth.provider.getSigner()}
                     collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
                     tokenId={id}
