@@ -42,7 +42,7 @@ The tokens API supports filters and pagination:
 - [tokens?limit=20&offset=40](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?limit=20&offset=4) - pagination
 - [tokens?id=10&id=11](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?id=1&id=2) - request specific tokens
 - [tokens?forSale=true](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?forSale=true) - on sale items, sort by price
-- [tokens?_weapon=Wand&_neck=Amulet](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?_weapon=Wand&_neck=Amulet) - on sale items, sort by price
+- [tokens?_weapon=Wand&_neck=Amulet](https://api.loot.exchange/collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/tokens?_weapon=Wand&_neck=Amulet) - filter by attribute
 
 If you are planning to use the API, let us know so that we can cater to your use case.
 
