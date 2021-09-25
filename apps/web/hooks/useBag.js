@@ -43,7 +43,6 @@ const useBag = id => {
         `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
       );
       let token = await response.json();
-      console.log(token);
 
       setBag({
         ...token.data.token,
@@ -71,6 +70,26 @@ const useBag = id => {
 
     if (bag) {
       getTransfers();
+    }
+  }, [bagId]);
+
+  useEffect(() => {
+    const getSellOrder = async () => {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}/orders`
+      );
+      let orders = await response.json();
+      console.log(orders.data.orders[0])
+      if(orders.data && orders.data.orders) {
+        setOwner({
+          ...bag,
+          sellOrder: orders.data.orders[0]
+        });
+      }
+    };
+
+    if (bag) {
+      getSellOrder();
     }
   }, [bagId]);
 
