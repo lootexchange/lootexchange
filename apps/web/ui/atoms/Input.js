@@ -24,4 +24,11 @@ export default styled(Input)`
   &::placeholder {
     color: rgba(255, 255, 255, 0.7);
   }
+
+  &::-webkit-outer-spin-button,
+  *::-webkit-inner-spin-button {
+    display: none;
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
 `;

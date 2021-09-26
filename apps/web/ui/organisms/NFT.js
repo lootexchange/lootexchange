@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Flex, Box, Pane, P, Image } from "@ui";
 import { FaEye, FaList } from "react-icons/fa";
+import Source from "@ui/organisms/Source";
 
 import ether from "../../public/ether.png";
 
@@ -74,8 +75,12 @@ const NFT = ({ bag, lens, noData, ...props }) => {
       {!noData && (
         <Box p={3} style={{ borderTop: "2px solid rgba(255, 255, 255, 0.1)" }}>
           <Flex justifyContent="space-between" alignItems="center">
-            <P>{bag.name}</P>
-            <Flex alignItems="center">
+            <P flex={1}>{bag.name}</P>
+
+            <Flex alignItems="center" justifyContent="center">
+              {bag.source && <Source size={23} source={bag.source} />}
+            </Flex>
+            <Flex alignItems="center" justifyContent="flex-end" flex={1}>
               {bag.isForSale && (
                 <>
                   <Image src={ether} width={18} height={14} />

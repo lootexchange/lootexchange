@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useManualQuery } from "graphql-hooks";
-import bags from "../data/loot.json";
 import eth from "../ethers";
-import { shortenAddress } from "@utils";
+import { shortenAddress, loot } from "@utils";
 import useCurrentUser from "@hooks/useCurrentUser";
 
 const BAG_QUERY = `query BagQuery($id: ID!) {
@@ -29,6 +28,8 @@ const BAG_QUERY = `query BagQuery($id: ID!) {
 
 const useBag = id => {
   const [bag, setBag] = useState(null);
+  const [owner, setOwner] = useState({});
+  const [transfers, setTransfers] = useState([]);
   const [fetchedEns, setFetchedEns] = useState(false);
   const currentUser = useCurrentUser();
 
@@ -36,24 +37,20 @@ const useBag = id => {
 
   useEffect(() => {
     const getBag = async () => {
-      let bagData = bags.find(b => b.id == id);
+      let bagData = loot().find(b => b.id == id);
 
-      const { data } = await fetchBag({
-        variables: { id }
-      });
-
-      let ownerAddress = data.bag.currentOwner.address;
-
-      let response = await fetch("/api/prices");
-      let prices = await response.json().then((result) => result.data.listingInfos);
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
+      );
+      let token = await response.json();
 
       setBag({
-        ...data.bag,
+        ...token.data.token,
         ...bagData,
-        shortName: shortenAddress(ownerAddress),
-        isForSale: !!prices[id],
-        price: prices[id] ? Number(prices[id].price) : 0,
-        transfers: data.transfers
+        shortName: shortenAddress(token.data.token.owner),
+        source: token.data.token.listingSource,
+        isForSale: !!token.data.token.listingPrice,
+        price: token.data.token.listingPrice
       });
     };
 
@@ -64,12 +61,45 @@ const useBag = id => {
   const bagId = bag && bag.id;
 
   useEffect(() => {
+    const getTransfers = async () => {
+      const { data } = await fetchBag({
+        variables: { id }
+      });
+      setTransfers(data.transfers);
+    };
+
+    if (bag) {
+      getTransfers();
+    }
+  }, [bagId]);
+
+  useEffect(() => {
+    const getSellOrder = async () => {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}/orders`
+      );
+      let orders = await response.json();
+      console.log(orders.data.orders[0])
+      if(orders.data && orders.data.orders) {
+        setBag({
+          ...bag,
+          sellOrder: orders.data.orders[0]
+        });
+      }
+    };
+
+    if (bag) {
+      getSellOrder();
+    }
+  }, [bagId]);
+
+  useEffect(() => {
     const getEnsName = async () => {
-      let ownerAddress = bag.currentOwner.address;
+      let ownerAddress = bag.owner;
       let ens = await eth.getEnsName(ownerAddress);
       let avatar = await eth.getAvatar(ens);
 
-      setBag({
+      setOwner({
         ...bag,
         isOwnBag: ownerAddress === currentUser.address,
         ownerAvatar: avatar,
@@ -82,7 +112,11 @@ const useBag = id => {
     }
   }, [currentUser, bagId]);
 
-  return bag;
+  return {
+    bag,
+    transfers,
+    owner
+  };
 };
 
 export default useBag;

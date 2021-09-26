@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
 import useCurrentUser from "@hooks/useCurrentUser";
 import Tilt from "react-parallax-tilt";
+import { Builders, Helpers } from "@lootexchange/sdk";
 
 import {
   Flex,
@@ -94,7 +95,7 @@ export const ItemCard = ({ bag, price, exchangeRate }) => (
       <Owner
         mt={3}
         name={bag.shortName}
-        address={bag.currentOwner.address}
+        address={bag.owner}
         avatar={bag.ownerAvatar}
       />
     </Box>
@@ -116,22 +117,34 @@ const ReviewStep = ({ bag, exchangeRate }) => (
         <Flex mt={3} justifyContent="space-between">
           <Owner
             name={bag.shortName}
-            address={bag.currentOwner.address}
+            address={bag.owner}
             avatar={bag.ownerAvatar}
           />
         </Flex>
       </Box>
-      <Price cost={bag.price * 0.975} sub="97.5%" />
+      {bag.source === "LootExchange" ? (
+        <Price cost={bag.price * 0.99} sub="99%" />
+      ) : (
+        <Price cost={bag.price * 0.975} sub="97.5%" />
+      )}
     </Flex>
 
     <Flex>
       <Box flex={1}>
         <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
         <Flex mt={3} justifyContent="space-between">
-          <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+          {bag.source === "LootExchange" ? (
+            <Logo width={257 / 2.7} height={98 / 2.7} />
+          ) : (
+            <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+          )}
         </Flex>
       </Box>
-      <Price cost={bag.price * 0.025} sub="2.5%" />
+      {bag.source === "LootExchange" ? (
+        <Price cost={bag.price * 0.01} sub="1%" />
+      ) : (
+        <Price cost={bag.price * 0.025} sub="2.5%" />
+      )}
     </Flex>
   </>
 );
@@ -202,20 +215,43 @@ const Purchase = () => {
   const currentUser = useCurrentUser();
   const [step, setStep] = useState(STEPS.review);
   const { id } = router.query;
-  let bag = useBag(id);
+  let { bag: bagData, owner } = useBag(id);
+  let bag = { ...bagData, ...owner };
+
   let exchangeRate = useExchangeRate();
+  const login = async () => {
+    await eth.logIn();
+  };
 
-  const purchase = () => {
-    if (step === STEPS.review) {
+  let purchase = async () => {
+    if (!eth.signer) {
+      await eth.connect();
+    } else {
+      // No need to check approvals as the tx would fail
+      // if the correct sell approval is missing. What's
+      // needed is error handling in case the transaction
+      // fails. The tx could fail for several reasons, but
+      // a common failure scenario is insuffient funds,
+      // which fortunately can be trakced down in a similar
+      // way as described below
+      // https://twitter.com/smpalladino/status/1436350919243862016?s=20
+
       setStep(STEPS.waitingForConfirmation);
-
-      setTimeout(() => {
-        setStep(STEPS.waitingforTransaction);
-
-        setTimeout(() => {
+      const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
+        await eth.signer.getAddress(),
+        bag.sellOrder
+      );
+      Helpers.Wyvern.match(eth.signer, buyOrder, bag.sellOrder)
+        .then(async tx => {
+          setStep(STEPS.waitingforTransaction);
+          let receipt = await tx.wait();
           setStep(STEPS.completed);
-        }, 3000);
-      }, 3000);
+          console.log(receipt);
+        })
+        .catch(() => {
+          // TODO: Maybe show an error (although most likely caused by user rejecting)
+          setStep(STEPS.review);
+        });
     }
   };
 
@@ -266,7 +302,7 @@ const Purchase = () => {
               mt={4}
               large
               name={bag.shortName}
-              address={bag.currentOwner.address}
+              address={bag.owner}
               avatar={bag.ownerAvatar}
             />
           </Flex>
@@ -326,7 +362,9 @@ const Purchase = () => {
           )}
           {step === STEPS.review && (
             <P fontSize={12}>
-              By clicking this button, I agree to the terms and conditions
+              {currentUser
+                ? "By clicking this button, I agree to the terms and conditions"
+                : "You need to connect your wallet before proceeding"}
             </P>
           )}
 
@@ -344,7 +382,7 @@ const Purchase = () => {
               <BuyButton>Go to Bag</BuyButton>
             </a>
           </Link>
-        ) : (
+        ) : currentUser ? (
           <BuyButton onClick={purchase}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
@@ -359,6 +397,8 @@ const Purchase = () => {
               "Purchase"
             )}
           </BuyButton>
+        ) : (
+          <BuyButton onClick={login}>Connect wallet</BuyButton>
         )}
       </Flex>
     </Flex>

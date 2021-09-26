@@ -16,7 +16,11 @@ const Avatar = ({ address = "test", size = 30, avatar, ...props }) => (
         style={{ width: size, height: size, objectFit: "cover" }}
       />
     ) : (
-      <ReactHashAvatar name={address} width={size} height={size} />
+      <ReactHashAvatar
+        name={address.toLocaleLowerCase()}
+        width={size}
+        height={size}
+      />
     )}
   </Box>
 );

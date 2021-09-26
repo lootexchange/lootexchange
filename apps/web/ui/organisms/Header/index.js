@@ -1,5 +1,6 @@
 import { Flex, Box, H1, P, Logo, Image } from "@ui";
 import useCurrentUser from "@hooks/useCurrentUser";
+import Link from "next/link";
 
 import SearchInput from "./GlobalSearch";
 import Account from "./Account";
@@ -18,18 +19,30 @@ const Header = () => {
       bg="background"
       alignItems="center"
     >
-      <Logo width={Math.floor(257 / 2.3)} height={Math.floor(98 / 2.3)} />
+      <Link href="/">
+        <a>
+          <Logo width={257 / 2.5} height={98 / 2.5} />
+        </a>
+      </Link>
       <Flex mx={4} flex={1} alignItems="center">
         <SearchInput
-          width="350px"
-          placeholder="Search by bag #, address, or ens"
+          width="400px"
+          placeholder="Search by bag #, item, address, or ens"
         />
-        <NavItem ml={4}>Explore</NavItem>
-        <NavItem ml={4}>Projects</NavItem>
+
+        <Link href="/">
+          <a>
+            <NavItem ml={4}>Loot Bags</NavItem>
+          </a>
+        </Link>
       </Flex>
       {currentUser && (
         <Flex mr={4}>
-          <NavItem>My Loot</NavItem>
+          <Link href={`/adventurers/${currentUser.address}`}>
+            <a>
+              <NavItem>My Loot</NavItem>
+            </a>
+          </Link>
         </Flex>
       )}
       <Account />

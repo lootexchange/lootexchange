@@ -37,6 +37,7 @@ import { Price, ItemCard } from "./purchase";
 
 import { shortenAddress, formatMoney } from "@utils";
 import moment from "moment";
+import ListingModal from "@ui/organisms/ListingModal";
 
 // need to just make this style the actual button
 const BuyButton = styled(Button)`
@@ -48,6 +49,16 @@ const BuyButton = styled(Button)`
     background: rgb(61 83 235);
     color: white;
   }
+
+  ${props =>
+    props.disabled &&
+    `
+    background: gray;
+    &:hover {
+      background: gray;
+    }
+
+    `}
 `;
 
 const CancelButton = styled(Button)`
@@ -74,8 +85,10 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
       </Box>
       <Input
         pl={36}
+        maxlength="15"
+        type="number"
         value={listPrice}
-        onChange={e => setListPrice(e.target.value)}
+        onChange={e => setListPrice(e.target.value.slice(0, 10))}
       />
     </Box>
 
@@ -89,7 +102,7 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
         <Flex mt={3} justifyContent="space-between">
           <Owner
             name={bag.shortName}
-            address={bag.currentOwner.address}
+            address={bag.owner}
             avatar={bag.ownerAvatar}
           />
         </Flex>
@@ -176,7 +189,8 @@ const Purchase = () => {
   const currentUser = useCurrentUser();
   const [step, setStep] = useState(STEPS.review);
   const { id, initialPrice } = router.query;
-  let bag = useBag(id);
+  let { bag: bagData, owner } = useBag(id);
+  const bag = { ...bagData, ...owner };
   let exchangeRate = useExchangeRate();
 
   useEffect(() => {
@@ -235,7 +249,7 @@ const Purchase = () => {
               mt={4}
               large
               name={bag.shortName}
-              address={bag.currentOwner.address}
+              address={bag.owner}
               avatar={bag.ownerAvatar}
             />
           </Flex>
@@ -302,7 +316,7 @@ const Purchase = () => {
             </a>
           </Link>
         ) : (
-          <BuyButton onClick={list}>
+          <BuyButton disabled={listPrice <= 0}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
                 <ReactLoading
@@ -313,7 +327,17 @@ const Purchase = () => {
                 />
               </Flex>
             ) : (
-              "List on Loot Exchange"
+              <>
+                {!!eth.provider && (
+                  <ListingModal
+                    onComplete={() => setStep(STEPS.completed)}
+                    signer={eth.provider.getSigner()}
+                    collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
+                    tokenId={id}
+                    listPrice={listPrice}
+                  />
+                )}
+              </>
             )}
           </BuyButton>
         )}

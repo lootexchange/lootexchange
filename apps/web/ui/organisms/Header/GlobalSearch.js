@@ -3,13 +3,10 @@ import { useDebounce } from "use-debounce";
 import styled from "@emotion/styled";
 import { Box, P } from "@ui";
 import Link from "next/link";
-import items from "../../../data/itemToPositionMap.json";
-import Fuse from "fuse.js";
 import { ethers } from "ethers";
 import eth from "../../../ethers";
 import Input from "./SearchInput";
-
-const fuse = new Fuse(Object.keys(items), { includeScore: true });
+import { shortenAddress } from "@utils";
 
 const SearchContainer = styled.div`
   position: absolute;
@@ -38,8 +35,8 @@ const ItemWrapper = styled(Box)`
 
 const routeMap = {
   bag: "bags",
-  address: "adventurer",
-  item: "item"
+  address: "adventurers",
+  item: "items"
 };
 
 const SearchResults = ({ results, handleSelection }) => {
@@ -102,13 +99,14 @@ const GlobalSearch = props => {
       }
     }
 
-    const results = fuse.search(debouncedQuery);
+    const response = await fetch(`/api/searchItems?q=${debouncedQuery}`);
+    const results = await response.json();
 
     return setResults(
       results.map(result => ({
         type: "item",
-        label: result.item,
-        id: result.refIndex
+        label: result.name,
+        id: result.id
       }))
     );
 
@@ -134,7 +132,7 @@ const GlobalSearch = props => {
           borderBottomLeftRadius: results.length ? 0 : 10
         }}
         value={query}
-        placeholder="Search by bag #, address, or ens"
+        placeholder="Search by bag #, item, address, or ens"
         onChange={e => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
       />
