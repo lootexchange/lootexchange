@@ -49,6 +49,16 @@ const BuyButton = styled(Button)`
     background: rgb(61 83 235);
     color: white;
   }
+
+  ${props =>
+    props.disabled &&
+    `
+    background: gray;
+    &:hover {
+      background: gray;
+    }
+
+    `}
 `;
 
 const CancelButton = styled(Button)`
@@ -75,8 +85,10 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
       </Box>
       <Input
         pl={36}
+        maxlength="15"
+        type="number"
         value={listPrice}
-        onChange={e => setListPrice(e.target.value)}
+        onChange={e => setListPrice(e.target.value.slice(0, 10))}
       />
     </Box>
 
@@ -304,7 +316,7 @@ const Purchase = () => {
             </a>
           </Link>
         ) : (
-          <BuyButton>
+          <BuyButton disabled={listPrice <= 0}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
                 <ReactLoading

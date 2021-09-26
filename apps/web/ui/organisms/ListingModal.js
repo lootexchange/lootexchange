@@ -319,7 +319,9 @@ export default function ListingModal({
   }
 
   function openModal() {
-    setIsOpen(true);
+    if (listPrice > 0) {
+      setIsOpen(true);
+    }
   }
 
   return (

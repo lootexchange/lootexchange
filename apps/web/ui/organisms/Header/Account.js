@@ -42,7 +42,6 @@ const Account = () => {
 
   const loginWithWalletConnect = async () => {
     await ethers.logIn();
-    setCurrentUser(ethers.user);
   };
 
   const logOut = async () => {
