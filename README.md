@@ -14,7 +14,8 @@
 - Open API
   - Fetch metadata and market information. No API keys required.
 - Battle-tested contracts
-  - Leverages the same exchange contract as Open Sea (Wyvern)
+  - Leverages the same exchange contract as Open Sea (Wyvern), which minimizes risk
+  - Anyone who has approved Open Sea for trading does not need to re-approve
 
 ## Progress
 
@@ -32,6 +33,15 @@
 - [ ] Offers UX
 
 For feature requests, create an Issue or join the Discord to discuss.
+
+## RoyaltyDAO
+
+A 1% royalty is collected on all trades, and sent to a community-operated treasury. The treasury is controlled by RoyaltyDAO, a fork of the [NounsDAO](https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-contracts/contracts/governance), which implements Compound-style on-chain voting using Loot balances. Rather than trying to be "The DAO", this is simply "a DAO", with the sole purpose of collecting and allocating royalties. 
+
+The DAO contract contains a small modification, to account for the fact that the Loot contract does not implement check-pointed balances. In order to prevent voting twice with the same tokens, each vote is tied to a particular token id. The main downside of this technique is that it is less efficient for large token holders to vote (requires multiple transactions), but the flipside is that this helps to democratize voting by taxing whales.
+
+
+Instead, each vote is tied to a particular
 
 
 ## API Endpoints
