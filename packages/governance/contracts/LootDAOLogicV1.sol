@@ -549,7 +549,7 @@ contract LootDAOLogicV1 is LootDAOStorageV1, LootDAOEvents {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             require(
                 loot.ownerOf(tokenIds[i]) == msg.sender,
-                "LootDAO::castVoteInterna: voter not owner of token"
+                "LootDAO::castVoteInternal: voter not owner of token"
             );
 
             Receipt storage receipt = proposal.receipts[tokenIds[i]];

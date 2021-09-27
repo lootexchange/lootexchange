@@ -17,7 +17,31 @@ describe("Governance", () => {
   let daoLogic: Contract;
   let daoProxy: Contract;
 
+  let snapshotId: number;
+
+  // Create a mock proposal
+  const propose = async (proposer: SignerWithAddress) => {
+    const targets = [loot.address];
+    const values = [0];
+    const signatures = [loot.interface.getSighash("balanceOf(address)")];
+    const calldatas = [defaultAbiCoder.encode(["address"], [loot.address])];
+    const description = "";
+
+    return proposer.sendTransaction({
+      to: daoProxy.address,
+      data: daoLogic.interface.encodeFunctionData("propose", [
+        targets,
+        values,
+        signatures,
+        calldatas,
+        description,
+      ]),
+    });
+  };
+
   beforeEach(async () => {
+    snapshotId = await ethers.provider.send("evm_snapshot", []);
+
     [deployer, alice, bob] = await ethers.getSigners();
 
     loot = await ethers.getContractAt(
@@ -76,6 +100,10 @@ describe("Governance", () => {
     );
   });
 
+  afterEach(async () => {
+    await ethers.provider.send("evm_revert", [snapshotId]);
+  });
+
   describe("deployment", () => {
     it("contracts are correctly configured", async () => {
       const executorAdmin = await executor.admin();
@@ -96,20 +124,6 @@ describe("Governance", () => {
   });
 
   describe("propose", () => {
-    let targets: string[];
-    let values: BigNumberish[];
-    let signatures: string[];
-    let calldatas: string[];
-    let description: string;
-
-    beforeEach(() => {
-      targets = [loot.address];
-      values = [0];
-      signatures = [loot.interface.getSighash("balanceOf(address)")];
-      calldatas = [defaultAbiCoder.encode(["address"], [loot.address])];
-      description = "";
-    });
-
     it("successfully propose if proposer owns more tokens than proposal threshold", async () => {
       const bigHolderAddress = "0x28b8d4f7516a112e2e2fd462293a1c27cde327a7";
       await network.provider.request({
@@ -118,16 +132,7 @@ describe("Governance", () => {
       });
       const bigHolder = await ethers.getSigner(bigHolderAddress);
 
-      await bigHolder.sendTransaction({
-        to: daoProxy.address,
-        data: daoLogic.interface.encodeFunctionData("propose", [
-          targets,
-          values,
-          signatures,
-          calldatas,
-          description,
-        ]),
-      });
+      await propose(bigHolder);
     });
 
     it("cannot propose if proposer owns less tokens than proposal thershold", async () => {
@@ -138,25 +143,13 @@ describe("Governance", () => {
       });
       const smallHolder = await ethers.getSigner(smallHolderAddress);
 
-      await expect(
-        smallHolder.sendTransaction({
-          to: daoProxy.address,
-          data: daoLogic.interface.encodeFunctionData("propose", [
-            targets,
-            values,
-            signatures,
-            calldatas,
-            description,
-          ]),
-        })
-      ).to.be.revertedWith(
+      await expect(propose(smallHolder)).to.be.revertedWith(
         "LootDAO::propose: proposer votes below proposal threshold"
       );
     });
   });
 
   describe("cancel", () => {
-    let proposalId: number;
     let bigHolder: SignerWithAddress;
 
     beforeEach(async () => {
@@ -166,28 +159,11 @@ describe("Governance", () => {
         params: [bigHolderAddress],
       });
       bigHolder = await ethers.getSigner(bigHolderAddress);
-
-      const targets = [loot.address];
-      const values = [0];
-      const signatures = [loot.interface.getSighash("balanceOf(address)")];
-      const calldatas = [defaultAbiCoder.encode(["address"], [loot.address])];
-      const description = "";
-
-      await bigHolder.sendTransaction({
-        to: daoProxy.address,
-        data: daoLogic.interface.encodeFunctionData("propose", [
-          targets,
-          values,
-          signatures,
-          calldatas,
-          description,
-        ]),
-      });
-
-      proposalId = 1;
     });
 
     it("cannot cancel proposal if proposer balance is above proposal threshold", async () => {
+      await propose(bigHolder);
+
       await expect(
         bob.sendTransaction({
           to: daoProxy.address,
@@ -197,6 +173,8 @@ describe("Governance", () => {
     });
 
     it("proposal can get cancelled if proposer balance falls below proposal threshold", async () => {
+      await propose(bigHolder);
+
       const tokenIds: BigNumberish[] = [];
       const balance = Number(await loot.balanceOf(bigHolder.address));
       for (let i = 0; i < balance - 1; i++) {
@@ -214,6 +192,162 @@ describe("Governance", () => {
         to: daoProxy.address,
         data: daoLogic.interface.encodeFunctionData("cancel", [1]),
       });
+    });
+  });
+
+  describe("castVote", async () => {
+    let bigHolder1: SignerWithAddress;
+    let bigHolder2: SignerWithAddress;
+    let smallHolder: SignerWithAddress;
+
+    beforeEach(async () => {
+      const bigHolder1Address = "0x28b8d4f7516a112e2e2fd462293a1c27cde327a7";
+      await network.provider.request({
+        method: "hardhat_impersonateAccount",
+        params: [bigHolder1Address],
+      });
+      bigHolder1 = await ethers.getSigner(bigHolder1Address);
+
+      const bigHolder2Address = "0xc229d7d3dd662a1b107e29aa84bb0c8ff609cf3a";
+      await network.provider.request({
+        method: "hardhat_impersonateAccount",
+        params: [bigHolder2Address],
+      });
+      bigHolder2 = await ethers.getSigner(bigHolder2Address);
+
+      const smallHolderAddress = "0xd61daebc28274d1feaaf51f11179cd264e4105fb";
+      await network.provider.request({
+        method: "hardhat_impersonateAccount",
+        params: [smallHolderAddress],
+      });
+      smallHolder = await ethers.getSigner(smallHolderAddress);
+    });
+
+    it("voter cannot vote with tokens they don't own", async () => {
+      await propose(bigHolder1);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      await expect(
+        smallHolder.sendTransaction({
+          to: daoProxy.address,
+          data: daoLogic.interface.encodeFunctionData("castVote", [
+            1,
+            [357, 1357],
+            1,
+          ]),
+        })
+      ).to.be.revertedWith(
+        "LootDAO::castVoteInternal: voter not owner of token"
+      );
+    });
+
+    it("voter cannot vote with the same token on the same proposal more than once", async () => {
+      await propose(bigHolder1);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      await smallHolder.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVote", [1, [357], 1]),
+      });
+
+      await expect(
+        smallHolder.sendTransaction({
+          to: daoProxy.address,
+          data: daoLogic.interface.encodeFunctionData("castVote", [
+            1,
+            [357],
+            1,
+          ]),
+        })
+      ).to.be.revertedWith("LootDAO::castVoteInternal: token already voted");
+    });
+
+    it("same token cannot be used to vote on the same proposal more than once", async () => {
+      await propose(bigHolder1);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      await smallHolder.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVote", [1, [357], 1]),
+      });
+
+      await loot
+        .connect(smallHolder)
+        .transferFrom(smallHolder.address, alice.address, 357);
+
+      await expect(
+        alice.sendTransaction({
+          to: daoProxy.address,
+          data: daoLogic.interface.encodeFunctionData("castVote", [
+            1,
+            [357],
+            1,
+          ]),
+        })
+      ).to.be.revertedWith("LootDAO::castVoteInternal: token already voted");
+    });
+
+    it("voter can vote with the same token on different proposals", async () => {
+      await propose(bigHolder1);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      await smallHolder.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVote", [1, [357], 1]),
+      });
+
+      await propose(bigHolder2);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      await smallHolder.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVote", [2, [357], 1]),
+      });
+    });
+
+    it("votes are correctly accounted for", async () => {
+      await propose(bigHolder1);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      await bigHolder2.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVote", [
+          1,
+          [2696, 2975],
+          1,
+        ]),
+      });
+
+      await bigHolder2.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVote", [
+          1,
+          [5944, 3207],
+          0,
+        ]),
+      });
+
+      const result = daoLogic.interface.decodeFunctionResult(
+        "proposals",
+        await ethers.provider.call({
+          to: daoProxy.address,
+          data: daoLogic.interface.encodeFunctionData("proposals", [1]),
+        })
+      );
+      expect(result.forVotes).to.be.equal(2);
+      expect(result.againstVotes).to.be.equal(2);
     });
   });
 });
