@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist && rm tsconfig.tsbuildinfo",
+    "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
