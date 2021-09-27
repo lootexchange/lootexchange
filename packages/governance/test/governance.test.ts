@@ -349,5 +349,49 @@ describe("Governance", () => {
       expect(result.forVotes).to.be.equal(2);
       expect(result.againstVotes).to.be.equal(2);
     });
+
+    it("vote by signature", async () => {
+      await propose(bigHolder1);
+
+      // Advance 1 block to enable voting on the proposal
+      await network.provider.send("evm_mine");
+
+      const domain = {
+        name: "Loot DAO",
+        verifyingContract: daoProxy.address,
+        chainId: (await ethers.provider.getNetwork()).chainId,
+      };
+
+      const types = {
+        Ballot: [
+          { name: "proposalId", type: "uint256" },
+          { name: "tokenIds", type: "uint256[]" },
+          { name: "support", type: "uint8" },
+        ],
+      };
+
+      await loot
+        .connect(smallHolder)
+        .transferFrom(smallHolder.address, alice.address, 357);
+
+      const signature = await alice._signTypedData(domain, types, {
+        proposalId: 1,
+        tokenIds: [357],
+        support: 1,
+      });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+
+      await alice.sendTransaction({
+        to: daoProxy.address,
+        data: daoLogic.interface.encodeFunctionData("castVoteBySig", [
+          1,
+          [357],
+          1,
+          v,
+          r,
+          s,
+        ]),
+      });
+    });
   });
 });

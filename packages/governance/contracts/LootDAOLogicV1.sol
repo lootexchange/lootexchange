@@ -504,7 +504,12 @@ contract LootDAOLogicV1 is LootDAOStorageV1, LootDAOEvents {
                 )
             );
             bytes32 structHash = keccak256(
-                abi.encode(BALLOT_TYPEHASH, proposalId, support)
+                abi.encode(
+                    BALLOT_TYPEHASH,
+                    proposalId,
+                    keccak256(abi.encodePacked(tokenIds)),
+                    support
+                )
             );
             bytes32 digest = keccak256(
                 abi.encodePacked("\x19\x01", domainSeparator, structHash)
@@ -548,7 +553,7 @@ contract LootDAOLogicV1 is LootDAOStorageV1, LootDAOEvents {
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             require(
-                loot.ownerOf(tokenIds[i]) == msg.sender,
+                loot.ownerOf(tokenIds[i]) == voter,
                 "LootDAO::castVoteInternal: voter not owner of token"
             );
 
