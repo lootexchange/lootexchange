@@ -28,7 +28,7 @@ export const loot = () => {
         "0000" + i
       ).slice(-4)}.png`,
       id: i,
-      image: `https://townsquare.vercel.app/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${i}.svg`,
+      image: `https://loot.exchange/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${i}.svg`,
       name: `Bag #${i}`,
       tokenId: i
     });
