@@ -28,7 +28,7 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://www.loot.exchange/" />
           <meta property="og:title" content="Loot Exchange" />
           <meta property="og:description" content="A community marketplace for the Loot Universe" />
-          <meta property="og:image" content="https://www.loot.exchange/exchangeIcon.svg" />
+          <meta property="og:image" content="https://avatars.githubusercontent.com/u/90751361?s=200&v=4" />
         </Head>
         <body>
           <Main />
