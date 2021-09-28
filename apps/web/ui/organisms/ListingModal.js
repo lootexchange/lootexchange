@@ -277,7 +277,7 @@ export default function ListingModal({
           feeRecipient:
             process.env.NEXT_PUBLIC_CHAIN_ID == 4
               ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
-              : signerAddress,
+              : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18",
           // Set listing time 2 minutes in the past to make sure on-chain validation passes
           listingTime: Math.floor(Date.now() / 1000) - 120,
           // TODO: Dynamically set expiration time
