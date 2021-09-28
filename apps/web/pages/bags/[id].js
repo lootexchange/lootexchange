@@ -90,7 +90,7 @@ const Bag = () => {
           <Flex>
             <Link href={`/bags/${bag.id}/updatePrice`} passHref>
               <BuyButton bg="#ffffff69" color="white" mr={2}>
-                Change Price
+                Lower Price
               </BuyButton>
             </Link>
             <Link href={`/bags/${bag.id}/cancel`} passHref>

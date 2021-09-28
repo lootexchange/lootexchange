@@ -30,10 +30,11 @@ import { FaTimes, FaCheckCircle, FaCube } from "react-icons/fa";
 import ReactLoading from "react-loading";
 import Link from "next/link";
 import eth from "../../../ethers";
+import treasury from "../../../public/cave.png";
 
 import useExchangeRate from "@hooks/useExchangeRate";
 
-import { shortenAddress, formatMoney } from "@utils";
+import { shortenAddress, formatMoney, shortenNumber } from "@utils";
 import moment from "moment";
 
 // need to just make this style the actual button
@@ -123,27 +124,44 @@ const ReviewStep = ({ bag, exchangeRate }) => (
         </Flex>
       </Box>
       {bag.source === "LootExchange" ? (
-        <Price cost={bag.price * 0.99} sub="99%" />
+        <Price cost={shortenNumber(bag.price * 0.99)} sub="99%" />
       ) : (
-        <Price cost={bag.price * 0.975} sub="97.5%" />
+        <Price cost={shortenNumber(bag.price * 0.975)} sub="97.5%" />
       )}
     </Flex>
 
     <Flex>
       <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
+        <H3 color="rgba(255,255,255,0.7)">
+          {bag.source === "LootExchange" ? "TreasuryDAO" : "Marketplace"}
+        </H3>
         <Flex mt={3} justifyContent="space-between">
           {bag.source === "LootExchange" ? (
-            <Logo width={257 / 2.7} height={98 / 2.7} />
+            <>
+              <Box>
+                <Image src={treasury} width={70} height={70} />
+              </Box>
+              <Box maxWidth={350} mx={3} flex={1}>
+                <P fontSize={14}>
+                  Community controlled treasury for funding projects in the
+                  lootosphere.
+                </P>
+                <a>
+                  <P mt={1} fontSize={16} color="rgba(100,100,150)">
+                    read more
+                  </P>
+                </a>
+              </Box>
+            </>
           ) : (
             <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
           )}
         </Flex>
       </Box>
       {bag.source === "LootExchange" ? (
-        <Price cost={bag.price * 0.01} sub="1%" />
+        <Price cost={shortenNumber(bag.price * 0.01)} sub="1%" />
       ) : (
-        <Price cost={bag.price * 0.025} sub="2.5%" />
+        <Price cost={shortenNumber(bag.price * 0.025} sub="2.5%" />
       )}
     </Flex>
   </>

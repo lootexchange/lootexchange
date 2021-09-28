@@ -26,6 +26,7 @@ import NFT from "@ui/organisms/NFT";
 import Owner from "@ui/organisms/Owner";
 import ether from "../../../public/ether.png";
 import openSea from "../../../public/OpenSea-logo.png";
+import treasury from "../../../public/cave.png";
 import { FaTimes, FaCheckCircle, FaCube } from "react-icons/fa";
 import ReactLoading from "react-loading";
 import Link from "next/link";
@@ -35,7 +36,7 @@ import useExchangeRate from "@hooks/useExchangeRate";
 
 import { Price, ItemCard } from "./purchase";
 
-import { shortenAddress, formatMoney } from "@utils";
+import { shortenAddress, formatMoney, shortenNumber } from "@utils";
 import moment from "moment";
 import ListingModal from "@ui/organisms/ListingModal";
 
@@ -107,17 +108,30 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
           />
         </Flex>
       </Box>
-      <Price cost={listPrice} sub="100%" />
+      <Price cost={shortenNumber(listPrice * 0.99)} sub="99%" />
     </Flex>
 
     <Flex>
       <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
-        <Flex mt={3} justifyContent="space-between">
-          <Logo width={257 / 2.7} height={98 / 2.7} />
+        <H3 color="rgba(255,255,255,0.7)">TreasuryDAO</H3>
+        <Flex mt={3}>
+          <Box>
+            <Image src={treasury} width={70} height={70} />
+          </Box>
+          <Box maxWidth={350} mx={3} flex={1}>
+            <P fontSize={14}>
+              Community controlled treasury for funding projects in the
+              lootosphere.
+            </P>
+            <a>
+              <P mt={1} fontSize={16} color="rgba(100,100,150)">
+                read more
+              </P>
+            </a>
+          </Box>
         </Flex>
       </Box>
-      <Price cost="0" sub="0%" />
+      <Price cost={shortenNumber(listPrice * 0.01)} sub="1%" />
     </Flex>
   </>
 );
