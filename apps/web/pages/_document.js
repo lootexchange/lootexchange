@@ -22,6 +22,13 @@ class MyDocument extends Document {
           />
           <title>Loot Exchange</title>
           <link rel="shortcut icon" type="image/jpg" href="/exchangeIcon.svg"/>
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:site" content="@lootexchange" />
+          <meta name="twitter:creator" content="@lootexchange" />
+          <meta property="og:url" content="https://www.loot.exchange/" />
+          <meta property="og:title" content="Loot Exchange" />
+          <meta property="og:description" content="A community marketplace for the Loot Universe" />
+          <meta property="og:image" content="https://www.loot.exchange/exchangeIcon.svg" />
         </Head>
         <body>
           <Main />
