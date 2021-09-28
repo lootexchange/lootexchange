@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
 import { FaInfoCircle, FaTag } from "react-icons/fa";
+import { Helpers } from "@lootexchange/sdk";
 
 import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
 import Link from "next/link";
@@ -16,8 +17,9 @@ import {
   itemRarity,
   rarityColor,
   rarityDescription,
-  lootRarity
+  lootRarity,
 } from "loot-rarity";
+import eth from "../../ethers";
 
 import { shortenAddress } from "@utils";
 import moment from "moment";
@@ -58,7 +60,7 @@ const attributeDefaults = [
   { key: "Foot", value: "Ornate Greaves of Anger" },
   { key: "Hand", value: "Gloves" },
   { key: "Neck", value: "Necklace of Enlightenment" },
-  { key: "Ring", value: "Gold Ring" }
+  { key: "Ring", value: "Gold Ring" },
 ];
 
 const Bag = () => {
@@ -88,16 +90,30 @@ const Bag = () => {
         <PriceBox>
           <Price price={bag.price} />
           <Flex>
-            <Link href={`/bags/${bag.id}/updatePrice`} passHref>
+            <Link
+              href={`/bags/${bag.id}/sell?initialPrice=${bag.price}`}
+              passHref
+            >
               <BuyButton bg="#ffffff69" color="white" mr={2}>
                 Lower Price
               </BuyButton>
             </Link>
-            <Link href={`/bags/${bag.id}/cancel`} passHref>
-              <BuyButton bg="#ffffff69" color="white" ml={2}>
-                Cancel Listing
-              </BuyButton>
-            </Link>
+            <BuyButton
+              bg="#ffffff69"
+              color="white"
+              ml={2}
+              onClick={async () => {
+                if (bag.sellOrder) {
+                  if (!eth.signer) {
+                    await eth.connect();
+                  } else {
+                    await Helpers.Wyvern.cancel(eth.signer, bag.sellOrder);
+                  }
+                }
+              }}
+            >
+              Cancel Listing
+            </BuyButton>
           </Flex>
         </PriceBox>
       );
@@ -207,7 +223,7 @@ const Bag = () => {
                     <Flex alignItems="center">
                       <P color="rgba(255,255,255,0.9)">
                         {rarityDescription(
-                          lootRarity(attributes.map(a => a.value))
+                          lootRarity(attributes.map((a) => a.value))
                         )}
                       </P>
                       <Box
@@ -216,12 +232,12 @@ const Bag = () => {
                         borderRadius="50%"
                         ml={2}
                         bg={rarityColor(
-                          lootRarity(attributes.map(a => a.value))
+                          lootRarity(attributes.map((a) => a.value))
                         )}
                       />
                     </Flex>
                   </Flex>
-                  {attributes.map(item => (
+                  {attributes.map((item) => (
                     <Flex
                       key={item.value}
                       py={3}
@@ -281,7 +297,7 @@ const Bag = () => {
               <tbody>
                 {transfers
                   .sort((a, b) => b.timestamp - a.timestamp)
-                  .map(transfer => {
+                  .map((transfer) => {
                     return (
                       <tr key={transfer.timestamp}>
                         <td>
