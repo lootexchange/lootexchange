@@ -133,20 +133,17 @@ const ReviewStep = ({ bag, exchangeRate }) => (
     <Flex>
       <Box flex={1}>
         <H3 color="rgba(255,255,255,0.7)">
-          {bag.source === "LootExchange" ? "TreasuryDAO" : "Marketplace"}
+          {bag.source === "LootExchange" ? "Community Treasury" : "Marketplace"}
         </H3>
         <Flex mt={3} justifyContent="space-between">
           {bag.source === "LootExchange" ? (
             <>
-              <Box>
-                <Image src={treasury} width={70} height={70} />
-              </Box>
-              <Box maxWidth={350} mx={3} flex={1}>
+              <Box maxWidth={350} mr={3} flex={1}>
                 <P fontSize={14}>
                   Community controlled treasury for funding projects in the
                   lootosphere.
                 </P>
-                <a>
+                <a href="https://treasury.loot.exchange/" target="_blank" rel="noreferrer">
                   <P mt={1} fontSize={16} color="rgba(100,100,150)">
                     read more
                   </P>
