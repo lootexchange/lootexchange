@@ -1,0 +1,17 @@
+.link,
+.link:visited,
+.link:active {
+  color: var(--brand-dark-green);
+  text-decoration: underline;
+}
+.link:hover {
+  color: var(--brand-dark-red);
+}
+
+.bidRow {
+  font-weight: normal !important;
+}
+
+.currentBidCol {
+  border-right: 0 !important;
+}
