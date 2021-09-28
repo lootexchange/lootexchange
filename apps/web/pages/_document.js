@@ -20,6 +20,8 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Concert+One&family=Source+Code+Pro:wght@200;400;600;900&display=swap"
             rel="stylesheet"
           />
+          <title>Loot Exchange</title>
+          <link rel="shortcut icon" type="image/jpg" href="/exchangeIcon.svg"/>
         </Head>
         <body>
           <Main />
