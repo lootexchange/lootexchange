@@ -18,7 +18,7 @@ import {
   Button,
   H1,
   Hr,
-  Logo
+  Logo,
 } from "@ui";
 import Header from "@ui/organisms/Header";
 import BackArrow from "@ui/organisms/BackArrow";
@@ -51,7 +51,7 @@ const BuyButton = styled(Button)`
     color: white;
   }
 
-  ${props =>
+  ${(props) =>
     props.disabled &&
     `
     background: gray;
@@ -89,7 +89,7 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
         maxlength="15"
         type="number"
         value={listPrice}
-        onChange={e => setListPrice(e.target.value.slice(0, 10))}
+        onChange={(e) => setListPrice(e.target.value.slice(0, 10))}
       />
     </Box>
 
@@ -141,9 +141,9 @@ const WaitingForConfirmation = ({ bag }) => {
   let web3Provider = eth.provider.provider;
   let meta = web3Provider.walletMeta || {
     icons: [
-      "https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png"
+      "https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png",
     ],
-    name: "MetaMask"
+    name: "MetaMask",
   };
   return (
     <>
@@ -195,7 +195,7 @@ const STEPS = {
   review: "REVIEW",
   watingForConfirmation: "WAITING_FOR_CONFIRMATION",
   waitingforTransaction: "WATING_FOR_TRANSACTION",
-  completed: "COMPLETED"
+  completed: "COMPLETED",
 };
 
 const Purchase = () => {
@@ -259,7 +259,7 @@ const Purchase = () => {
                   style={{
                     width: 450,
                     background: "black",
-                    display: "block"
+                    display: "block",
                   }}
                 />
               </Box>
@@ -306,7 +306,7 @@ const Purchase = () => {
               [STEPS.waitingforTransaction]: (
                 <WaitingforTransaction bag={bag} />
               ),
-              [STEPS.completed]: <Confirmed bag={bag} />
+              [STEPS.completed]: <Confirmed bag={bag} />,
             }[step]}
         </Box>
 
@@ -351,7 +351,11 @@ const Purchase = () => {
                   <ListingModal
                     onComplete={() => setStep(STEPS.completed)}
                     signer={eth.provider.getSigner()}
-                    collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
+                    collection={
+                      process.env.NEXT_PUBLIC_CHAIN_ID == "4"
+                        ? "0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
+                        : "0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7"
+                    }
                     tokenId={id}
                     listPrice={listPrice}
                   />
