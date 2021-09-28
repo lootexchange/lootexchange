@@ -25,13 +25,13 @@ const Adventurer = ({}) => {
           <Owner address={address || ""} name={wallet.shortName || ""} large />
           <Box mt={3}>
             <P>
-              {bagsHeld} {bagsHeld > 1 ? "Bags" : "Bag"}
+              {bagsHeld} {bagsHeld > 1 || bagsHeld == 0 ? "Bags" : "Bag"}
             </P>
           </Box>
         </Box>
         <Box>
           <Select
-            onChange={e => setLens(e.target.value)}
+            onChange={(e) => setLens(e.target.value)}
             icon={<FaEye color="rgba(255,255,255,0.9)" />}
           >
             <option value="characters">Character</option>
@@ -41,7 +41,7 @@ const Adventurer = ({}) => {
       </Flex>
       <Box p={3} pt={0}>
         <Grid>
-          {bags.map(loot => (
+          {bags.map((loot) => (
             <Link
               key={loot.tokenId}
               href={`/bags/${loot.tokenId}`}

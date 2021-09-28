@@ -17,7 +17,7 @@ export default function ListingModal({
   collection,
   tokenId,
   listPrice,
-  onComplete
+  onComplete,
 }) {
   let [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +25,7 @@ export default function ListingModal({
     pending: null,
     success: null,
     error: null,
-    tx: null
+    tx: null,
   };
 
   // Steps:
@@ -60,18 +60,18 @@ export default function ListingModal({
           "function ownerOf(uint256 tokenId) view returns (address)",
           "function getApproved(uint256 tokenId) view returns (address)",
           "function isApprovedForAll(address owner, address operator) view returns (bool)",
-          "function setApprovalForAll(address operator, bool approved)"
+          "function setApprovalForAll(address operator, bool approved)",
         ])
       );
       setCollectionContract(collectionContract);
 
       const proxyRegistryContract = new Contract(
-        // TODO: Dynamically select address based on current network
-        // (eg. mainnet address = "0xa5409ec958c83c3f309868babaca7c86dcb077c1")
-        "0xf57b2c51ded3a29e6891aba85459d600256cf317",
+        process.env.NEXT_PUBLIC_CHAIN_ID == 4
+          ? "0xf57b2c51ded3a29e6891aba85459d600256cf317"
+          : "0xa5409ec958c83c3f309868babaca7c86dcb077c1",
         new Interface([
           "function proxies(address) view returns (address)",
-          "function registerProxy()"
+          "function registerProxy()",
         ])
       );
       setProxyRegistryContract(proxyRegistryContract);
@@ -85,7 +85,7 @@ export default function ListingModal({
     async function executeStep1() {
       setStep1({
         ...step1,
-        pending: true
+        pending: true,
       });
 
       try {
@@ -97,7 +97,7 @@ export default function ListingModal({
             pending: false,
             success: false,
             error: "Current user is not the owner of the listed token",
-            tx: null
+            tx: null,
           });
 
           // Exit
@@ -115,18 +115,18 @@ export default function ListingModal({
             .connect(signer)
             .registerProxy()
             // Wait for the transaction to get mined
-            .then(tx => {
+            .then((tx) => {
               setStep1({
                 ...step1,
                 tx: `https://${
                   process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
-                }.etherscan.io/tx/${tx.hash}`
+                }.etherscan.io/tx/${tx.hash}`,
               });
               tx.wait().then(() =>
                 proxyRegistryContract
                   .connect(signer)
                   .proxies(signerAddress)
-                  .then(userProxy => {
+                  .then((userProxy) => {
                     // Set user proxy
                     setUserProxy(userProxy);
 
@@ -139,7 +139,7 @@ export default function ListingModal({
                         process.env.NEXT_PUBLIC_CHAIN_ID == 4
                           ? "rinkeby"
                           : "www"
-                      }.etherscan.io/tx/${tx.hash}`
+                      }.etherscan.io/tx/${tx.hash}`,
                     });
                   })
               );
@@ -155,7 +155,7 @@ export default function ListingModal({
             pending: false,
             success: true,
             error: null,
-            tx: null
+            tx: null,
           });
         }
       } catch (error) {
@@ -166,7 +166,7 @@ export default function ListingModal({
           pending: false,
           error: "Could not check/register user proxy",
           success: false,
-          tx: null
+          tx: null,
         });
       }
     }
@@ -183,7 +183,7 @@ export default function ListingModal({
     async function executeStep2() {
       setStep2({
         ...step2,
-        pending: true
+        pending: true,
       });
 
       try {
@@ -204,7 +204,7 @@ export default function ListingModal({
             pending: false,
             success: true,
             error: null,
-            tx: null
+            tx: null,
           });
         } else {
           // Set the approval on the user proxy
@@ -215,8 +215,9 @@ export default function ListingModal({
             .then(({ wait, hash }) => {
               setStep2({
                 ...step2,
-                // TODO: Dynamically select explorer link based on current network
-                tx: `https://rinkeby.etherscan.io/tx/${hash}`
+                tx: `https://${
+                  process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
+                }.etherscan.io/tx/${hash}`,
               });
               wait().then(() => {
                 // Set success
@@ -224,7 +225,9 @@ export default function ListingModal({
                   pending: false,
                   success: true,
                   error: null,
-                  tx: `https://rinkeby.etherscan.io/tx/${hash}`
+                  tx: `https://${
+                    process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
+                  }.etherscan.io/tx/${hash}`,
                 });
               });
             });
@@ -237,7 +240,7 @@ export default function ListingModal({
           error: "Could not check/set approval",
           success: false,
           tx: null,
-          pending: false
+          pending: false,
         });
       }
     }
@@ -251,14 +254,15 @@ export default function ListingModal({
     async function executeStep3() {
       setStep3({
         ...step3,
-        pending: true
+        pending: true,
       });
       try {
         // Build and sign the sell order
         let sellOrder = Builders.Erc721.SingleItem.sell({
-          // TODO: Dynamically select exchange address based on current network
-          // (eg. mainnet address = "0x7be8076f4ea4a4ad08075c2508e481d6c946d12b")
-          exchange: "0x5206e78b21ce315ce284fb24cf05e0585a93b1d9",
+          exchange:
+            process.env.NEXT_PUBLIC_CHAIN_ID == 4
+              ? "0x5206e78b21ce315ce284fb24cf05e0585a93b1d9"
+              : "0x7be8076f4ea4a4ad08075c2508e481d6c946d12b",
           maker: signerAddress,
           target: collection,
           tokenId: tokenId,
@@ -266,20 +270,24 @@ export default function ListingModal({
           // TODO: Dynamically set price
           basePrice: parseEther(listPrice.toString()),
           // TODO: Dynamically (or not) set fee
-          fee: 0,
+          fee: 100,
           // The fee recipient on the maker's order should never be the zero address.
           // Even if the fee is 0, the fee recipient should be set to the maker's address.
-          feeRecipient: signerAddress,
+          // TODO: Dynamically set the fee recipient as the Treasury Executor address
+          feeRecipient:
+            process.env.NEXT_PUBLIC_CHAIN_ID == 4
+              ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
+              : signerAddress,
           // Set listing time 2 minutes in the past to make sure on-chain validation passes
           listingTime: Math.floor(Date.now() / 1000) - 120,
           // TODO: Dynamically set expiration time
           expirationTime: 0,
-          salt: BigNumber.from(randomBytes(32))
+          salt: BigNumber.from(randomBytes(32)),
         });
         sellOrder = await Helpers.Order.sign(signer, sellOrder);
 
         await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/orders`, {
-          orders: [sellOrder]
+          orders: [sellOrder],
         });
 
         // Set success
@@ -287,7 +295,7 @@ export default function ListingModal({
           pending: false,
           success: true,
           error: null,
-          tx: null
+          tx: null,
         });
 
         setTimeout(() => {
@@ -301,7 +309,7 @@ export default function ListingModal({
           pending: false,
           error: "Could not build/sign the sell order",
           success: false,
-          tx: null
+          tx: null,
         });
       }
     }
@@ -370,7 +378,7 @@ export default function ListingModal({
                 p={4}
                 style={{
                   boxShadow: "0px 5px 20px 6px black",
-                  border: "1px solid rgba(255, 255, 255, 0.2)"
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                 }}
                 className="inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform"
               >
