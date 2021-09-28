@@ -70,6 +70,7 @@ const Bag = () => {
     bag && bag.attributes.length ? bag.attributes : attributeDefaults;
 
   const getCallToAction = () => {
+    console.log(owner, bag)
     if (!owner.isOwnBag && bag.isForSale) {
       return (
         <PriceBox>
@@ -103,7 +104,7 @@ const Bag = () => {
       );
     }
 
-    if (owner.isOwnBag && bag.isForSale && !bag.source === "LootExchange") {
+    if (owner.isOwnBag && bag.isForSale && bag.source !== "LootExchange") {
       return (
         <PriceBox>
           <Price price={bag.price} />
@@ -120,8 +121,8 @@ const Bag = () => {
               <FaInfoCircle />
             </Box>
             <P fontSize={12} lineHeight={1.9} mt={-1}>
-              You bag is listed on open sea. If you relist and someone buys your
-              bag from Loot exchange, you&apos;ll pay 0% in transaction fees!
+              You bag is listed on Open Sea. If you relist and someone buys your
+              bag from Loot exchange, you&apos;ll pay only 1% in fees!
             </P>
           </Flex>
         </PriceBox>
