@@ -1,6 +1,6 @@
 {
   "name": "@lootexchange/sdk",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Loot Exchange SDK",
   "keywords": [
     "ethereum",
@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist && rm tsconfig.tsbuildinfo",
+    "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
     "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
