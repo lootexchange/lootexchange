@@ -17,7 +17,7 @@ import {
   itemRarity,
   rarityColor,
   rarityDescription,
-  lootRarity,
+  lootRarity
 } from "loot-rarity";
 import eth from "../../ethers";
 
@@ -60,7 +60,7 @@ const attributeDefaults = [
   { key: "Foot", value: "Ornate Greaves of Anger" },
   { key: "Hand", value: "Gloves" },
   { key: "Neck", value: "Necklace of Enlightenment" },
-  { key: "Ring", value: "Gold Ring" },
+  { key: "Ring", value: "Gold Ring" }
 ];
 
 const Bag = () => {
@@ -190,7 +190,13 @@ const Bag = () => {
                 <Box p={[3, 3, 4]} flex={1} position="relative">
                   <Flex justifyContent="space-between">
                     <H2 mb={2}>{bag.name}</H2>
-                    {bag.source && <Source source={bag.source} size={30} />}
+                    {bag.source && (
+                      <Source
+                        source={bag.source}
+                        size={30}
+                        alignItem="flex-start"
+                      />
+                    )}
                   </Flex>
 
                   <Link href={`/adventurers/${bag.owner}`}>
@@ -223,7 +229,7 @@ const Bag = () => {
                     <Flex alignItems="center">
                       <P color="rgba(255,255,255,0.9)">
                         {rarityDescription(
-                          lootRarity(attributes.map((a) => a.value))
+                          lootRarity(attributes.map(a => a.value))
                         )}
                       </P>
                       <Box
@@ -232,12 +238,12 @@ const Bag = () => {
                         borderRadius="50%"
                         ml={2}
                         bg={rarityColor(
-                          lootRarity(attributes.map((a) => a.value))
+                          lootRarity(attributes.map(a => a.value))
                         )}
                       />
                     </Flex>
                   </Flex>
-                  {attributes.map((item) => (
+                  {attributes.map(item => (
                     <Flex
                       key={item.value}
                       py={3}
@@ -297,7 +303,7 @@ const Bag = () => {
               <tbody>
                 {transfers
                   .sort((a, b) => b.timestamp - a.timestamp)
-                  .map((transfer) => {
+                  .map(transfer => {
                     return (
                       <tr key={transfer.timestamp}>
                         <td>

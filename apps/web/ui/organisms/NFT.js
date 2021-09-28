@@ -78,7 +78,9 @@ const NFT = ({ bag, lens, noData, ...props }) => {
             <P flex={1}>{bag.name}</P>
 
             <Flex alignItems="center" justifyContent="center">
-              {bag.source && <Source size={23} source={bag.source} />}
+              {bag.source && (
+                <Source size={23} source={bag.source} alignItems="center" />
+              )}
             </Flex>
             <Flex alignItems="center" justifyContent="flex-end" flex={1}>
               {bag.isForSale && (

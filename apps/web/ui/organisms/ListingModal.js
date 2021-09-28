@@ -17,7 +17,7 @@ export default function ListingModal({
   collection,
   tokenId,
   listPrice,
-  onComplete,
+  onComplete
 }) {
   let [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +25,7 @@ export default function ListingModal({
     pending: null,
     success: null,
     error: null,
-    tx: null,
+    tx: null
   };
 
   // Steps:
@@ -60,7 +60,7 @@ export default function ListingModal({
           "function ownerOf(uint256 tokenId) view returns (address)",
           "function getApproved(uint256 tokenId) view returns (address)",
           "function isApprovedForAll(address owner, address operator) view returns (bool)",
-          "function setApprovalForAll(address operator, bool approved)",
+          "function setApprovalForAll(address operator, bool approved)"
         ])
       );
       setCollectionContract(collectionContract);
@@ -71,7 +71,7 @@ export default function ListingModal({
           : "0xa5409ec958c83c3f309868babaca7c86dcb077c1",
         new Interface([
           "function proxies(address) view returns (address)",
-          "function registerProxy()",
+          "function registerProxy()"
         ])
       );
       setProxyRegistryContract(proxyRegistryContract);
@@ -85,7 +85,7 @@ export default function ListingModal({
     async function executeStep1() {
       setStep1({
         ...step1,
-        pending: true,
+        pending: true
       });
 
       try {
@@ -97,7 +97,7 @@ export default function ListingModal({
             pending: false,
             success: false,
             error: "Current user is not the owner of the listed token",
-            tx: null,
+            tx: null
           });
 
           // Exit
@@ -115,18 +115,18 @@ export default function ListingModal({
             .connect(signer)
             .registerProxy()
             // Wait for the transaction to get mined
-            .then((tx) => {
+            .then(tx => {
               setStep1({
                 ...step1,
                 tx: `https://${
                   process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
-                }.etherscan.io/tx/${tx.hash}`,
+                }.etherscan.io/tx/${tx.hash}`
               });
               tx.wait().then(() =>
                 proxyRegistryContract
                   .connect(signer)
                   .proxies(signerAddress)
-                  .then((userProxy) => {
+                  .then(userProxy => {
                     // Set user proxy
                     setUserProxy(userProxy);
 
@@ -139,7 +139,7 @@ export default function ListingModal({
                         process.env.NEXT_PUBLIC_CHAIN_ID == 4
                           ? "rinkeby"
                           : "www"
-                      }.etherscan.io/tx/${tx.hash}`,
+                      }.etherscan.io/tx/${tx.hash}`
                     });
                   })
               );
@@ -155,7 +155,7 @@ export default function ListingModal({
             pending: false,
             success: true,
             error: null,
-            tx: null,
+            tx: null
           });
         }
       } catch (error) {
@@ -166,7 +166,7 @@ export default function ListingModal({
           pending: false,
           error: "Could not check/register user proxy",
           success: false,
-          tx: null,
+          tx: null
         });
       }
     }
@@ -183,7 +183,7 @@ export default function ListingModal({
     async function executeStep2() {
       setStep2({
         ...step2,
-        pending: true,
+        pending: true
       });
 
       try {
@@ -204,7 +204,7 @@ export default function ListingModal({
             pending: false,
             success: true,
             error: null,
-            tx: null,
+            tx: null
           });
         } else {
           // Set the approval on the user proxy
@@ -217,7 +217,7 @@ export default function ListingModal({
                 ...step2,
                 tx: `https://${
                   process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
-                }.etherscan.io/tx/${hash}`,
+                }.etherscan.io/tx/${hash}`
               });
               wait().then(() => {
                 // Set success
@@ -227,7 +227,7 @@ export default function ListingModal({
                   error: null,
                   tx: `https://${
                     process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
-                  }.etherscan.io/tx/${hash}`,
+                  }.etherscan.io/tx/${hash}`
                 });
               });
             });
@@ -240,7 +240,7 @@ export default function ListingModal({
           error: "Could not check/set approval",
           success: false,
           tx: null,
-          pending: false,
+          pending: false
         });
       }
     }
@@ -254,7 +254,7 @@ export default function ListingModal({
     async function executeStep3() {
       setStep3({
         ...step3,
-        pending: true,
+        pending: true
       });
       try {
         // Build and sign the sell order
@@ -282,12 +282,12 @@ export default function ListingModal({
           listingTime: Math.floor(Date.now() / 1000) - 120,
           // TODO: Dynamically set expiration time
           expirationTime: 0,
-          salt: BigNumber.from(randomBytes(32)),
+          salt: BigNumber.from(randomBytes(32))
         });
         sellOrder = await Helpers.Order.sign(signer, sellOrder);
 
         await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/orders`, {
-          orders: [sellOrder],
+          orders: [sellOrder]
         });
 
         // Set success
@@ -295,7 +295,7 @@ export default function ListingModal({
           pending: false,
           success: true,
           error: null,
-          tx: null,
+          tx: null
         });
 
         setTimeout(() => {
@@ -309,7 +309,7 @@ export default function ListingModal({
           pending: false,
           error: "Could not build/sign the sell order",
           success: false,
-          tx: null,
+          tx: null
         });
       }
     }
@@ -378,7 +378,7 @@ export default function ListingModal({
                 p={4}
                 style={{
                   boxShadow: "0px 5px 20px 6px black",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)"
                 }}
                 className="inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform"
               >
@@ -425,38 +425,40 @@ const Step = ({ stepData, stepNumber, title, children }) => {
   const { error, pending, success, tx } = stepData;
   return (
     <Box mb={4}>
-      {!!pending ? (
-        <Box mb={2}>
-          <Spinner />
-        </Box>
-      ) : (
-        <>
-          {!!success ? (
-            <Box mb={2}>
-              <HiCheck className="h-7 w-7 bg-green-500 rounded-full" />
-            </Box>
-          ) : !!error ? (
-            <HiX className="h-7 w-7 bg-red-500 rounded-full" />
-          ) : (
-            <Flex
-              mb={2}
-              justifyContent="center"
-              alignItems="center"
-              width={30}
-              height={30}
-              border="1px solid rgba(255,255,255,0.2)"
-              borderRadius="50%"
-            >
-              <P>{stepNumber}</P>
-            </Flex>
-          )}
-        </>
-      )}
-      <P fontWeight={600} mb={2}>
-        {title}
-      </P>
+      <Flex>
+        {!!pending ? (
+          <Box mb={2}>
+            <Spinner />
+          </Box>
+        ) : (
+          <>
+            {!!success ? (
+              <Box mb={2}>
+                <HiCheck className="h-7 w-7 bg-green-500 rounded-full" />
+              </Box>
+            ) : !!error ? (
+              <HiX className="h-7 w-7 bg-red-500 rounded-full" />
+            ) : (
+              <Flex
+                mb={2}
+                justifyContent="center"
+                alignItems="center"
+                width={30}
+                height={30}
+                border="1px solid rgba(255,255,255,0.2)"
+                borderRadius="50%"
+              >
+                <P>{stepNumber}</P>
+              </Flex>
+            )}
+          </>
+        )}
+        <P fontWeight={600} mb={2} ml={3}>
+          {title}
+        </P>
+      </Flex>
       {!success && (
-        <Box>
+        <Box mt={2}>
           <P fontSize={12} lineHeight={1.5}>
             {children}
           </P>
@@ -465,7 +467,11 @@ const Step = ({ stepData, stepNumber, title, children }) => {
               <P mt={2}>See transaction.</P>
             </a>
           )}
-          {!!error && <ErrorMessage error={error} />}
+          {!!error && (
+            <Box mt={3}>
+              <ErrorMessage error={error} />
+            </Box>
+          )}
         </Box>
       )}
     </Box>

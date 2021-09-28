@@ -208,6 +208,10 @@ const Purchase = () => {
   const bag = { ...bagData, ...owner };
   let exchangeRate = useExchangeRate();
 
+  const login = async () => {
+    await eth.logIn();
+  };
+
   useEffect(() => {
     if (initialPrice) {
       setListPrice(initialPrice);
@@ -330,7 +334,7 @@ const Purchase = () => {
               <BuyButton>Go to Bag</BuyButton>
             </a>
           </Link>
-        ) : (
+        ) : currentUser ? (
           <BuyButton disabled={listPrice <= 0}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
@@ -355,6 +359,8 @@ const Purchase = () => {
               </>
             )}
           </BuyButton>
+        ) : (
+          <BuyButton onClick={login}>Connect wallet</BuyButton>
         )}
       </Flex>
     </Flex>
