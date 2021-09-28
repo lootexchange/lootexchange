@@ -51,3 +51,7 @@ export const abbreviateNumber = value => {
   newValue += suffixes[suffixNum];
   return newValue;
 };
+
+export const shortenNumber = (value, precision = 5) => {
+  return parseFloat(value.toPrecision(precision));
+};
