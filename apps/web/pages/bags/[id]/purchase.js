@@ -161,7 +161,7 @@ const ReviewStep = ({ bag, exchangeRate }) => (
       {bag.source === "LootExchange" ? (
         <Price cost={shortenNumber(bag.price * 0.01)} sub="1%" />
       ) : (
-        <Price cost={shortenNumber(bag.price * 0.025} sub="2.5%" />
+        <Price cost={shortenNumber(bag.price * 0.025)} sub="2.5%" />
       )}
     </Flex>
   </>
