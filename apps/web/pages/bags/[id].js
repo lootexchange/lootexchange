@@ -119,7 +119,7 @@ const Bag = () => {
       );
     }
 
-    if (owner.isOwnBag && bag.isForSale && !bag.source === "LootExchange") {
+    if (owner.isOwnBag && bag.isForSale && bag.source !== "LootExchange") {
       return (
         <PriceBox>
           <Price price={bag.price} />
