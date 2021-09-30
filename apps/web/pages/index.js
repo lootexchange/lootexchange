@@ -24,6 +24,7 @@ const Home = () => {
       <Flex
         justifyContent="space-between"
         m={3}
+        flexWrap="wrap"
         mt={2}
         alignItems="center"
         position="relative"
@@ -57,6 +58,7 @@ const Home = () => {
           floor={floor}
         />
         <Select
+          display={["none", "none", "block", "block"]}
           onChange={e => setLens(e.target.value)}
           icon={<FaEye color="rgba(255,255,255,0.9)" />}
         >

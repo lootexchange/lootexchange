@@ -24,6 +24,10 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
+.web3modal-modal-lightbox {
+  z-index: 999;
+}
+
 a {
   color: inherit;
   text-decoration: none;

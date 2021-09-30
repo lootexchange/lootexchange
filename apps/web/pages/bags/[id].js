@@ -171,12 +171,13 @@ const Bag = () => {
             <Box
               maxWidth="medium"
               width={[1, 1 / 2, 1 / 2, 1 / 2]}
-              mr={[0, 4, 4]}
               mb={[3, 0, 0]}
             >
-              <NFT bag={bag} lens="characters" noData />
+              <Box mr={[0, 4, 4]}>
+                <NFT bag={bag} lens="characters" noData />
+              </Box>
             </Box>
-            <Flex flexDirection="column" flex={1}>
+            <Flex flexDirection="column" width={[1, 1 / 2, 1 / 2, 1 / 2]}>
               <Pane
                 mb={4}
                 display="flex"
@@ -247,7 +248,7 @@ const Bag = () => {
                     <Flex
                       key={item.value}
                       py={3}
-                      px={4}
+                      px={[3, 3, 4]}
                       alignItems="ceter"
                       borderTop="1px solid rgba(255,255,255,0.1)"
                     >

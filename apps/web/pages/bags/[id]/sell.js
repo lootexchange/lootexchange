@@ -18,7 +18,7 @@ import {
   Button,
   H1,
   Hr,
-  Logo,
+  Logo
 } from "@ui";
 import Header from "@ui/organisms/Header";
 import BackArrow from "@ui/organisms/BackArrow";
@@ -51,7 +51,7 @@ const BuyButton = styled(Button)`
     color: white;
   }
 
-  ${(props) =>
+  ${props =>
     props.disabled &&
     `
     background: gray;
@@ -89,7 +89,7 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
         maxlength="15"
         type="number"
         value={listPrice}
-        onChange={(e) => setListPrice(e.target.value.slice(0, 10))}
+        onChange={e => setListPrice(e.target.value.slice(0, 10))}
       />
     </Box>
 
@@ -141,9 +141,9 @@ const WaitingForConfirmation = ({ bag }) => {
   let web3Provider = eth.provider.provider;
   let meta = web3Provider.walletMeta || {
     icons: [
-      "https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png",
+      "https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png"
     ],
-    name: "MetaMask",
+    name: "MetaMask"
   };
   return (
     <>
@@ -195,7 +195,7 @@ const STEPS = {
   review: "REVIEW",
   watingForConfirmation: "WAITING_FOR_CONFIRMATION",
   waitingforTransaction: "WATING_FOR_TRANSACTION",
-  completed: "COMPLETED",
+  completed: "COMPLETED"
 };
 
 const Purchase = () => {
@@ -234,7 +234,12 @@ const Purchase = () => {
 
   return (
     <Flex flex={1} bg="background" height="100%" overflow="hidden">
-      <Box bg="#1e1e1e" flex={1} height={"100%"}>
+      <Box
+        bg="#1e1e1e"
+        flex={1}
+        height={"100%"}
+        display={["none", "none", "block", "block"]}
+      >
         <Box p={3} position="absolute" top={0}>
           <Logo width={257 / 2.3} height={98 / 2.3} />
         </Box>
@@ -259,7 +264,7 @@ const Purchase = () => {
                   style={{
                     width: 450,
                     background: "black",
-                    display: "block",
+                    display: "block"
                   }}
                 />
               </Box>
@@ -280,7 +285,7 @@ const Purchase = () => {
         width={1}
         maxWidth={600}
         height={"100%"}
-        p={4}
+        p={[3, 3, 4, 4]}
       >
         <Flex justifyContent="space-between" mb={4}>
           <H2 fontSize={16}>List your bag</H2>
@@ -306,7 +311,7 @@ const Purchase = () => {
               [STEPS.waitingforTransaction]: (
                 <WaitingforTransaction bag={bag} />
               ),
-              [STEPS.completed]: <Confirmed bag={bag} />,
+              [STEPS.completed]: <Confirmed bag={bag} />
             }[step]}
         </Box>
 
