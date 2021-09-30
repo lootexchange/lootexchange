@@ -7,7 +7,7 @@ const sortByPrice = bags =>
 
 const sortByNumber = bags => sort(bags).asc(bag => bag.id);
 
-const useBags = ({ sort, filter, ids }) => {
+const useBags = ({ sort, filter, marketplace, ids }) => {
   const [bags, setBags] = useState(loot);
   const [filteredBags, setFilteredBags] = useState([]);
 
@@ -38,7 +38,12 @@ const useBags = ({ sort, filter, ids }) => {
   }, []);
 
   useEffect(() => {
-    let filtered = filter == "all" ? bags : bags.filter(b => b.isForSale);
+    let filtered =
+      filter == "all"
+        ? bags
+        : filter == "forSale"
+        ? bags.filter(b => b.isForSale)
+        : bags.filter(b => filter === b.source);
 
     if (ids) {
       filtered = filtered.filter(b => ids.includes(b.id.toString()));
@@ -48,7 +53,7 @@ const useBags = ({ sort, filter, ids }) => {
       sort == "number" ? sortByNumber(filtered) : sortByPrice(filtered);
 
     setFilteredBags(sorted);
-  }, [sort, filter, bags, ids]);
+  }, [sort, filter, marketplace, bags, ids]);
 
   let floor = Math.min(...bags.filter(p => p.isForSale).map(p => p.price));
   let localFloor = Math.min(
