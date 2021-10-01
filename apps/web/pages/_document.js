@@ -20,8 +20,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Concert+One&family=Source+Code+Pro:wght@200;400;600;900&display=swap"
             rel="stylesheet"
           />
-          <title>Loot Exchange</title>
-          <link rel="shortcut icon" type="image/jpg" href="/exchangeIcon.svg"/>
+          <link rel="shortcut icon" type="image/svg" href="/exchangeIcon.svg"/>
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:site" content="@lootexchange" />
           <meta name="twitter:creator" content="@lootexchange" />

@@ -28,7 +28,7 @@ export const loot = () => {
         "0000" + i
       ).slice(-4)}.png`,
       id: i,
-      image: `https://loot.exchange/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${i}.svg`,
+      image: `https://cdn-1a6d2.kxcdn.com/images/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/${i}`,
       name: `Bag #${i}`,
       tokenId: i
     });
