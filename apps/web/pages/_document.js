@@ -21,6 +21,14 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           <link rel="shortcut icon" type="image/svg" href="/exchangeIcon.svg"/>
+          <title>Loot Exchange</title>
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:site" content="@lootexchange" />
+          <meta name="twitter:creator" content="@lootexchange" />
+          <meta property="og:url" content="https://www.loot.exchange/" />
+          <meta property="og:title" content="Loot Exchange" />
+          <meta property="og:description" content="A community marketplace for the Loot Universe" />
+          <meta property="og:image" content="https://avatars.githubusercontent.com/u/90751361?s=200&v=4" />
         </Head>
         <body>
           <Main />

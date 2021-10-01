@@ -4,7 +4,13 @@ import { AddressZero } from "@ethersproject/constants";
 
 import OrderHelper from "../../helpers/order";
 import { HowToCall, Order, Side, SaleKind } from "../../types";
-import { getListingTime, getSalt } from "../utils";
+import {
+  bn,
+  getDutchAuctionBuyTime,
+  getDutchAuctionSellTime,
+  getListingTime,
+  getSalt,
+} from "../utils";
 
 import Erc721Abi from "../../abis/ERC721.json";
 
@@ -25,6 +31,7 @@ type RequiredOrderParams = {
   listingTime: BigNumberish;
   expirationTime: BigNumberish;
   salt: BigNumberish;
+  extra?: BigNumberish;
   v?: number;
   r?: string;
   s?: string;
@@ -76,6 +83,12 @@ export default class SingleItemErc721OrderBuilder {
   }
 
   public static sell(params: RequiredOrderParams): Order {
+    if (params.extra) {
+      if (bn(params.listingTime).gte(bn(params.expirationTime))) {
+        throw new Error("Invalid listing/expiration time");
+      }
+    }
+
     return OrderHelper.normalize({
       exchange: params.exchange,
       maker: params.maker,
@@ -84,7 +97,7 @@ export default class SingleItemErc721OrderBuilder {
       takerRelayerFee: 0,
       feeRecipient: params.feeRecipient,
       side: Side.SELL,
-      saleKind: SaleKind.FIXED_PRICE,
+      saleKind: params.extra ? SaleKind.DUTCH_AUCTION : SaleKind.FIXED_PRICE,
       target: params.target,
       howToCall: HowToCall.CALL,
       calldata: new Interface(Erc721Abi as any).encodeFunctionData(
@@ -96,7 +109,7 @@ export default class SingleItemErc721OrderBuilder {
       staticExtradata: "0x",
       paymentToken: params.paymentToken,
       basePrice: params.basePrice,
-      extra: 0,
+      extra: params.extra || 0,
       listingTime: params.listingTime,
       expirationTime: params.expirationTime,
       salt: params.salt,
@@ -111,6 +124,12 @@ export default class SingleItemErc721OrderBuilder {
   }
 
   public static buy(params: RequiredOrderParams): Order {
+    if (params.extra) {
+      if (bn(params.listingTime).gte(bn(params.expirationTime))) {
+        throw new Error("Invalid listing/expiration time");
+      }
+    }
+
     return OrderHelper.normalize({
       exchange: params.exchange,
       maker: params.maker,
@@ -119,7 +138,7 @@ export default class SingleItemErc721OrderBuilder {
       takerRelayerFee: params.fee,
       feeRecipient: params.feeRecipient,
       side: Side.BUY,
-      saleKind: SaleKind.FIXED_PRICE,
+      saleKind: params.extra ? SaleKind.DUTCH_AUCTION : SaleKind.FIXED_PRICE,
       target: params.target,
       howToCall: HowToCall.CALL,
       calldata: new Interface(Erc721Abi as any).encodeFunctionData(
@@ -131,7 +150,7 @@ export default class SingleItemErc721OrderBuilder {
       staticExtradata: "0x",
       paymentToken: params.paymentToken,
       basePrice: params.basePrice,
-      extra: 0,
+      extra: params.extra || 0,
       listingTime: params.listingTime,
       expirationTime: params.expirationTime,
       salt: params.salt,
@@ -167,6 +186,16 @@ export default class SingleItemErc721OrderBuilder {
       throw new Error("Invalid buy order calldata");
     }
 
+    // As in https://github.com/ProjectWyvern/wyvern-ethereum/blob/bfca101b2407e4938398fccd8d1c485394db7e01/contracts/exchange/SaleKindInterface.sol#L70-L87
+    const basePrice =
+      buyOrder.saleKind === SaleKind.FIXED_PRICE
+        ? bn(buyOrder.basePrice)
+        : bn(buyOrder.basePrice).add(
+            bn(buyOrder.extra)
+              .mul(bn(getDutchAuctionBuyTime()).sub(bn(buyOrder.listingTime)))
+              .div(bn(buyOrder.expirationTime).sub(bn(buyOrder.listingTime)))
+          );
+
     return OrderHelper.normalize({
       exchange: buyOrder.exchange,
       maker: seller,
@@ -186,7 +215,7 @@ export default class SingleItemErc721OrderBuilder {
       staticTarget: AddressZero,
       staticExtradata: "0x",
       paymentToken: buyOrder.paymentToken,
-      basePrice: buyOrder.basePrice,
+      basePrice,
       extra: 0,
       listingTime: getListingTime(),
       expirationTime: 0,
@@ -219,6 +248,16 @@ export default class SingleItemErc721OrderBuilder {
       throw new Error("Invalid sell order calldata");
     }
 
+    // As in https://github.com/ProjectWyvern/wyvern-ethereum/blob/bfca101b2407e4938398fccd8d1c485394db7e01/contracts/exchange/SaleKindInterface.sol#L70-L87
+    const basePrice =
+      sellOrder.saleKind === SaleKind.FIXED_PRICE
+        ? bn(sellOrder.basePrice)
+        : bn(sellOrder.basePrice).sub(
+            bn(sellOrder.extra)
+              .mul(bn(getDutchAuctionSellTime()).sub(bn(sellOrder.listingTime)))
+              .div(bn(sellOrder.expirationTime).sub(bn(sellOrder.listingTime)))
+          );
+
     return OrderHelper.normalize({
       exchange: sellOrder.exchange,
       maker: buyer,
@@ -238,7 +277,7 @@ export default class SingleItemErc721OrderBuilder {
       staticTarget: AddressZero,
       staticExtradata: "0x",
       paymentToken: sellOrder.paymentToken,
-      basePrice: sellOrder.basePrice,
+      basePrice,
       extra: 0,
       listingTime: getListingTime(),
       expirationTime: 0,

@@ -113,17 +113,18 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
 
     <Flex>
       <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">TreasuryDAO</H3>
+        <H3 color="rgba(255,255,255,0.7)">Community Treasury</H3>
         <Flex mt={3}>
-          <Box>
-            <Image src={treasury} width={70} height={70} />
-          </Box>
-          <Box maxWidth={350} mx={3} flex={1}>
+          <Box maxWidth={350} mr={3} flex={1}>
             <P fontSize={14}>
               Community controlled treasury for funding projects in the
               lootosphere.
             </P>
-            <a>
+            <a
+              href="https://treasury.loot.exchange/"
+              target="_blank"
+              rel="noreferrer"
+            >
               <P mt={1} fontSize={16} color="rgba(100,100,150)">
                 read more
               </P>
@@ -207,6 +208,10 @@ const Purchase = () => {
   const bag = { ...bagData, ...owner };
   let exchangeRate = useExchangeRate();
 
+  const login = async () => {
+    await eth.logIn();
+  };
+
   useEffect(() => {
     if (initialPrice) {
       setListPrice(initialPrice);
@@ -229,7 +234,12 @@ const Purchase = () => {
 
   return (
     <Flex flex={1} bg="background" height="100%" overflow="hidden">
-      <Box bg="#1e1e1e" flex={1} height={"100%"}>
+      <Box
+        bg="#1e1e1e"
+        flex={1}
+        height={"100%"}
+        display={["none", "none", "block", "block"]}
+      >
         <Box p={3} position="absolute" top={0}>
           <Logo width={257 / 2.3} height={98 / 2.3} />
         </Box>
@@ -275,7 +285,7 @@ const Purchase = () => {
         width={1}
         maxWidth={600}
         height={"100%"}
-        p={4}
+        p={[3, 3, 4, 4]}
       >
         <Flex justifyContent="space-between" mb={4}>
           <H2 fontSize={16}>List your bag</H2>
@@ -329,7 +339,7 @@ const Purchase = () => {
               <BuyButton>Go to Bag</BuyButton>
             </a>
           </Link>
-        ) : (
+        ) : currentUser ? (
           <BuyButton disabled={listPrice <= 0}>
             {step !== STEPS.review ? (
               <Flex justifyContent="center" alignItems="center">
@@ -346,7 +356,11 @@ const Purchase = () => {
                   <ListingModal
                     onComplete={() => setStep(STEPS.completed)}
                     signer={eth.provider.getSigner()}
-                    collection="0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
+                    collection={
+                      process.env.NEXT_PUBLIC_CHAIN_ID == "4"
+                        ? "0x79e2d470f950f2cf78eef41720e8ff2cf4b3cd78"
+                        : "0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7"
+                    }
                     tokenId={id}
                     listPrice={listPrice}
                   />
@@ -354,6 +368,8 @@ const Purchase = () => {
               </>
             )}
           </BuyButton>
+        ) : (
+          <BuyButton onClick={login}>Connect wallet</BuyButton>
         )}
       </Flex>
     </Flex>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaEye, FaFilter, FaArrowDown } from "react-icons/fa";
+import { FaEye, FaFilter, FaArrowDown, FaStore } from "react-icons/fa";
 import { Flex, Box, Grid, Select, Image } from "@ui";
 import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
@@ -24,6 +24,7 @@ const Home = () => {
       <Flex
         justifyContent="space-between"
         m={3}
+        flexWrap="wrap"
         mt={2}
         alignItems="center"
         position="relative"
@@ -36,6 +37,8 @@ const Home = () => {
           >
             <option value="all">All</option>
             <option value="forSale">For Sale</option>
+            <option value="LootExchange">Loot Exchange</option>
+            <option value="OpenSea">Open Sea</option>
           </Select>
 
           <Select
@@ -57,6 +60,7 @@ const Home = () => {
           floor={floor}
         />
         <Select
+          display={["none", "none", "block", "block"]}
           onChange={e => setLens(e.target.value)}
           icon={<FaEye color="rgba(255,255,255,0.9)" />}
         >

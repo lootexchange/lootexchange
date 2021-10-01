@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaEye, FaFilter, FaArrowDown } from "react-icons/fa";
+import { FaEye, FaFilter, FaArrowDown, FaStore } from "react-icons/fa";
 import { Flex, Box, Grid, Select, Image, H2, P } from "@ui";
 import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
@@ -58,6 +58,8 @@ const Item = () => {
           >
             <option value="all">All</option>
             <option value="forSale">For Sale</option>
+            <option value="LootExchange">Loot Exchange</option>
+            <option value="OpenSea">Open Sea</option>
           </Select>
 
           <Select

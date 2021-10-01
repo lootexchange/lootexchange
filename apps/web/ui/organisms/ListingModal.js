@@ -66,9 +66,9 @@ export default function ListingModal({
       setCollectionContract(collectionContract);
 
       const proxyRegistryContract = new Contract(
-        // TODO: Dynamically select address based on current network
-        // (eg. mainnet address = "0xa5409ec958c83c3f309868babaca7c86dcb077c1")
-        "0xf57b2c51ded3a29e6891aba85459d600256cf317",
+        process.env.NEXT_PUBLIC_CHAIN_ID == 4
+          ? "0xf57b2c51ded3a29e6891aba85459d600256cf317"
+          : "0xa5409ec958c83c3f309868babaca7c86dcb077c1",
         new Interface([
           "function proxies(address) view returns (address)",
           "function registerProxy()"
@@ -215,8 +215,9 @@ export default function ListingModal({
             .then(({ wait, hash }) => {
               setStep2({
                 ...step2,
-                // TODO: Dynamically select explorer link based on current network
-                tx: `https://rinkeby.etherscan.io/tx/${hash}`
+                tx: `https://${
+                  process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
+                }.etherscan.io/tx/${hash}`
               });
               wait().then(() => {
                 // Set success
@@ -224,7 +225,9 @@ export default function ListingModal({
                   pending: false,
                   success: true,
                   error: null,
-                  tx: `https://rinkeby.etherscan.io/tx/${hash}`
+                  tx: `https://${
+                    process.env.NEXT_PUBLIC_CHAIN_ID == 4 ? "rinkeby" : "www"
+                  }.etherscan.io/tx/${hash}`
                 });
               });
             });
@@ -256,9 +259,10 @@ export default function ListingModal({
       try {
         // Build and sign the sell order
         let sellOrder = Builders.Erc721.SingleItem.sell({
-          // TODO: Dynamically select exchange address based on current network
-          // (eg. mainnet address = "0x7be8076f4ea4a4ad08075c2508e481d6c946d12b")
-          exchange: "0x5206e78b21ce315ce284fb24cf05e0585a93b1d9",
+          exchange:
+            process.env.NEXT_PUBLIC_CHAIN_ID == 4
+              ? "0x5206e78b21ce315ce284fb24cf05e0585a93b1d9"
+              : "0x7be8076f4ea4a4ad08075c2508e481d6c946d12b",
           maker: signerAddress,
           target: collection,
           tokenId: tokenId,
@@ -266,10 +270,14 @@ export default function ListingModal({
           // TODO: Dynamically set price
           basePrice: parseEther(listPrice.toString()),
           // TODO: Dynamically (or not) set fee
-          fee: 0,
+          fee: 100,
           // The fee recipient on the maker's order should never be the zero address.
           // Even if the fee is 0, the fee recipient should be set to the maker's address.
-          feeRecipient: signerAddress,
+          // TODO: Dynamically set the fee recipient as the Treasury Executor address
+          feeRecipient:
+            process.env.NEXT_PUBLIC_CHAIN_ID == 4
+              ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
+              : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18",
           // Set listing time 2 minutes in the past to make sure on-chain validation passes
           listingTime: Math.floor(Date.now() / 1000) - 120,
           // TODO: Dynamically set expiration time
@@ -417,38 +425,40 @@ const Step = ({ stepData, stepNumber, title, children }) => {
   const { error, pending, success, tx } = stepData;
   return (
     <Box mb={4}>
-      {!!pending ? (
-        <Box mb={2}>
-          <Spinner />
-        </Box>
-      ) : (
-        <>
-          {!!success ? (
-            <Box mb={2}>
-              <HiCheck className="h-7 w-7 bg-green-500 rounded-full" />
-            </Box>
-          ) : !!error ? (
-            <HiX className="h-7 w-7 bg-red-500 rounded-full" />
-          ) : (
-            <Flex
-              mb={2}
-              justifyContent="center"
-              alignItems="center"
-              width={30}
-              height={30}
-              border="1px solid rgba(255,255,255,0.2)"
-              borderRadius="50%"
-            >
-              <P>{stepNumber}</P>
-            </Flex>
-          )}
-        </>
-      )}
-      <P fontWeight={600} mb={2}>
-        {title}
-      </P>
+      <Flex>
+        {!!pending ? (
+          <Box mb={2}>
+            <Spinner />
+          </Box>
+        ) : (
+          <>
+            {!!success ? (
+              <Box mb={2}>
+                <HiCheck className="h-7 w-7 bg-green-500 rounded-full" />
+              </Box>
+            ) : !!error ? (
+              <HiX className="h-7 w-7 bg-red-500 rounded-full" />
+            ) : (
+              <Flex
+                mb={2}
+                justifyContent="center"
+                alignItems="center"
+                width={30}
+                height={30}
+                border="1px solid rgba(255,255,255,0.2)"
+                borderRadius="50%"
+              >
+                <P>{stepNumber}</P>
+              </Flex>
+            )}
+          </>
+        )}
+        <P fontWeight={600} mb={2} ml={3}>
+          {title}
+        </P>
+      </Flex>
       {!success && (
-        <Box>
+        <Box mt={2}>
           <P fontSize={12} lineHeight={1.5}>
             {children}
           </P>
@@ -457,7 +467,11 @@ const Step = ({ stepData, stepNumber, title, children }) => {
               <P mt={2}>See transaction.</P>
             </a>
           )}
-          {!!error && <ErrorMessage error={error} />}
+          {!!error && (
+            <Box mt={3}>
+              <ErrorMessage error={error} />
+            </Box>
+          )}
         </Box>
       )}
     </Box>

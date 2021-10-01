@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
 import { FaInfoCircle, FaTag } from "react-icons/fa";
+import { Helpers } from "@lootexchange/sdk";
 
 import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
 import Link from "next/link";
@@ -18,6 +19,7 @@ import {
   rarityDescription,
   lootRarity
 } from "loot-rarity";
+import eth from "../../ethers";
 
 import { shortenAddress } from "@utils";
 import moment from "moment";
@@ -89,16 +91,30 @@ const Bag = () => {
         <PriceBox>
           <Price price={bag.price} />
           <Flex>
-            <Link href={`/bags/${bag.id}/updatePrice`} passHref>
+            <Link
+              href={`/bags/${bag.id}/sell?initialPrice=${bag.price}`}
+              passHref
+            >
               <BuyButton bg="#ffffff69" color="white" mr={2}>
                 Lower Price
               </BuyButton>
             </Link>
-            <Link href={`/bags/${bag.id}/cancel`} passHref>
-              <BuyButton bg="#ffffff69" color="white" ml={2}>
-                Cancel Listing
-              </BuyButton>
-            </Link>
+            <BuyButton
+              bg="#ffffff69"
+              color="white"
+              ml={2}
+              onClick={async () => {
+                if (bag.sellOrder) {
+                  if (!eth.signer) {
+                    await eth.connect();
+                  } else {
+                    await Helpers.Wyvern.cancel(eth.signer, bag.sellOrder);
+                  }
+                }
+              }}
+            >
+              Cancel Listing
+            </BuyButton>
           </Flex>
         </PriceBox>
       );
@@ -121,8 +137,8 @@ const Bag = () => {
               <FaInfoCircle />
             </Box>
             <P fontSize={12} lineHeight={1.9} mt={-1}>
-              You bag is listed on Open Sea. If you relist and someone buys your
-              bag from Loot exchange, you&apos;ll pay only 1% in fees!
+              You bag is listed on open sea. If you relist and someone buys your
+              bag from Loot exchange, you&apos;ll pay 1% in transaction fees!
             </P>
           </Flex>
         </PriceBox>
@@ -156,12 +172,13 @@ const Bag = () => {
             <Box
               maxWidth="medium"
               width={[1, 1 / 2, 1 / 2, 1 / 2]}
-              mr={[0, 4, 4]}
               mb={[3, 0, 0]}
             >
-              <NFT bag={bag} lens="characters" noData />
+              <Box mr={[0, 4, 4]}>
+                <NFT bag={bag} lens="characters" noData />
+              </Box>
             </Box>
-            <Flex flexDirection="column" flex={1}>
+            <Flex flexDirection="column" width={[1, 1 / 2, 1 / 2, 1 / 2]}>
               <Pane
                 mb={4}
                 display="flex"
@@ -175,7 +192,13 @@ const Bag = () => {
                 <Box p={[3, 3, 4]} flex={1} position="relative">
                   <Flex justifyContent="space-between">
                     <H2 mb={2}>{bag.name}</H2>
-                    {bag.source && <Source source={bag.source} size={30} />}
+                    {bag.source && (
+                      <Source
+                        source={bag.source}
+                        size={30}
+                        alignItem="flex-start"
+                      />
+                    )}
                   </Flex>
 
                   <Link href={`/adventurers/${bag.owner}`}>
@@ -226,7 +249,7 @@ const Bag = () => {
                     <Flex
                       key={item.value}
                       py={3}
-                      px={4}
+                      px={[3, 3, 4]}
                       alignItems="ceter"
                       borderTop="1px solid rgba(255,255,255,0.1)"
                     >

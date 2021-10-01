@@ -5,6 +5,7 @@ import { Contract } from "@ethersproject/contracts";
 import { Order, Side } from "../types";
 
 import ExchangeAbi from "../abis/Exchange.json";
+import OrderHelper from "./order";
 
 export default class WyvernHelper {
   // --------------- Public ---------------
@@ -96,8 +97,61 @@ export default class WyvernHelper {
         ],
         {
           value:
-            sellOrder.paymentToken === AddressZero ? sellOrder.basePrice : 0,
+            // TODO: Support dutch auction buy orders (in that case we need
+            // to pass the sell order's base price as the value)
+            sellOrder.paymentToken === AddressZero ? buyOrder.basePrice : 0,
         }
+      );
+  }
+
+  public static async cancel(relayer: Signer, order: Order) {
+    if (!OrderHelper.verifySignature(order)) {
+      throw new Error("Invalid signature");
+    }
+
+    const makerAddress = order.maker.toLowerCase();
+    const relayerAddress = (await relayer.getAddress()).toLowerCase();
+    if (makerAddress !== relayerAddress) {
+      throw new Error("Relayer unauthorized to cancel order");
+    }
+
+    const addrs = [
+      order.exchange,
+      order.maker,
+      order.taker,
+      order.feeRecipient,
+      order.target,
+      order.staticTarget,
+      order.paymentToken,
+    ];
+
+    const uints = [
+      order.makerRelayerFee,
+      order.takerRelayerFee,
+      0, // makerProtocolFee is always 0
+      0, // takerProtocolFee is always 0
+      order.basePrice,
+      order.extra,
+      order.listingTime,
+      order.expirationTime,
+      order.salt,
+    ];
+
+    return new Contract(order.exchange, ExchangeAbi as any)
+      .connect(relayer)
+      .cancelOrder_(
+        addrs,
+        uints,
+        1, // feeMethod is always 1 (SplitFee)
+        order.side,
+        order.saleKind,
+        order.howToCall,
+        order.calldata,
+        order.replacementPattern,
+        order.staticExtradata,
+        order.v,
+        order.r,
+        order.s
       );
   }
 }

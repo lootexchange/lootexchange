@@ -133,20 +133,21 @@ const ReviewStep = ({ bag, exchangeRate }) => (
     <Flex>
       <Box flex={1}>
         <H3 color="rgba(255,255,255,0.7)">
-          {bag.source === "LootExchange" ? "TreasuryDAO" : "Marketplace"}
+          {bag.source === "LootExchange" ? "Community Treasury" : "Marketplace"}
         </H3>
         <Flex mt={3} justifyContent="space-between">
           {bag.source === "LootExchange" ? (
             <>
-              <Box>
-                <Image src={treasury} width={70} height={70} />
-              </Box>
-              <Box maxWidth={350} mx={3} flex={1}>
+              <Box maxWidth={350} mr={3} flex={1}>
                 <P fontSize={14}>
                   Community controlled treasury for funding projects in the
                   lootosphere.
                 </P>
-                <a>
+                <a
+                  href="https://treasury.loot.exchange/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <P mt={1} fontSize={16} color="rgba(100,100,150)">
                     read more
                   </P>
@@ -286,7 +287,12 @@ const Purchase = () => {
 
   return (
     <Flex flex={1} bg="background" height="100%" overflow="hidden">
-      <Box bg="#1e1e1e" flex={1} height={"100%"}>
+      <Box
+        bg="#1e1e1e"
+        flex={1}
+        height={"100%"}
+        display={["none", "none", "block", "block"]}
+      >
         <Box p={3} position="absolute" top={0}>
           <Logo width={Math.floor(257 / 2.3)} height={Math.floor(98 / 2.3)} />
         </Box>
@@ -332,7 +338,7 @@ const Purchase = () => {
         width={1}
         maxWidth={600}
         height={"100%"}
-        p={4}
+        p={[3, 3, 4, 4]}
       >
         <Flex justifyContent="space-between" mb={4}>
           <H2 fontSize={16}>Checkout</H2>
