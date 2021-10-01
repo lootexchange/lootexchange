@@ -83,7 +83,7 @@ export default class SingleItemErc721OrderBuilder {
   }
 
   public static sell(params: RequiredOrderParams): Order {
-    if (params.extra) {
+    if (bn(params.extra || 0).gt(0)) {
       if (bn(params.listingTime).gte(bn(params.expirationTime))) {
         throw new Error("Invalid listing/expiration time");
       }
@@ -97,7 +97,9 @@ export default class SingleItemErc721OrderBuilder {
       takerRelayerFee: 0,
       feeRecipient: params.feeRecipient,
       side: Side.SELL,
-      saleKind: params.extra ? SaleKind.DUTCH_AUCTION : SaleKind.FIXED_PRICE,
+      saleKind: bn(params.extra || 0).gt(0)
+        ? SaleKind.DUTCH_AUCTION
+        : SaleKind.FIXED_PRICE,
       target: params.target,
       howToCall: HowToCall.CALL,
       calldata: new Interface(Erc721Abi as any).encodeFunctionData(
@@ -124,7 +126,7 @@ export default class SingleItemErc721OrderBuilder {
   }
 
   public static buy(params: RequiredOrderParams): Order {
-    if (params.extra) {
+    if (bn(params.extra || 0).gt(0)) {
       if (bn(params.listingTime).gte(bn(params.expirationTime))) {
         throw new Error("Invalid listing/expiration time");
       }
@@ -138,7 +140,9 @@ export default class SingleItemErc721OrderBuilder {
       takerRelayerFee: params.fee,
       feeRecipient: params.feeRecipient,
       side: Side.BUY,
-      saleKind: params.extra ? SaleKind.DUTCH_AUCTION : SaleKind.FIXED_PRICE,
+      saleKind: bn(params.extra || 0).gt(0)
+        ? SaleKind.DUTCH_AUCTION
+        : SaleKind.FIXED_PRICE,
       target: params.target,
       howToCall: HowToCall.CALL,
       calldata: new Interface(Erc721Abi as any).encodeFunctionData(
