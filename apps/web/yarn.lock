@@ -729,10 +729,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@lootexchange/sdk@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@lootexchange/sdk/-/sdk-0.0.6.tgz#8a45729c30b09508b4541058e559b485732b8766"
-  integrity sha512-KbUC552GWp3dNfu1Jt/eyNwK0G819YkZ4MzFNdojPhjkLRODMP1cUhN9Asf9Pbk2F2aIwP5WFgbsw6UKZoeIdg==
+"@lootexchange/sdk@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@lootexchange/sdk/-/sdk-0.0.7.tgz#5ab418c461382179f5813bedd6e60f1aea81f7b1"
+  integrity sha512-c/SkgiukcPfaWEBe1/Q3nbgcxdq8wcAc2UNeQjs/aYYM3LkSa1CR4qvM+lCw6YbgqNSCQvR24kOH+Z32wTSGkw==
   dependencies:
     ethers "^5.4.7"
 

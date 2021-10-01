@@ -16,7 +16,7 @@
     "@emotion/react": "^11.4.1",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
-    "@lootexchange/sdk": "^0.0.6",
+    "@lootexchange/sdk": "^0.0.7",
     "@rebass/forms": "^4.0.6",
     "@walletconnect/web3-provider": "^1.6.5",
     "autoprefixer": "^10.3.5",
