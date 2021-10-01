@@ -3,6 +3,7 @@ import { useManualQuery } from "graphql-hooks";
 import eth from "../ethers";
 import { shortenAddress, loot } from "@utils";
 import useCurrentUser from "@hooks/useCurrentUser";
+import { formatEther } from "ethers/lib/utils";
 
 const BAG_QUERY = `query BagQuery($id: ID!) {
   bag(id: $id) {
@@ -26,7 +27,7 @@ const BAG_QUERY = `query BagQuery($id: ID!) {
   }
 }`;
 
-const useBag = id => {
+const useBag = (id) => {
   const [bag, setBag] = useState(null);
   const [owner, setOwner] = useState({});
   const [transfers, setTransfers] = useState([]);
@@ -37,20 +38,32 @@ const useBag = id => {
 
   useEffect(() => {
     const getBag = async () => {
-      let bagData = loot().find(b => b.id == id);
+      let bagData = loot().find((b) => b.id == id);
 
-      let response = await fetch(
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
       );
-      let token = await response.json();
+      const token = await response.json().then((result) => result.data.token);
+
+      let price = Number(formatEther(token?.listingPrice || "0"));
+      let source = token?.listingSource || null;
+      let start = Number(token?.listingStart);
+      let expiration = Number(token?.listingExpiration);
+      let extra = Number(formatEther(token?.listingExtra || "0"));
+      if (extra !== 0) {
+        price =
+          price -
+          (extra * (Math.floor(Date.now() / 1000) + 120 - start)) /
+            (expiration - start);
+      }
 
       setBag({
-        ...token.data.token,
+        ...token,
         ...bagData,
-        shortName: shortenAddress(token.data.token.owner),
-        source: token.data.token.listingSource,
-        isForSale: !!token.data.token.listingPrice,
-        price: token.data.token.listingPrice
+        shortName: shortenAddress(token.owner),
+        source: source,
+        isForSale: price !== 0,
+        price: Math.round(price * 10000) / 10000,
       });
     };
 
@@ -63,7 +76,7 @@ const useBag = id => {
   useEffect(() => {
     const getTransfers = async () => {
       const { data } = await fetchBag({
-        variables: { id }
+        variables: { id },
       });
       setTransfers(data.transfers);
     };
@@ -79,11 +92,11 @@ const useBag = id => {
         `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}/orders`
       );
       let orders = await response.json();
-      console.log(orders.data.orders[0])
-      if(orders.data && orders.data.orders) {
+      console.log(orders.data.orders[0]);
+      if (orders.data && orders.data.orders) {
         setBag({
           ...bag,
-          sellOrder: orders.data.orders[0]
+          sellOrder: orders.data.orders[0],
         });
       }
     };
@@ -103,7 +116,7 @@ const useBag = id => {
         ...bag,
         isOwnBag: ownerAddress === currentUser.address,
         ownerAvatar: avatar,
-        shortName: ens || shortenAddress(ownerAddress)
+        shortName: ens || shortenAddress(ownerAddress),
       });
     };
 
@@ -115,7 +128,7 @@ const useBag = id => {
   return {
     bag,
     transfers,
-    owner
+    owner,
   };
 };
 
