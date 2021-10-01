@@ -47,7 +47,7 @@ const useBags = ({ sort, filter, marketplace, ids }) => {
           ...bag,
           isForSale: price !== 0,
           source: listingInfo?.source || null,
-          price,
+          price: Math.round(price * 10000) / 10000,
         };
       });
 

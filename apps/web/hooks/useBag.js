@@ -63,7 +63,7 @@ const useBag = (id) => {
         shortName: shortenAddress(token.owner),
         source: source,
         isForSale: price !== 0,
-        price,
+        price: Math.round(price * 10000) / 10000,
       });
     };
 
