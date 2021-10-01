@@ -72,7 +72,6 @@ const Bag = () => {
     bag && bag.attributes.length ? bag.attributes : attributeDefaults;
 
   const getCallToAction = () => {
-    console.log(owner, bag)
     if (!owner.isOwnBag && bag.isForSale) {
       return (
         <PriceBox>
