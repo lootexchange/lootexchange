@@ -249,7 +249,7 @@ const Bag = () => {
                       key={item.value}
                       py={3}
                       px={[3, 3, 4]}
-                      alignItems="ceter"
+                      alignItems="center"
                       borderTop="1px solid rgba(255,255,255,0.1)"
                     >
                       <Box flex={1}>
