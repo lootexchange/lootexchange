@@ -5,6 +5,7 @@ import { FaEye, FaList } from "react-icons/fa";
 import Source from "@ui/organisms/Source";
 
 import ether from "../../public/ether.png";
+import { formatEther } from "ethers/lib/utils";
 
 // gotta clean this up
 const NftContainer = styled.div`
@@ -44,7 +45,7 @@ const NFT = ({ bag, lens, noData, ...props }) => {
     <Pane {...props}>
       {lens != "loot" && (
         <OpenContainer
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
             e.nativeEvent.stopImmediatePropagation();
@@ -68,7 +69,7 @@ const NFT = ({ bag, lens, noData, ...props }) => {
             height: "100%",
             position: "absolute",
             inset: 0,
-            objectFit: "cover"
+            objectFit: "cover",
           }}
         />
       </NftContainer>
@@ -87,7 +88,7 @@ const NFT = ({ bag, lens, noData, ...props }) => {
                 <>
                   <Image src={ether} width={18} height={14} />
                   <P color="textPrimary" fontWeight="700" fontSize={16}>
-                    {bag.price}
+                    {Math.round(Number(formatEther(bag.price)) * 10000) / 10000}
                   </P>
                 </>
               )}
