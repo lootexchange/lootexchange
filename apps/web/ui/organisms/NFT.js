@@ -41,6 +41,13 @@ const NFT = ({ bag, lens, noData, ...props }) => {
     setViz(true);
   }, [lens]);
 
+  let price;
+  try {
+    price = Number(formatEther(bag.price));
+  } catch {
+    price = NaN;
+  }
+
   return (
     <Pane {...props}>
       {lens != "loot" && (
@@ -88,7 +95,7 @@ const NFT = ({ bag, lens, noData, ...props }) => {
                 <>
                   <Image src={ether} width={18} height={14} />
                   <P color="textPrimary" fontWeight="700" fontSize={16}>
-                    {Math.round(Number(formatEther(bag.price)) * 10000) / 10000}
+                    {isNaN(price) ? "NaN" : Math.round(price * 10000) / 10000}
                   </P>
                 </>
               )}
