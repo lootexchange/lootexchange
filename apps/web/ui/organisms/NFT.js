@@ -5,7 +5,6 @@ import { FaEye, FaList } from "react-icons/fa";
 import Source from "@ui/organisms/Source";
 
 import ether from "../../public/ether.png";
-import { formatEther } from "ethers/lib/utils";
 
 // gotta clean this up
 const NftContainer = styled.div`
@@ -40,13 +39,6 @@ const NFT = ({ bag, lens, noData, ...props }) => {
   useEffect(() => {
     setViz(true);
   }, [lens]);
-
-  let price;
-  try {
-    price = Number(formatEther(bag.price));
-  } catch {
-    price = NaN;
-  }
 
   return (
     <Pane {...props}>
@@ -95,7 +87,7 @@ const NFT = ({ bag, lens, noData, ...props }) => {
                 <>
                   <Image src={ether} width={18} height={14} />
                   <P color="textPrimary" fontWeight="700" fontSize={16}>
-                    {isNaN(price) ? "NaN" : Math.round(price * 10000) / 10000}
+                    {bag.price}
                   </P>
                 </>
               )}
