@@ -256,7 +256,8 @@ const getMetadata = (id) => {
       "orders":0,
       "names":0,
       "plusones":0
-    }
+    },
+    "greatness": {}
   }
   for(let keyPrefix in items) {
     let sourceArray = items[keyPrefix]
@@ -265,6 +266,7 @@ const getMetadata = (id) => {
     let output = sourceArray[rand.mod(sourceArray.length).toNumber()];
     const greatness = rand.mod(21);
     meta.scores.greatness += greatness.toNumber();
+    meta.greatness[keyPrefix.toLowerCase()] = greatness.toNumber();
     if (greatness.gt(14)) {
       meta.scores.orders++
       let order = suffixes[rand.mod(suffixes.length).toNumber()]
