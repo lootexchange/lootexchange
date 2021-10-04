@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import useBag from "@hooks/useBag";
 import { FaInfoCircle, FaTag } from "react-icons/fa";
 import { Helpers } from "@lootexchange/sdk";
 
-import { Flex, Box, Grid, Select, Image, Pane, H2, H3, P, Button } from "@ui";
+import { Flex, Box, Image, Pane, H2, H3, P, Button } from "@ui";
 import Link from "next/link";
 import Header from "@ui/organisms/Header";
 import BackArrow from "@ui/organisms/BackArrow";
