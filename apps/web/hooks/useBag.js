@@ -36,14 +36,30 @@ const useBag = (id) => {
 
   const [fetchBag] = useManualQuery(BAG_QUERY);
 
+  const getAttributeDetail = async (name) => {
+    const response = await fetch(`/api/searchItems?q=${name}`);
+    return response.json();
+  }
+
+  const getAttributes = async (attributes) => {
+    const attributesWithIds = [];
+    for (const attribute of attributes) {
+      const attributeDetail = await getAttributeDetail(attribute.value);
+      attributesWithIds.push(attributeDetail[0]);
+    }
+    return await Promise.all(attributesWithIds);
+  }
+
+
   useEffect(() => {
     const getBag = async () => {
       let bagData = loot().find((b) => b.id == id);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
       );
       const token = await response.json().then((result) => result.data.token);
+      let attributes = await getAttributes(token.attributes);
+      delete token.attributes;
 
       let price = Number(formatEther(token?.listingPrice || "0"));
       let source = token?.listingSource || null;
@@ -64,6 +80,7 @@ const useBag = (id) => {
         source: source,
         isForSale: price !== 0,
         price: Math.round(price * 10000) / 10000,
+        attributes: attributes,
       });
     };
 

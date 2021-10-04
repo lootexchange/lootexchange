@@ -53,14 +53,14 @@ const PriceBox = ({ ...props }) => (
 );
 
 const attributeDefaults = [
-  { key: "Weapon", value: '"Grim Shout" Grave Wand of Skill +1' },
-  { key: "Chest", value: "Ancient Helm" },
-  { key: "Head", value: "Ancient Helm" },
-  { key: "Waist", value: "Hard Leather Belt" },
-  { key: "Foot", value: "Ornate Greaves of Anger" },
-  { key: "Hand", value: "Gloves" },
-  { key: "Neck", value: "Necklace of Enlightenment" },
-  { key: "Ring", value: "Gold Ring" }
+  { key: "Weapon", value: '"Grim Shout" Grave Wand of Skill +1', id: 7 },
+  { key: "Chest", value: "Ancient Helm", id: 12 },
+  { key: "Head", value: "Ancient Helm", id: 11 },
+  { key: "Waist", value: "Hard Leather Belt", id: 6 },
+  { key: "Foot", value: "Ornate Greaves of Anger", id: 17 },
+  { key: "Hand", value: "Gloves", id: 10 },
+  { key: "Neck", value: "Necklace of Enlightenment", id: 4 },
+  { key: "Ring", value: "Gold Ring", id: 5 }
 ];
 
 const Bag = () => {
@@ -245,34 +245,38 @@ const Bag = () => {
                     </Flex>
                   </Flex>
                   {attributes.map(item => (
-                    <Flex
-                      key={item.value}
-                      py={3}
-                      px={[3, 3, 4]}
-                      alignItems="center"
-                      borderTop="1px solid rgba(255,255,255,0.1)"
-                    >
-                      <Box flex={1}>
-                        <P fontSize={14} color="rgba(255,255,255, 0.8)" mr={3}>
-                          {item.key}
-                        </P>
-                        <P color="white" fontSize={16} fontWeight={600}>
-                          {item.value}
-                        </P>
-                      </Box>
-                      <Flex alignItems="center">
-                        <P color="rgba(255,255,255,0.9)">
-                          {rarityDescription(itemRarity(item.value))}
-                        </P>
-                        <Box
-                          width={12}
-                          height={12}
-                          borderRadius="50%"
-                          ml={2}
-                          bg={rarityColor(item.value)}
-                        />
-                      </Flex>
-                    </Flex>
+                    <Link key={item.key} href={`/items/${item.id}`} passHref>
+                      <a>
+                        <Flex
+                          key={item.value}
+                          py={3}
+                          px={[3, 3, 4]}
+                          alignItems="center"
+                          borderTop="1px solid rgba(255,255,255,0.1)"
+                        >
+                          <Box flex={1}>
+                            <P fontSize={14} color="rgba(255,255,255, 0.8)" mr={3}>
+                              {item.key}
+                            </P>
+                            <P color="white" fontSize={16} fontWeight={600}>
+                              {item.value}
+                            </P>
+                          </Box>
+                          <Flex alignItems="center">
+                            <P color="rgba(255,255,255,0.9)">
+                              {rarityDescription(itemRarity(item.value))}
+                            </P>
+                            <Box
+                              width={12}
+                              height={12}
+                              borderRadius="50%"
+                              ml={2}
+                              bg={rarityColor(item.value)}
+                            />
+                          </Flex>
+                        </Flex>
+                      </a>
+                    </Link>
                   ))}
                 </Box>
               </Pane>
