@@ -48,7 +48,7 @@ const Home = () => {
             <option value="LootExchange">Loot Exchange</option>
             <option value="OpenSea">Open Sea</option>
           </Select>
-          <ItemSelector />
+          {false && <ItemSelector />}
         </Flex>
         <CollectionStats
           display={["none", "block", "block", "block"]}

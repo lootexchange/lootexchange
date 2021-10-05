@@ -99,6 +99,8 @@ const GlobalSearch = props => {
       }
     }
 
+    return setResults([]);
+
     const response = await fetch(`/api/searchItems?q=${debouncedQuery}`);
     const results = await response.json();
 
