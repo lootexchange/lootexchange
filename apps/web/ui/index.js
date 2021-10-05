@@ -22,3 +22,4 @@ export { default as Avatar } from "./atoms/Avatar";
 export { default as Image } from "next/image";
 export { default as Button } from "./atoms/Button";
 export { default as Hr } from "./atoms/Hr";
+export { default as Loader } from "./atoms/Loader";

@@ -6,7 +6,7 @@ const Leadin = props => (
   <P fontSize="12px" fontWeight="300" color="white" {...props} />
 );
 
-const CollectionStats = ({ count = 7800, floor, ...props }) => (
+const CollectionStats = ({ total = 7800, floor, ...props }) => (
   <Box {...props}>
     <Flex
       bg="#1b1b19"
@@ -16,10 +16,10 @@ const CollectionStats = ({ count = 7800, floor, ...props }) => (
     >
       <Box p={2} px={4} textAlign="center" borderRight="1px solid black">
         <Leadin>Bags</Leadin>
-        <P>{abbreviateNumber(count)}</P>
+        <P>{abbreviateNumber(total)}</P>
       </Box>
       <Box p={2} px={4} textAlign="center">
-        <Leadin>Floor</Leadin>
+        <Leadin>Entry</Leadin>
         <Flex alignItems="center">
           <Box mt={1}>
             <Image alt="eth" src={ether} fixed="true" width={16} height={14} />

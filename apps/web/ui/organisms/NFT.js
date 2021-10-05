@@ -60,7 +60,6 @@ const NFT = ({ bag, lens, noData, ...props }) => {
       )}
       <NftContainer>
         <img
-          lazy="true"
           src={!viz ? bag.image : image}
           style={{
             padding: lens == "loot" || (!viz && lens == "characters") ? 10 : 0,

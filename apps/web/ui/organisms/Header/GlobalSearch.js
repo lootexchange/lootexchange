@@ -132,7 +132,7 @@ const GlobalSearch = props => {
           borderBottomLeftRadius: results.length ? 0 : 10
         }}
         value={query}
-        placeholder="Search by bag #, item, address, or ens"
+        placeholder="Search by bag #, address, or ens"
         onChange={e => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
       />

@@ -1,22 +1,29 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaEye, FaFilter, FaArrowDown, FaStore } from "react-icons/fa";
-import { Flex, Box, Grid, Select, Image } from "@ui";
+import { Flex, Box, Grid, Select, Image, Loader } from "@ui";
 import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
+import ItemSelector from "@ui/organisms/ItemSelector";
 import NFT from "@ui/organisms/NFT";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 
 import useBagData from "../hooks/useBags";
-import useInfinteList from "../hooks/useInfiniteList";
 
 const Home = () => {
   const [lens, setLens] = useState("characters");
   const [filteredBags, setFilteredBags] = useState([]);
   const [filter, setFilter] = useState("forSale");
-  const [sort, setSort] = useState("price");
-  const { floor, bags } = useBagData({ sort, filter });
+  const { floor, bags, loading, fetchMore, moreLeft, total } = useBagData({
+    filter
+  });
 
-  const list = useInfinteList(bags, 100);
+  const [sentryRef] = useInfiniteScroll({
+    loading,
+    hasNextPage: moreLeft,
+    onLoadMore: fetchMore,
+    rootMargin: "0px 0px 400px 0px"
+  });
 
   return (
     <Flex flex={1} flexDirection="column" bg="background">
@@ -31,6 +38,7 @@ const Home = () => {
       >
         <Flex>
           <Select
+            mr={3}
             value={filter}
             onChange={e => setFilter(e.target.value)}
             icon={<FaFilter size={14} color="rgba(255,255,255,0.9)" />}
@@ -40,16 +48,7 @@ const Home = () => {
             <option value="LootExchange">Loot Exchange</option>
             <option value="OpenSea">Open Sea</option>
           </Select>
-
-          <Select
-            value={sort}
-            onChange={e => setSort(e.target.value)}
-            ml={3}
-            icon={<FaArrowDown size={14} color="rgba(255,255,255,0.9)" />}
-          >
-            <option value="price">Price</option>
-            <option value="number">Number</option>
-          </Select>
+          <ItemSelector />
         </Flex>
         <CollectionStats
           display={["none", "block", "block", "block"]}
@@ -58,6 +57,7 @@ const Home = () => {
           left="50%"
           style={{ transform: "translate(-50%, -50%)" }}
           floor={floor}
+          total={total}
         />
         <Select
           display={["none", "none", "block", "block"]}
@@ -70,7 +70,7 @@ const Home = () => {
       </Flex>
       <Box p={3} pt={0}>
         <Grid>
-          {list.map(bag => (
+          {bags.map(bag => (
             <Link href={`/bags/${bag.id}`} key={bag.id}>
               <a>
                 <NFT bag={bag} lens={lens} />
@@ -78,6 +78,11 @@ const Home = () => {
             </Link>
           ))}
         </Grid>
+        {(loading || moreLeft) && (
+          <Flex ref={sentryRef} py={3} justifyContent="center">
+            <Loader size={50} />
+          </Flex>
+        )}
       </Box>
     </Flex>
   );

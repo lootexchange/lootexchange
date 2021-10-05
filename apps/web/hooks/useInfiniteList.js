@@ -31,7 +31,8 @@ const useInfinteList = (items, number) => {
 
   useEffect(() => {
     setOffset(0);
-    setList(items.slice(offset, offset + number));
+    setList([]);
+    setList(items.slice(0, 0 + number));
   }, [items]);
 
   return list;

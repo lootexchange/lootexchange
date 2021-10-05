@@ -8,14 +8,17 @@ import Header from "@ui/organisms/Header";
 import { FaEye } from "react-icons/fa";
 
 import useWallet from "@hooks/useWallet";
+import useBags from "@hooks/useBags";
 
 const Adventurer = ({}) => {
   const router = useRouter();
   const { address } = router.query;
+
   const [lens, setLens] = useState("characters");
 
+  const { bags } = useBags({ owner: address, skip: !address, limit: 400 });
   const wallet = useWallet(address);
-  const { bagsHeld = 0, bags } = wallet;
+  const bagsHeld = bags.length;
 
   return (
     <Flex flex={1} flexDirection="column" bg="black">
@@ -31,7 +34,7 @@ const Adventurer = ({}) => {
         </Box>
         <Box>
           <Select
-            onChange={(e) => setLens(e.target.value)}
+            onChange={e => setLens(e.target.value)}
             icon={<FaEye color="rgba(255,255,255,0.9)" />}
           >
             <option value="characters">Character</option>
@@ -41,7 +44,7 @@ const Adventurer = ({}) => {
       </Flex>
       <Box p={3} pt={0}>
         <Grid>
-          {bags.map((loot) => (
+          {bags.map(loot => (
             <Link
               key={loot.tokenId}
               href={`/bags/${loot.tokenId}`}

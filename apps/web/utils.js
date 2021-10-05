@@ -15,6 +15,8 @@ export const chainToName = {
   4: "Rinkeby"
 };
 
+export const LOOT_API_URL = `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}`;
+
 export const getChainName = id => chainToName[id] || "Unknown";
 
 export const formatEth = bigNumber =>
@@ -55,3 +57,5 @@ export const abbreviateNumber = value => {
 export const shortenNumber = (value, precision = 5) => {
   return parseFloat(value.toPrecision(precision));
 };
+
+export const gweiToEth = gwei => Number(ethers.utils.formatEther(gwei));
