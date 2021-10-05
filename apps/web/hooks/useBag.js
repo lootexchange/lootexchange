@@ -44,7 +44,7 @@ const useBag = (id) => {
   const getAttributes = async (attributes) => {
     const attributesWithIds = [];
     for (const attribute of attributes) {
-      const attributeDetail = await getAttributeDetail(attribute.value);
+      const attributeDetail = getAttributeDetail(attribute.value);
       attributesWithIds.push({
         key: attribute.key,
         value: attribute.value,
