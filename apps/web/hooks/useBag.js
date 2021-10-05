@@ -42,16 +42,21 @@ const useBag = (id) => {
   }
 
   const getAttributes = async (attributes) => {
-    const attributesWithIds = [];
+    const attributesPromises = [];
+    const result = [];
     for (const attribute of attributes) {
-      const attributeDetail = await getAttributeDetail(attribute.value);
-      attributesWithIds.push({
-        key: attribute.key,
-        value: attribute.value,
-        id: attributeDetail[0].id
+      attributesPromises.push(getAttributeDetail(attribute.value));
+    }
+    const attributeWithIds = await Promise.all(attributesPromises);
+
+    for (let i = 0; i < attributes.length; ++i) {
+      result.push({
+        key: attributes[i].key,
+        value: attributes[i].value,
+        id: attributeWithIds[0].id
       });
     }
-    return await Promise.all(attributesWithIds);
+    return result;
   }
 
 
