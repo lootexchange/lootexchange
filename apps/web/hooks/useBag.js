@@ -36,15 +36,38 @@ const useBag = (id) => {
 
   const [fetchBag] = useManualQuery(BAG_QUERY);
 
+  const getAttributeDetail = async (name) => {
+    const response = await fetch(`/api/searchItems?q=${name}`);
+    return response.json();
+  }
+
+  const getAttributes = async (attributes) => {
+    const attributesPromises = [];
+    const result = [];
+    for (const attribute of attributes) {
+      attributesPromises.push(getAttributeDetail(attribute.value));
+    }
+    const attributeWithIds = await Promise.all(attributesPromises);
+
+    for (let i = 0; i < attributes.length; ++i) {
+      result.push({
+        key: attributes[i].key,
+        value: attributes[i].value,
+        id: attributeWithIds[i][0].id
+      });
+    }
+    return result;
+  }
+
+
   useEffect(() => {
     const getBag = async () => {
       let bagData = loot().find((b) => b.id == id);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
       );
       const token = await response.json().then((result) => result.data.token);
-
+      token.attributes = await getAttributes(token.attributes);
       let price = Number(formatEther(token?.listingPrice || "0"));
       let source = token?.listingSource || null;
       let start = Number(token?.listingStart);
