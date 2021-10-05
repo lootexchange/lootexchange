@@ -45,7 +45,11 @@ const useBag = (id) => {
     const attributesWithIds = [];
     for (const attribute of attributes) {
       const attributeDetail = await getAttributeDetail(attribute.value);
-      attributesWithIds.push(attributeDetail[0]);
+      attributesWithIds.push({
+        key: attribute.key,
+        value: attribute.value,
+        id: attributeDetail[0].id
+      });
     }
     return await Promise.all(attributesWithIds);
   }
@@ -58,9 +62,7 @@ const useBag = (id) => {
         `${process.env.NEXT_PUBLIC_API_BASE}/collections/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/tokens/${id}`
       );
       const token = await response.json().then((result) => result.data.token);
-      let attributes = await getAttributes(token.attributes);
-      delete token.attributes;
-
+      token.attributes = await getAttributes(token.attributes);
       let price = Number(formatEther(token?.listingPrice || "0"));
       let source = token?.listingSource || null;
       let start = Number(token?.listingStart);
@@ -80,7 +82,6 @@ const useBag = (id) => {
         source: source,
         isForSale: price !== 0,
         price: Math.round(price * 10000) / 10000,
-        attributes: attributes,
       });
     };
 
