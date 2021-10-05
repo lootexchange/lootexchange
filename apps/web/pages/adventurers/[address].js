@@ -16,7 +16,13 @@ const Adventurer = ({}) => {
 
   const [lens, setLens] = useState("characters");
 
-  const { bags } = useBags({ owner: address, skip: !address, limit: 400 });
+  const { bags } = useBags({
+    owner: address,
+    skip: !address,
+    limit: 400,
+    filter: "all"
+  });
+
   const wallet = useWallet(address);
   const bagsHeld = bags.length;
 
