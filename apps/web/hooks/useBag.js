@@ -53,7 +53,7 @@ const useBag = (id) => {
       result.push({
         key: attributes[i].key,
         value: attributes[i].value,
-        id: attributeWithIds[0].id
+        id: attributeWithIds[i][0].id
       });
     }
     return result;
