@@ -119,7 +119,9 @@ const Home = () => {
           </Flex>
         </Box>
         <Flex mt={2}>
+          <a target="_blank" href="https://discord.com">
           <IconButton mr={2} icon={<FaDiscord size={20} />} />
+          </a>
           <IconButton mr={2} icon={<FaTwitter size={20} />} />
           <IconButton mr={2} icon={<FaInfo size={20} />} />
         </Flex>
