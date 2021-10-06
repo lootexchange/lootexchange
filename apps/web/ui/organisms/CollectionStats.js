@@ -13,6 +13,7 @@ const CollectionStats = ({ total = 7800, floor, ...props }) => (
       borderRadius="default"
       borderWidth={1}
       borderColor="rgba(255,255,255,0.05)"
+      {...props.sx}
     >
       <Box p={2} px={4} textAlign="center" borderRight="1px solid black">
         <Leadin>Bags</Leadin>

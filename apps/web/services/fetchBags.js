@@ -12,7 +12,7 @@ export const formatToken = token => {
       "0000" + id
     ).slice(-4)}.png`,
     id,
-    image: `https://cdn-1a6d2.kxcdn.com/images/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7/${i}`
+    image: `https://loot.exchange/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${id}.svg`
   };
 };
 
@@ -35,6 +35,7 @@ const fetchBags = async ({
   source,
   sort,
   filter,
+  item,
   owner,
   limit = BAGS_PER_PAGE
 }) => {
@@ -44,7 +45,10 @@ const fetchBags = async ({
       offset: offset * limit,
       limit: limit,
       forSale: filter !== "all" ? true : null,
-      source: filter == "LootExchange" || filter == "OpenSea" ? filter : null
+      source: filter == "LootExchange" || filter == "OpenSea" ? filter : null,
+      ...(item && {
+        [`_${item.key}`]: item.value
+      })
     })
   ).toString();
 
@@ -52,6 +56,8 @@ const fetchBags = async ({
     lootAPI(`/tokens?${params}`),
     fetchPrices()
   ]);
+
+  console.log(data);
 
   let formattedTokens = data.tokens.map(formatToken);
   let total = data.totalCount;

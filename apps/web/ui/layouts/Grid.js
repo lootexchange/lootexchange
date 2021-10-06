@@ -8,14 +8,14 @@ export default styled(Box)`
   grid-gap: 24px;
 
   @media (min-width: 520px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   @media (min-width: 820px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   @media (min-width: 1520px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 `;

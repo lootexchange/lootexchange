@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import fetchBags from "../services/fetchBags";
 
-const useBags = ({ sort, filter, source, owner, skip }) => {
+const useBags = ({ sort, filter, source, owner, skip, item }) => {
   const [bags, setBags] = useState([]);
   const [floor, setFloor] = useState(0);
   const [total, setTotal] = useState(7800);
@@ -14,6 +14,7 @@ const useBags = ({ sort, filter, source, owner, skip }) => {
     let { bags: results, total } = await fetchBags({
       offset,
       filter,
+      item,
       owner
     });
 
@@ -42,7 +43,7 @@ const useBags = ({ sort, filter, source, owner, skip }) => {
   useEffect(() => {
     setBags([]);
     setOffset(0);
-  }, [filter, owner, skip]);
+  }, [filter, owner, skip, item]);
 
   return {
     fetchMore: fetchNextBags,

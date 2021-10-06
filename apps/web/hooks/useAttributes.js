@@ -9,10 +9,11 @@ const useAttributes = id => {
 
   useEffect(() => {
     const fetchAttributes = async () => {
-      let data = await lootAPI("");
+      let data = await lootAPI("/attributes");
+      console.log(data);
 
       setAttributes(
-        data.collection.attributes.map(attribute => {
+        data.attributes.map(attribute => {
           return {
             ...attribute,
             values: sort(attribute.values).desc(item => item.count)

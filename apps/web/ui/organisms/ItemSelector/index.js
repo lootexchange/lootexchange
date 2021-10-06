@@ -12,7 +12,7 @@ const ButtonWrapper = styled(Popover.Button)`
   background: none;
 `;
 
-const ItemSelector = ({ items = [], onChange }) => {
+const ItemSelector = ({ item, onChange }) => {
   return (
     <Popover style={{ position: "relative" }}>
       {({ open }) => (
@@ -21,24 +21,30 @@ const ItemSelector = ({ items = [], onChange }) => {
             <Box
               py="14px"
               px="16px"
-              pl="42px"
+              //pl="42px"
               bg="background"
-              color="textPrimary"
+              color={item ? "textPrimary" : "textSecondary"}
               borderRadius="default"
               borderWidth={1}
               borderColor="borderColorAlt"
               fontFamily="body"
               fontSize="14px"
               fontWeight={700}
+              maxWidth={200}
+              sx={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                whiteSpace: "nowrap"
+              }}
               style={{
                 WebkitAppearance: "none"
               }}
             >
-              {items.length ? items.join(",") : "Filter by Item"}
+              {item ? item.value : "By Item"}
             </Box>
           </ButtonWrapper>
 
-          {open && <Editor items={items} onChange={onChange} />}
+          {open && <Editor item={item} onChange={onChange} />}
         </>
       )}
     </Popover>
