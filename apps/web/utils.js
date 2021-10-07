@@ -59,3 +59,23 @@ export const shortenNumber = (value, precision = 5) => {
 };
 
 export const gweiToEth = gwei => Number(ethers.utils.formatEther(gwei));
+
+const positions = [
+  "weapon",
+  "chest",
+  "head",
+  "waist",
+  "foot",
+  "hand",
+  "neck",
+  "ring"
+];
+
+export const sortItems = items => {
+  return items
+    .slice()
+    .filter(i => positions.indexOf(i.key) > -1)
+    .sort(function(a, b) {
+      return positions.indexOf(a.key) - positions.indexOf(b.key);
+    });
+};

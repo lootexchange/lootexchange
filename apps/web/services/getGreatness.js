@@ -30,7 +30,6 @@ const getMetadata = id => {
     greatness: {}
   };
   for (let keyPrefix in items) {
-    let sourceArray = items[keyPrefix];
     let tokenId = BigNumber.from(id);
     const rand = random(keyPrefix + tokenId.toString());
     const greatness = rand.mod(21);
@@ -39,6 +38,7 @@ const getMetadata = id => {
   }
   return meta;
 };
+
 function memoizer(fun) {
   let cache = {};
 

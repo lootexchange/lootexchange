@@ -9,6 +9,7 @@ import {
   rarityDescription,
   lootRarity
 } from "loot-rarity";
+import { sortItems } from "@utils";
 
 import ether from "../../public/ether.png";
 import getGreatness from "../../services/getGreatness";
@@ -114,6 +115,8 @@ const NFT = ({ bag, lens, noData, ...props }) => {
     setViz(true);
   }, [lens]);
 
+  let items = bag && bag.attributes ? sortItems(bag.attributes) : [];
+
   return (
     <Pane
       {...props}
@@ -150,12 +153,13 @@ const NFT = ({ bag, lens, noData, ...props }) => {
         <Box
           p={3}
           pt={[5, 3, 3, 3]}
+          pb={4}
           flex={1}
           style={{
             borderLeft: "1px solid rgba(255, 255, 255, 0.2)"
           }}
         >
-          {bag.attributes.map(attribute => (
+          {items.map(attribute => (
             <Flex
               mb={2}
               justifyContent="space-between"
@@ -182,6 +186,18 @@ const NFT = ({ bag, lens, noData, ...props }) => {
         <Box p={3} bg="#24222E">
           <Flex justifyContent="space-between" alignItems="center">
             <P flex={1}>{bag.name}</P>
+
+            <Box
+              py={1}
+              px={3}
+              border="1px solid rgba(255,255,255,0.2)"
+              borderRadius="100px"
+            >
+              <Greatness
+                item={lootRarity(items.map(i => i.value))}
+                greatness={metaData ? metaData.scores.greatness : 0}
+              />
+            </Box>
 
             <Flex alignItems="center" justifyContent="flex-end" flex={1}>
               {bag.isForSale && (

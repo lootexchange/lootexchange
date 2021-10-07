@@ -24,7 +24,7 @@ import {
 } from "loot-rarity";
 import eth from "../../ethers";
 
-import { shortenAddress } from "@utils";
+import { shortenAddress, sortItems } from "@utils";
 import moment from "moment";
 
 const BuyButton = styled(Button)`
@@ -74,7 +74,6 @@ const Bag = () => {
 
   useEffect(() => {
     const getMetadata = async () => {
-      console.log(getGreatness(id));
       setMetaData(getGreatness(id));
     };
 
@@ -84,7 +83,9 @@ const Bag = () => {
   }, [id]);
 
   let attributes =
-    bag && bag.attributes.length ? bag.attributes : attributeDefaults;
+    bag && bag.attributes.length
+      ? sortItems(bag.attributes)
+      : attributeDefaults;
 
   const getCallToAction = () => {
     if (!owner.isOwnBag && bag.isForSale) {
@@ -237,10 +238,7 @@ const Bag = () => {
               >
                 <Box>
                   <Flex p={[3, 3, 4]} alignItems="center">
-                    <FaTag size={20} />
-                    <H2 ml={3} fontSize={22}>
-                      Attributes
-                    </H2>
+                    <H2 fontSize={22}>Stats</H2>
                     <Box flex={1} />
                     <Flex alignItems="center">
                       <P>Rarity</P>
@@ -268,7 +266,10 @@ const Bag = () => {
                       </P>
                     </Box>
                     <Flex alignItems="center">
-                      <P color="rgba(255,255,255,0.9)">
+                      <P
+                        color="rgba(255,255,255,0.9)"
+                        display={["none", "none", "block", "block"]}
+                      >
                         {rarityDescription(
                           lootRarity(attributes.map(a => a.value))
                         )}
@@ -304,7 +305,10 @@ const Bag = () => {
                         </P>
                       </Box>
                       <Flex alignItems="center">
-                        <P color="rgba(255,255,255,0.9)">
+                        <P
+                          color="rgba(255,255,255,0.9)"
+                          display={["none", "none", "block", "block"]}
+                        >
                           {rarityDescription(itemRarity(item.value))}
                         </P>
                         <Box

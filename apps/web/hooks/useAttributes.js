@@ -10,7 +10,6 @@ const useAttributes = id => {
   useEffect(() => {
     const fetchAttributes = async () => {
       let data = await lootAPI("/attributes");
-      console.log(data);
 
       setAttributes(
         data.attributes.map(attribute => {

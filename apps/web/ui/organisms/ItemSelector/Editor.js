@@ -1,8 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useDebounce } from "use-debounce";
+
 import { Pane, Box, P, Checkbox, Flex, Loader } from "@ui";
+import { FaArrowLeft } from "react-icons/fa";
 import SearchInput from "@ui/organisms/Header/SearchInput";
 import styled from "@emotion/styled";
 import useAttributes from "@hooks/useAttributes";
+import { sortItems } from "@utils";
+import Fuse from "fuse.js";
 
 import { Popover } from "@headlessui/react";
 
@@ -13,13 +18,50 @@ const Grid = styled.div`
 `;
 
 const ItemSelector = ({ item, onChange }) => {
+  const fuse = useRef(null);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [debouncedQuery] = useDebounce(query, 300);
+
   const attributes = useAttributes();
+  const items = attributes && sortItems(attributes);
+
+  useEffect(() => {
+    if (attributes) {
+      let searchList = attributes.reduce(
+        (o, attr) => [
+          ...o,
+          ...attr.values.map(value => ({
+            key: attr.key,
+            ...value
+          }))
+        ],
+        []
+      );
+
+      fuse.current = new Fuse(searchList, {
+        includeScore: true,
+        keys: ["value"]
+      });
+    }
+  }, [attributes]);
 
   let category =
-    selectedAttribute &&
-    attributes &&
-    attributes.find(a => a.key === selectedAttribute);
+    selectedAttribute && items && items.find(a => a.key === selectedAttribute);
+
+  const handleSearch = async () => {
+    if (fuse.current) {
+      let results = fuse.current.search(debouncedQuery).slice(0, 8);
+      setSearchResults(results.map(r => r.item));
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedQuery.length > 0) {
+      handleSearch();
+    }
+  }, [debouncedQuery]);
 
   return (
     <Box
@@ -41,21 +83,50 @@ const ItemSelector = ({ item, onChange }) => {
             width={450}
           >
             <Box p={3}>
-              <SearchInput mb={3} autoFocus placeholder="search for items" />
-              {selectedAttribute ? (
+              <SearchInput
+                mb={3}
+                autoFocus
+                placeholder="search for items"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+              />
+
+              {debouncedQuery ? (
                 <Box maxHeight={200} overflow="auto">
-                  <P
-                    fontSize={18}
-                    fontWeight={600}
-                    mb={3}
-                    onClick={() => setSelectedAttribute(null)}
-                    sx={{
-                      cursor: "pointer",
-                      textTransform: "capitalize"
-                    }}
-                  >
-                    {category.key}
-                  </P>
+                  {searchResults.map(item => (
+                    <Flex
+                      onClick={() => {
+                        onChange(item);
+                        close();
+                      }}
+                      key={item.value}
+                      mb={3}
+                      alignItem="center"
+                      justifyContent="space-between"
+                      sx={{ cursor: "pointer" }}
+                    >
+                      <P>{item.value}</P>
+                      <P color="rgba(255,255,255,0.8)">({item.count})</P>
+                    </Flex>
+                  ))}
+                </Box>
+              ) : selectedAttribute ? (
+                <Box maxHeight={200} overflow="auto">
+                  <Flex mb={3} alignItems="center">
+                    <FaArrowLeft />
+                    <P
+                      ml={2}
+                      fontSize={18}
+                      fontWeight={600}
+                      onClick={() => setSelectedAttribute(null)}
+                      sx={{
+                        cursor: "pointer",
+                        textTransform: "capitalize"
+                      }}
+                    >
+                      {category.key}
+                    </P>
+                  </Flex>
 
                   {category.values.map(item => (
                     <Flex
@@ -74,9 +145,9 @@ const ItemSelector = ({ item, onChange }) => {
                     </Flex>
                   ))}
                 </Box>
-              ) : attributes ? (
+              ) : items ? (
                 <Grid>
-                  {attributes.map(attribute => {
+                  {items.map(attribute => {
                     return (
                       <Box
                         onClick={() => setSelectedAttribute(attribute.key)}

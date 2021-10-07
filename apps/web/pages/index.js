@@ -118,13 +118,15 @@ const Home = () => {
             <div style={{ fontFamily: "times", fontSize: 30 }}>Loot</div>
           </Flex>
         </Box>
-        <Flex mt={2}>
-          <a target="_blank" href="https://discord.com">
-          <IconButton mr={2} icon={<FaDiscord size={20} />} />
-          </a>
-          <IconButton mr={2} icon={<FaTwitter size={20} />} />
-          <IconButton mr={2} icon={<FaInfo size={20} />} />
-        </Flex>
+        <Box sx={{ visibility: ["hidden", "unset", "unset", "unset"] }}>
+          <Flex mt={2}>
+            <a target="_blank" href="https://discord.com" rel="noreferrer">
+              <IconButton mr={2} icon={<FaDiscord size={20} />} />
+            </a>
+            <IconButton mr={2} icon={<FaTwitter size={20} />} />
+            <IconButton mr={2} icon={<FaInfo size={20} />} />
+          </Flex>
+        </Box>
       </Box>
 
       <Flex flexDirection="column" alignItems="center" mb={4}>
@@ -168,7 +170,11 @@ const Home = () => {
               { key: "All Bags", value: "all" }
             ]}
           />
-          <ItemSelector item={item} onChange={newItem => setItem(newItem)} />
+          <ItemSelector
+            item={item}
+            onChange={newItem => setItem(newItem)}
+            display={["none", "block", "block", "block"]}
+          />
         </Flex>
         <Flex>
           <Select
@@ -178,7 +184,9 @@ const Home = () => {
             icon={<FaSort color="rgba(255,255,255,0.9)" />}
           >
             <option value="characters">Price</option>
-            <option value="loot">Greatness</option>
+            <option disabled value="loot">
+              Greatness
+            </option>
           </Select>
           <Select
             display={["none", "none", "block", "block"]}
@@ -186,7 +194,13 @@ const Home = () => {
             icon={<FaEye color="rgba(255,255,255,0.9)" />}
           >
             <option value="characters">Character</option>
-            <option value="loot">Loot</option>
+            <option disabled value="hyper">
+              Hyperloot
+            </option>
+
+            <option disabled value="swag">
+              Loot Swag
+            </option>
           </Select>
         </Flex>
       </Flex>

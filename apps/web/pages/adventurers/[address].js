@@ -44,7 +44,13 @@ const Adventurer = ({}) => {
             icon={<FaEye color="rgba(255,255,255,0.9)" />}
           >
             <option value="characters">Character</option>
-            <option value="loot">Loot</option>
+            <option disabled value="hyper">
+              Hyperloot
+            </option>
+
+            <option disabled value="swag">
+              Loot Swag
+            </option>
           </Select>
         </Box>
       </Flex>
