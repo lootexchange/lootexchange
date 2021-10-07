@@ -10,6 +10,8 @@ import {
   FaSort,
   FaTwitter,
   FaDiscord,
+  FaEthereum,
+  FaHome,
   FaSword
 } from "react-icons/fa";
 import { Flex, Box, Grid, Select, Image, Loader, H2, RadioGroup } from "@ui";
@@ -120,11 +122,21 @@ const Home = () => {
         </Box>
         <Box sx={{ visibility: ["hidden", "unset", "unset", "unset"] }}>
           <Flex mt={2}>
-            <a target="_blank" href="https://discord.com" rel="noreferrer">
+            <a target="_blank" href="https://discord.com/invite/NXEntTSHgy" rel="noreferrer">
               <IconButton mr={2} icon={<FaDiscord size={20} />} />
             </a>
-            <IconButton mr={2} icon={<FaTwitter size={20} />} />
-            <IconButton mr={2} icon={<FaInfo size={20} />} />
+            <a target="blank" href="https://twitter.com/lootproject">
+              <IconButton mr={2} icon={<FaTwitter size={20} />} />
+            </a>
+            <a target="_blank" href="https://lootproject.com" rel="noreferrer">
+              <IconButton mr={2} icon={<FaHome size={20} />} />
+            </a>
+            <a
+              target="_blank"
+              href="https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7#code" rel="noreferrer"
+            >
+              <IconButton mr={2} icon={<FaEthereum size={20} />} />
+            </a>
           </Flex>
         </Box>
       </Box>
