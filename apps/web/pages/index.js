@@ -42,9 +42,12 @@ const Home = () => {
   const itemsRef = useRef(null);
   const [filteredBags, setFilteredBags] = useState([]);
   const [filter, setFilter] = useState("forSale");
+  const [sort, setSort] = useState("Price");
+
   const [item, setItem] = useState(null);
   const { floor, bags, loading, fetchMore, moreLeft, total } = useBagData({
     filter,
+    sort,
     item
   });
 
@@ -201,13 +204,11 @@ const Home = () => {
           <Select
             mr={3}
             display={["none", "none", "block", "block"]}
-            onChange={e => setLens(e.target.value)}
+            onChange={e => setSort(e.target.value)}
             icon={<FaSort color="rgba(255,255,255,0.9)" />}
           >
-            <option value="characters">Price</option>
-            <option disabled value="loot">
-              Greatness
-            </option>
+            <option value="Price">Price</option>
+            <option value="Greatness">Greatness</option>
           </Select>
           <Select
             display={["none", "none", "block", "block"]}

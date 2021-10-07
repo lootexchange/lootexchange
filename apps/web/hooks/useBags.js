@@ -15,6 +15,7 @@ const useBags = ({ sort, filter, source, owner, skip, item }) => {
       offset,
       filter,
       item,
+      sort,
       owner
     });
 
@@ -43,7 +44,7 @@ const useBags = ({ sort, filter, source, owner, skip, item }) => {
   useEffect(() => {
     setBags([]);
     setOffset(0);
-  }, [filter, owner, skip, item]);
+  }, [filter, owner, skip, item, sort]);
 
   return {
     fetchMore: fetchNextBags,

@@ -44,6 +44,7 @@ const fetchBags = async ({
       owner: owner ? owner.toLowerCase() : null,
       offset: offset * limit,
       limit: limit,
+      sort: sort == "Greatness" ? "_Greatness" : null,
       forSale: filter !== "all" ? true : null,
       source: filter == "LootExchange" || filter == "OpenSea" ? filter : null,
       ...(item && {

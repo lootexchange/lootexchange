@@ -142,7 +142,8 @@ const NFT = ({ bag, lens, noData, ...props }) => {
             <Box
               position="absolute"
               bottom={0}
-              height={0}
+              zIndex={10}
+              height="10%"
               left={0}
               right={0}
               bg="black"
