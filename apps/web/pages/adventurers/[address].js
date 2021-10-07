@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Flex, Box, P, Grid, Select } from "@ui";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import NFT from "@ui/organisms/NFT";
+import NFT from "@ui/organisms/LootNFT";
 import Owner from "@ui/organisms/Owner";
 import Header from "@ui/organisms/Header";
 import { FaEye } from "react-icons/fa";

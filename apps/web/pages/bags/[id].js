@@ -13,6 +13,9 @@ import NFT from "@ui/organisms/NFT";
 import Source from "@ui/organisms/Source";
 import Owner from "@ui/organisms/Owner";
 import ether from "../../public/ether.png";
+const column = 120;
+
+import getGreatness from "../../services/getGreatness";
 import {
   itemRarity,
   rarityColor,
@@ -66,7 +69,19 @@ const attributeDefaults = [
 const Bag = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [metaData, setMetaData] = useState(null);
   const { bag, owner, transfers } = useBag(id);
+
+  useEffect(() => {
+    const getMetadata = async () => {
+      console.log(getGreatness(id));
+      setMetaData(getGreatness(id));
+    };
+
+    if (id) {
+      getMetadata();
+    }
+  }, [id]);
 
   let attributes =
     bag && bag.attributes.length ? bag.attributes : attributeDefaults;
@@ -228,6 +243,31 @@ const Bag = () => {
                     </H2>
                     <Box flex={1} />
                     <Flex alignItems="center">
+                      <P>Rarity</P>
+
+                      <P textAlign="right" width={column}>
+                        Greatness
+                      </P>
+                    </Flex>
+                  </Flex>
+
+                  <Flex
+                    py={3}
+                    px={[3, 3, 4]}
+                    alignItems="ceter"
+                    borderTop="1px solid rgba(255,255,255,0.1)"
+                  >
+                    <Box flex={1}>
+                      <P
+                        fontSize={14}
+                        color="rgba(255,255,255, 0.8)"
+                        mr={3}
+                      ></P>
+                      <P color="white" fontSize={16} fontWeight={600}>
+                        {bag.name}
+                      </P>
+                    </Box>
+                    <Flex alignItems="center">
                       <P color="rgba(255,255,255,0.9)">
                         {rarityDescription(
                           lootRarity(attributes.map(a => a.value))
@@ -242,6 +282,9 @@ const Bag = () => {
                           lootRarity(attributes.map(a => a.value))
                         )}
                       />
+                      <P width={column} textAlign="right">
+                        {metaData ? metaData.scores.greatness : 0}
+                      </P>
                     </Flex>
                   </Flex>
                   {attributes.map(item => (
@@ -271,6 +314,9 @@ const Bag = () => {
                           ml={2}
                           bg={rarityColor(item.value)}
                         />
+                        <P width={column} textAlign="right">
+                          {metaData ? metaData.greatness[item.key] : 0}
+                        </P>
                       </Flex>
                     </Flex>
                   ))}
@@ -278,50 +324,6 @@ const Bag = () => {
               </Pane>
             </Flex>
           </Flex>
-        )}
-
-        {transfers && (
-          <Box mt={4} mb={5}>
-            <H3 fontSize={22} mb={3}>
-              Transfers
-            </H3>
-            <table style={{ borderCollapse: "collapse", width: "100%" }}>
-              <thead>
-                <tr
-                  style={{ borderBottom: "2px solid rgba(255, 255, 255, 0.1)" }}
-                >
-                  <th>
-                    <P>From</P>
-                  </th>
-                  <th>
-                    <P>To</P>
-                  </th>
-                  <th>
-                    <P>Date</P>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {transfers
-                  .sort((a, b) => b.timestamp - a.timestamp)
-                  .map(transfer => {
-                    return (
-                      <tr key={transfer.timestamp}>
-                        <td>
-                          <P>{shortenAddress(transfer.from.address)}</P>
-                        </td>
-                        <td>
-                          <P>{shortenAddress(transfer.to.address)}</P>
-                        </td>
-                        <td>
-                          <P>{moment.unix(transfer.timestamp).fromNow()}</P>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </Box>
         )}
       </Box>
     </Box>

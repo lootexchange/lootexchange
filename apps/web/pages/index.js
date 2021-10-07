@@ -139,7 +139,7 @@ const Home = () => {
         top={-1}
         ref={itemsRef}
         bg="black"
-        zIndex={200}
+        zIndex={92}
         borderColor={isSticky ? "rgba(255,255,255,0.05)" : "transparent"}
         borderBottomWidth={1}
         sx={{

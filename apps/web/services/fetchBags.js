@@ -57,8 +57,6 @@ const fetchBags = async ({
     fetchPrices()
   ]);
 
-  console.log(data);
-
   let formattedTokens = data.tokens.map(formatToken);
   let total = data.totalCount;
 

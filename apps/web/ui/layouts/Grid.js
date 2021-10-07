@@ -7,11 +7,7 @@ export default styled(Box)`
   grid-template-columns: 1fr;
   grid-gap: 24px;
 
-  @media (min-width: 520px) {
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 820px) {
+  @media (min-width: 920px) {
     grid-template-columns: 1fr 1fr;
   }
 

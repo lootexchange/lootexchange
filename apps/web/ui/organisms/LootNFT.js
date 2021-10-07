@@ -3,17 +3,31 @@ import styled from "@emotion/styled";
 import { Flex, Box, Pane, P, Image } from "@ui";
 import { FaEye, FaList } from "react-icons/fa";
 import Source from "@ui/organisms/Source";
-import Tilt from "react-parallax-tilt";
+import {
+  itemRarity,
+  rarityColor,
+  rarityDescription,
+  lootRarity
+} from "loot-rarity";
 
 import ether from "../../public/ether.png";
+import getGreatness from "../../services/getGreatness";
 
 // gotta clean this up
 const NftContainer = styled.div`
   position: relative;
-  width: 50%;
+  width: 40%;
 
   height: 0;
   padding-bottom: 50%;
+
+  @media (min-width: 920px) and (max-width: 1300px) {
+    width: 40%;
+  }
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 const OpenContainer = styled.div`
@@ -65,7 +79,7 @@ const getColor = greatness => {
   return colors[5];
 };
 
-const Greatness = ({ number }) => (
+const Greatness = ({ greatness, item }) => (
   <Flex justifyContent="center" alignItems="center">
     <Flex
       display="none"
@@ -75,17 +89,26 @@ const Greatness = ({ number }) => (
       width={8}
       height={8}
       borderRadius="100%"
-      bg={getColor(Math.floor(Math.random() * 19 + 1))}
+      bg={rarityColor(item)}
     />
     <P fontSize={11} minWidth={15} textAlign="right">
-      {number}
+      {greatness}
     </P>
   </Flex>
 );
 
 const NFT = ({ bag, lens, noData, ...props }) => {
   const [viz, setViz] = useState(true);
+  const [metaData, setMetaData] = useState(null);
   let image = lens === "loot" ? bag.image : bag.characterImage;
+
+  useEffect(() => {
+    const getMetadata = async () => {
+      setMetaData(getGreatness(bag.id));
+    };
+
+    getMetadata();
+  }, []);
 
   useEffect(() => {
     setViz(true);
@@ -99,63 +122,56 @@ const NFT = ({ bag, lens, noData, ...props }) => {
     >
       <Box position="absolute" top={0} right={0} left={0} bottom="0" />
       <Flex position="relative">
-        <NftContainer
-          position="relative"
-          style={{
-            borderRight: "1px solid rgba(255, 255, 255, 0.2)"
-          }}
-        >
-          <img
-            src={bag.characterImage}
-            style={{
-              padding:
-                lens == "loot" || (!viz && lens == "characters") ? 10 : 0,
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-              inset: 0,
-              objectFit: "cover"
-            }}
-          />
-          <Box
-            position="absolute"
-            bottom={0}
-            height={0}
-            left={0}
-            right={0}
-            bg="black"
-          />
-        </NftContainer>
-
-        <NftContainer>
-          <Box p={3}>
-            {bag.attributes.map(attribute => (
-              <Flex
-                mb={2}
-                justifyContent="space-between"
-                alignItems="center"
-                key={attribute.key}
-              >
-                {false && (
-                  <Flex
-                    display="none"
-                    mr={2}
-                    justifyContent="center"
-                    alignItems="center"
-                    width={8}
-                    height={8}
-                    borderRadius="100%"
-                    bg={getColor(Math.floor(Math.random() * 19 + 1))}
-                  />
-                )}
-                <P flex={1} mr={2} fontSize={[12, 14, 14, 14]}>
-                  {attribute.value}
-                </P>
-                <Greatness number={Math.floor(Math.random() * 19 + 1)} />
-              </Flex>
-            ))}
+        <NftContainer position="relative">
+          <Box width={1} display={["none", "unset", "unset", "unset"]}>
+            <img
+              src={bag.characterImage}
+              style={{
+                padding:
+                  lens == "loot" || (!viz && lens == "characters") ? 10 : 0,
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                inset: 0,
+                objectFit: "cover"
+              }}
+            />
+            <Box
+              position="absolute"
+              bottom={0}
+              height={0}
+              left={0}
+              right={0}
+              bg="black"
+            />
           </Box>
         </NftContainer>
+
+        <Box
+          p={3}
+          pt={[5, 3, 3, 3]}
+          flex={1}
+          style={{
+            borderLeft: "1px solid rgba(255, 255, 255, 0.2)"
+          }}
+        >
+          {bag.attributes.map(attribute => (
+            <Flex
+              mb={2}
+              justifyContent="space-between"
+              alignItems="center"
+              key={attribute.key}
+            >
+              <P flex={1} mr={2} fontSize={[12, 14, 14, 14]}>
+                {attribute.value}
+              </P>
+              <Greatness
+                item={attribute.value}
+                greatness={metaData ? metaData.greatness[attribute.key] : 0}
+              />
+            </Flex>
+          ))}
+        </Box>
         {bag.source && (
           <Box position="absolute" left={12} top={12}>
             <Source size={23} source={bag.source} alignItems="center" />
