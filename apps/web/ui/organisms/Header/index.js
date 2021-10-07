@@ -27,7 +27,9 @@ const Header = () => {
       <Sidebar open={open} onClose={() => setOpen(false)} />
       <Link href="/">
         <a>
-          <Logo width={257 / 2.5} height={98 / 2.5} />
+          <P fontFamily="times" fontSize={30}>
+            Loot
+          </P>
         </a>
       </Link>
       <Box display={["flex", "flex", "none", "none"]}>
@@ -43,26 +45,33 @@ const Header = () => {
         alignItems="center"
       >
         <Flex mx={4} flex={1} alignItems="center">
-          <SearchInput
-            width="400px"
-            placeholder="Search by bag #, item, address, or ens"
-          />
+          <SearchInput width="300px" placeholder="Search for Projects" />
 
           <Link href="/">
             <a>
-              <NavItem ml={4}>Loot Bags</NavItem>
+              <NavItem ml={4}>Projects</NavItem>
+            </a>
+          </Link>
+
+          <Link href="/">
+            <a>
+              <NavItem ml={4}>Marketplace</NavItem>
+            </a>
+          </Link>
+
+          <Link href="/">
+            <a>
+              <NavItem ml={4}>Forum</NavItem>
+            </a>
+          </Link>
+
+          <Link href="/">
+            <a>
+              <NavItem ml={4}>Governance</NavItem>
             </a>
           </Link>
         </Flex>
-        {currentUser && (
-          <Flex mr={4}>
-            <Link href={`/adventurers/${currentUser.address}`}>
-              <a>
-                <NavItem>My Loot</NavItem>
-              </a>
-            </Link>
-          </Flex>
-        )}
+
         <Account />
       </Box>
     </Flex>

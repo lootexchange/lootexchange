@@ -5,7 +5,7 @@ const H2 = ({ ...props }) => (
     as="h2"
     color="white"
     fontSize="32px"
-    fontFamily="body"
+    fontFamily="EB Garamond,serif"
     fontWeight={600}
     {...props}
   />
