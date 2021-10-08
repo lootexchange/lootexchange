@@ -430,7 +430,7 @@ const Home = () => {
         <P mt={5}>CHAPTER 3</P>
 
         <H2 mt={2}>A Quest for Adventurers</H2>
-        <P textStyle="italic">"O Adventurer, look at you…"</P>
+        <P textStyle="italic">&quot;O Adventurer, look at you…&quot;</P>
         <P
           fontSize={20}
           mt={3}
