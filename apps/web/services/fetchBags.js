@@ -1,6 +1,6 @@
 import lootAPI from "./lootAPI";
 import fetchPrices from "./fetchPrices";
-const BAGS_PER_PAGE = 30;
+export const BAGS_PER_PAGE = 25;
 import { gweiToEth } from "@utils";
 
 export const formatToken = token => {

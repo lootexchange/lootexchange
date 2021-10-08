@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import fetchBags from "../services/fetchBags";
+import { BAGS_PER_PAGE } from "../services/fetchBags";
 
 const useBags = ({ sort, filter, source, owner, skip, item }) => {
   const [bags, setBags] = useState([]);
@@ -21,7 +22,7 @@ const useBags = ({ sort, filter, source, owner, skip, item }) => {
 
     setTotal(total);
 
-    setMoreLeft(results.length === 30);
+    setMoreLeft(results.length === BAGS_PER_PAGE);
 
     let localFloor = Math.min(
       ...[...bags, ...results].filter(bag => bag.price).map(bag => bag.price)
