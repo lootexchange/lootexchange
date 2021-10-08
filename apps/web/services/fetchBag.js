@@ -3,10 +3,9 @@ import fetchPrices from "./fetchPrices";
 import { formatToken, withPrice } from "./fetchBags";
 
 const fetchBag = async id => {
-  let [data, orders, prices] = await Promise.all([
+  let [data, orders] = await Promise.all([
     lootAPI(`/tokens/${id}`),
-    lootAPI(`/tokens/${id}/orders`),
-    fetchPrices()
+    lootAPI(`/tokens/${id}/orders`)
   ]);
 
   let formattedToken = formatToken(data.token);
@@ -20,7 +19,7 @@ const fetchBag = async id => {
     };
   }
 
-  return withPrice(prices, formattedToken);
+  return formattedToken;
 };
 
 export default fetchBag;

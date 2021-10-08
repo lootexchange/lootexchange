@@ -8,22 +8,15 @@ export const formatToken = token => {
 
   return {
     ...token,
+    isForSale: !!token.listingPrice,
+    source: token.listingSource,
+    price: token.listingSource ? gweiToEth(token.listingPrice) : 0,
+
     characterImage: `https://api.lootcharacter.com/imgs/bags/${(
       "0000" + id
     ).slice(-4)}.png`,
     id,
     image: `https://loot.exchange/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${id}.svg`
-  };
-};
-
-export const withPrice = (prices, token) => {
-  let priceInfo = prices[token.id.toString()];
-
-  return {
-    ...token,
-    isForSale: !!priceInfo,
-    source: !!priceInfo ? priceInfo.source : null,
-    price: priceInfo ? gweiToEth(priceInfo.price) : 0
   };
 };
 
@@ -53,16 +46,12 @@ const fetchBags = async ({
     })
   ).toString();
 
-  let [data, prices] = await Promise.all([
-    lootAPI(`/tokens?${params}`),
-    fetchPrices()
-  ]);
+  let data = await lootAPI(`/tokens?${params}`);
 
   let formattedTokens = data.tokens.map(formatToken);
   let total = data.totalCount;
 
-  let withPrices = formattedTokens.map(bag => withPrice(prices, bag));
-  return { bags: withPrices, total };
+  return { bags: formattedTokens, total };
 };
 
 export default fetchBags;
