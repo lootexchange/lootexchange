@@ -223,14 +223,15 @@ const Home = () => {
           right gear
         </P>
 
-        <Flex maxWidth={1200} mt={4} mb={5}>
+        <Flex maxWidth={1200} mt={4} mb={5} flexWrap="wrap">
           <Flex
-            mr={3}
+            mr={[0, 2]}
+            mb={[3, 0]}
             flexDirection="column"
             borderRadius="default"
             bg="backgroundSecondary"
             sx={{
-              width: 300,
+              width: ["100%", 300],
               height: 600
             }}
           >
@@ -253,12 +254,13 @@ const Home = () => {
           </Flex>
 
           <Flex
-            mr={3}
+            mr={[0, 2]}
+            mb={[3, 0]}
             borderRadius="default"
             bg="backgroundSecondary"
             flexDirection="column"
             sx={{
-              width: 373,
+              width: ["100%", 373],
               height: 600
             }}
           >
@@ -284,13 +286,14 @@ const Home = () => {
           </Flex>
 
           <Flex
-            mr={3}
+            mr={[0, 2]}
+            mb={[3, 0]}
             borderRadius="default"
             flexDirection="column"
             bg="backgroundSecondary"
             overflow="hidden"
             sx={{
-              width: 300,
+              width: ["100%", 300],
               height: 600
             }}
           >
