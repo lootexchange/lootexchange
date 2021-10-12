@@ -7,7 +7,7 @@ const useBag = id => {
   const [bag, setBag] = useState(null);
   let owner = useWallet(bag && bag.owner);
   const currentUser = useCurrentUser();
-  if(bag) {
+  if(bag && currentUser) {
     owner.isOwnBag = bag.owner === currentUser.address
   }
 
