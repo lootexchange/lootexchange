@@ -7,7 +7,8 @@
       "@hooks/*": ["hooks/*"],
       "@ui": ["ui"],
       "@ui/*": ["ui/*"],
-      "@utils": ["utils.js"]
+      "@utils": ["utils.js"],
+      "@api": ["services/api.js"]
     }
   }
 }

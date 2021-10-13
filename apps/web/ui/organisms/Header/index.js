@@ -44,21 +44,37 @@ const Header = () => {
       >
         <Flex mx={4} flex={1} alignItems="center">
           <SearchInput
-            width="400px"
-            placeholder="Search by bag #, item, address, or ens"
+            width="360px"
+            placeholder="Search by collection, bag #, item, address, or ens"
           />
+
+          {false && (
+            <Link href="/">
+              <a>
+                <NavItem ml={4}>Adventures</NavItem>
+              </a>
+            </Link>
+          )}
 
           <Link href="/">
             <a>
-              <NavItem ml={4}>Loot Bags</NavItem>
+              <NavItem ml={4}>Bags</NavItem>
             </a>
           </Link>
+
+          {false && (
+            <Link href="/">
+              <a>
+                <NavItem ml={4}>Players</NavItem>
+              </a>
+            </Link>
+          )}
         </Flex>
         {currentUser && (
           <Flex mr={4}>
             <Link href={`/adventurers/${currentUser.address}`}>
               <a>
-                <NavItem>My Loot</NavItem>
+                <NavItem>Inventory</NavItem>
               </a>
             </Link>
           </Flex>
