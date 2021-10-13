@@ -1,14 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import useWallet from "@hooks/useWallet";
+import fetchItem from "../services/fetchItem";
+import useCurrentUser from "@hooks/useCurrentUser";
 
-const useItem = id => {
-  const [item, setItem] = useState({});
+const useItem = (collection, id) => {
+  const [item, setItem] = useState(null);
+  let owner = useWallet(item && item.owner);
+  const currentUser = useCurrentUser();
+
+  if (item && currentUser) {
+    owner.isOwnBag = item.owner === currentUser.address;
+  }
 
   useEffect(() => {
     const getItem = async () => {
-      let response = await fetch("/api/getBagIdsByItem?id=" + id);
-      let result = await response.json();
+      let item = await fetchItem(collection, id);
 
-      setItem(result);
+      setItem(item);
     };
 
     if (id) {
@@ -16,7 +24,7 @@ const useItem = id => {
     }
   }, [id]);
 
-  return item;
+  return { item, owner };
 };
 
 export default useItem;
