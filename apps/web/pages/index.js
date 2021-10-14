@@ -23,16 +23,21 @@ import {
   P,
   Image,
   Loader,
+  Pane,
   H2,
   H1,
   RadioGroup
 } from "@ui";
+import { formatEther } from "@ethersproject/units";
 import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
 import ItemSelector from "@ui/organisms/ItemSelector";
 import NFT from "@ui/organisms/LootNFT";
 import loot from "../public/community.png";
 import useInfiniteScroll from "react-infinite-scroll-hook";
+import useExchangeRate from "@hooks/useExchangeRate";
+import { formatMoney } from "@utils";
+import { useEtherBalance } from "@usedapp/core";
 
 import useBagData from "../hooks/useBags";
 
@@ -61,6 +66,33 @@ const CollectionGrid = styled.div`
 
   @media (max-width: 420px) {
     grid-template-columns: 1fr;
+  }
+`;
+
+const StatGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  max-width: 920px;
+  width: 100%;
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
+  }
+
+  & > div {
+    border-radius: 0px;
+    border-right-width: 0px;
+  }
+
+  & > div:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  & > div:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-right-width: 2px;
   }
 `;
 
@@ -102,6 +134,10 @@ const Home = () => {
   const [lens, setLens] = useState("characters");
   const [isSticky, setIsSticky] = useState(false);
   const itemsRef = useRef(null);
+  const exchangeRate = useExchangeRate();
+  const treasury = useEtherBalance(
+    "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18"
+  );
 
   const [item, setItem] = useState(null);
   const { floor, bags, loading, fetchMore, moreLeft, total } = useBagData({});
@@ -109,41 +145,98 @@ const Home = () => {
   return (
     <Flex flex={1} flexDirection="column" bg="background">
       <Header />
-      <Flex
-        bg="#140F0F"
-        p={4}
-        py={5}
-        flexDirection="column"
-        alignItems="center"
-      >
-        <Box maxWidth={920} width={["100%", "100%", "920px"]}>
-          <Flex>
-            <img src="/exchangeIcon.svg" width={50} />
-            <H1
-              ml={4}
-              fontFamily="body"
-              fontSize={24}
-              fontWeight={900}
+      <Box position="relative">
+        <Flex
+          //bg="#140F0F"
+          bg="#1e2b4d"
+          p={4}
+          py={5}
+          pb={"100px"}
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Box maxWidth={920} width={["100%", "100%", "920px"]}>
+            <Flex>
+              <img src="/exchangeIcon.svg" width={50} />
+              <H1
+                ml={4}
+                fontFamily="body"
+                fontSize={24}
+                fontWeight={900}
+                maxWidth="640px"
+              >
+                Buy, Sell, and explore
+                <br /> all things Loot
+              </H1>
+            </Flex>
+            <P
+              mt={3}
+              fontSize={16}
+              fontWeight={200}
+              color="textSecondary"
               maxWidth="640px"
             >
-              Buy, Sell, and explore
-              <br /> all things Loot
-            </H1>
-          </Flex>
-          <P
-            mt={3}
-            fontSize={16}
-            fontWeight={200}
-            color="textSecondary"
-            maxWidth="640px"
-          >
-            0% fee marketplace, 5% to community owned treasury, and window into
-            the wild world of loot
-          </P>
-        </Box>
-      </Flex>
-
-      <Flex p={3} alignItems="center" flexDirection="column" pb={6}>
+              0% fee marketplace, 5% to community owned treasury, and window
+              into the wild world of loot
+            </P>
+          </Box>
+        </Flex>{" "}
+        <Flex
+          p={3}
+          alignItems="center"
+          flexDirection="column"
+          pb={5}
+          position="absolute"
+          left={0}
+          right={0}
+          top="calc(100% - 80px)"
+        >
+          <StatGrid>
+            <Pane bg="black">
+              <Box p={3}>
+                <P mb={1} color="textSecondary">
+                  Treasury
+                </P>
+                <H2>Ξ{treasury ? formatEther(treasury) : 0}</H2>
+                <P mt={-1} color="textSecondary">
+                  {treasury
+                    ? formatMoney(formatEther(treasury) * exchangeRate)
+                    : 0}
+                </P>
+              </Box>
+            </Pane>
+            <Pane bg="black">
+              <Box p={3}>
+                <P mb={1} color="textSecondary">
+                  Open Proposals
+                </P>
+                <H2>0</H2>
+                <P mt={-1} color="textSecondary">
+                  0 closed
+                </P>
+              </Box>
+            </Pane>
+            <Pane bg="black">
+              <Box p={3}>
+                <P mb={1} color="textSecondary">
+                  Loot Floor
+                </P>
+                <H2>Ξ{floor}</H2>
+                <P mt={-1} color="textSecondary">
+                  {formatMoney(floor * exchangeRate)}
+                </P>
+              </Box>
+            </Pane>
+          </StatGrid>
+        </Flex>
+      </Box>
+      <Flex
+        p={3}
+        alignItems="center"
+        flexDirection="column"
+        pb={5}
+        pt={"100px"}
+      >
         <H2 my={4} color="textSecondary" fontSize={24}>
           Loot Collections
         </H2>
@@ -177,9 +270,13 @@ const Home = () => {
           </Link>
         </CollectionGrid>
       </Flex>
-      <Flex>
+      <Box p={[3, 4]} alignItems="center" flexDirection="column">
+        <H2 mb={3} color="textSecondary" fontSize={24}>
+          Entry Bags
+        </H2>
+
         <Grid>
-          {bags.map(bag => (
+          {bags.slice(0, 6).map(bag => (
             <Link href={`/bags/${bag.id}`} key={bag.id}>
               <a>
                 <NFT bag={bag} lens={lens} />
@@ -187,7 +284,12 @@ const Home = () => {
             </Link>
           ))}
         </Grid>
-      </Flex>
+        <Link href="/loot">
+          <a>
+            <P mt={3}>See All</P>
+          </a>
+        </Link>
+      </Box>
     </Flex>
   );
 };
