@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import NFT from "@ui/organisms/LootNFT";
 import Owner from "@ui/organisms/Owner";
 import Header from "@ui/organisms/Header";
+import SynthLootNFT from "@ui/organisms/SynthLootNFT";
 import { FaEye } from "react-icons/fa";
 
 import useWallet from "@hooks/useWallet";
@@ -67,6 +68,8 @@ const Adventurer = ({}) => {
               </a>
             </Link>
           ))}
+
+          {address && <SynthLootNFT address={address} />}
         </Grid>
       </Box>
     </Flex>

@@ -9,7 +9,7 @@ import {
   rarityDescription,
   lootRarity
 } from "loot-rarity";
-import { sortItems } from "@utils";
+import { sortItems, shortenAddress } from "@utils";
 
 import ether from "../../public/ether.png";
 import getGreatness from "../../services/getGreatness";
@@ -98,7 +98,7 @@ const Greatness = ({ greatness, item }) => (
   </Flex>
 );
 
-const NFT = ({ bag, lens, noData, ...props }) => {
+const NFT = ({ bag, lens, noData, type, address, ...props }) => {
   const [viz, setViz] = useState(true);
   const [metaData, setMetaData] = useState(null);
   let image = lens === "loot" ? bag.image : bag.characterImage;
@@ -110,6 +110,7 @@ const NFT = ({ bag, lens, noData, ...props }) => {
 
     getMetadata();
   }, []);
+  console.log(metaData);
 
   useEffect(() => {
     setViz(true);
@@ -126,28 +127,55 @@ const NFT = ({ bag, lens, noData, ...props }) => {
       <Box position="absolute" top={0} right={0} left={0} bottom="0" />
       <Flex position="relative">
         <NftContainer position="relative">
-          <Box width={1} display={["none", "unset", "unset", "unset"]}>
-            <img
-              src={bag.characterImage}
-              style={{
-                padding:
-                  lens == "loot" || (!viz && lens == "characters") ? 10 : 0,
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-                inset: 0,
-                objectFit: "cover"
-              }}
-            />
-            <Box
-              position="absolute"
-              bottom={0}
-              zIndex={10}
-              height="10%"
-              left={0}
-              right={0}
-              bg="black"
-            />
+          <Box display={["none", "unset", "unset", "unset"]}>
+            {type == "synthLoot" ? (
+              <Flex
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="column"
+                position="absolute"
+                top={0}
+                bottom={0}
+                right={0}
+                left={0}
+              >
+                <Box mb={2}>
+                  <img
+                    src="/synthLootCollectionLogo.png"
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: "50%"
+                    }}
+                  />
+                </Box>
+                <P color="textSecondary">Synth Loot</P>
+              </Flex>
+            ) : (
+              <>
+                <img
+                  src={image}
+                  style={{
+                    //padding:
+                    // lens == "loot" || (!viz && lens == "characters") ? 10 : 0,
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    inset: 0,
+                    objectFit: "cover"
+                  }}
+                />
+                <Box
+                  position="absolute"
+                  bottom={0}
+                  zIndex={10}
+                  height="10%"
+                  left={0}
+                  right={0}
+                  bg="black"
+                />
+              </>
+            )}
           </Box>
         </NftContainer>
 
@@ -184,9 +212,29 @@ const NFT = ({ bag, lens, noData, ...props }) => {
         )}
       </Flex>
       {!noData && (
-        <Box p={3} bg="#24222E">
-          <Flex justifyContent="space-between" alignItems="center">
-            <P flex={1}>{bag.name}</P>
+        <Box bg="#24222E">
+          <Flex justifyContent="space-between" alignItems="center" pr={3}>
+            <Flex alignItems="center" flex={1}>
+              <img
+                src={
+                  type === "synthLoot"
+                    ? "/synthLootCollectionLogo.png"
+                    : "/lootCollectionLogo.png"
+                }
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderBottomLeftRadius: 10
+                }}
+              />
+              <Box ml={3}>
+                <P>
+                  {type === "synthLoot"
+                    ? "bag " + shortenAddress(address)
+                    : bag.name}
+                </P>
+              </Box>
+            </Flex>
 
             <Box
               py={1}
