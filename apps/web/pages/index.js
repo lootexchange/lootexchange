@@ -193,39 +193,47 @@ const Home = () => {
         >
           <StatGrid>
             <Pane bg="black">
-              <Box p={3}>
-                <P mb={1} color="textSecondary">
-                  Treasury
-                </P>
-                <H2>Ξ{treasury ? formatEther(treasury) : 0}</H2>
-                <P mt={-1} color="textSecondary">
-                  {treasury
-                    ? formatMoney(formatEther(treasury) * exchangeRate)
-                    : 0}
-                </P>
-              </Box>
+              <a href="https://www.royaltydao.com/">
+                <Box p={3}>
+                  <P mb={1} color="textSecondary">
+                    Treasury
+                  </P>
+                  <H2>Ξ{treasury ? formatEther(treasury) : 0}</H2>
+                  <P mt={-1} color="textSecondary">
+                    {treasury
+                      ? formatMoney(formatEther(treasury) * exchangeRate)
+                      : 0}
+                  </P>
+                </Box>
+              </a>
             </Pane>
             <Pane bg="black">
-              <Box p={3}>
-                <P mb={1} color="textSecondary">
-                  Open Proposals
-                </P>
-                <H2>0</H2>
-                <P mt={-1} color="textSecondary">
-                  0 closed
-                </P>
-              </Box>
+              <a href="https://www.royaltydao.com/">
+                <Box p={3}>
+                  <P mb={1} color="textSecondary">
+                    Open Proposals
+                  </P>
+                  <H2>0</H2>
+                  <P mt={-1} color="textSecondary">
+                    0 closed
+                  </P>
+                </Box>
+              </a>
             </Pane>
             <Pane bg="black">
-              <Box p={3}>
-                <P mb={1} color="textSecondary">
-                  Loot Floor
-                </P>
-                <H2>Ξ{floor}</H2>
-                <P mt={-1} color="textSecondary">
-                  {formatMoney(floor * exchangeRate)}
-                </P>
-              </Box>
+              <Link href="/loot">
+                <a>
+                  <Box p={3}>
+                    <P mb={1} color="textSecondary">
+                      Loot Floor
+                    </P>
+                    <H2>Ξ{floor}</H2>
+                    <P mt={-1} color="textSecondary">
+                      {formatMoney(floor * exchangeRate)}
+                    </P>
+                  </Box>
+                </a>
+              </Link>
             </Pane>
           </StatGrid>
         </Flex>

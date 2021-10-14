@@ -1,5 +1,7 @@
+import { ethers } from "ethers";
 const { BigNumber } = require("@ethersproject/bignumber");
-const { id } = require("@ethersproject/hash");
+const { id, address } = require("@ethersproject/hash");
+const { sha3 } = require("web3-utils");
 
 let items = {};
 
@@ -21,7 +23,7 @@ items.RING = [];
 
 const random = input => BigNumber.from(id(input));
 
-const getMetadata = id => {
+const getMetadata = token => {
   let meta = {
     items: {},
     scores: {
@@ -30,8 +32,12 @@ const getMetadata = id => {
     greatness: {}
   };
   for (let keyPrefix in items) {
-    let tokenId = BigNumber.from(id);
-    const rand = random(keyPrefix + tokenId.toString());
+    // not really sure what needs to happen if it's an address
+    let tokenId = ethers.utils.isAddress(token)
+      ? token
+      : BigNumber.from(token).toString();
+
+    const rand = random(keyPrefix + tokenId);
     const greatness = rand.mod(21);
     meta.scores.greatness += greatness.toNumber();
     meta.greatness[keyPrefix.toLowerCase()] = greatness.toNumber();

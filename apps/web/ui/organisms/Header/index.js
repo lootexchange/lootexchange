@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Flex, Box, H1, P, Logo, Image, Button } from "@ui";
 import useCurrentUser from "@hooks/useCurrentUser";
 import Link from "next/link";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaCaretDown } from "react-icons/fa";
 
 import SearchInput from "./GlobalSearch";
 import Account from "./Account";
 import Sidebar from "./Sidebar";
+import NavDropdown from "../NavDropdown";
 
 export const NavItem = ({ ...props }) => (
   <P color="textSecondary" fontWeight={600} fontSize={2} {...props} />
@@ -56,11 +57,34 @@ const Header = () => {
             </Link>
           )}
 
-          <Link href="/">
-            <a>
-              <NavItem ml={4}>Bags</NavItem>
-            </a>
-          </Link>
+          <NavDropdown
+            ml={4}
+            button={
+              <NavItem>
+                <Flex alignItems="center">
+                  <Box mr={1}>Bags</Box>
+                  <FaCaretDown />
+                </Flex>
+              </NavItem>
+            }
+            items={[
+              {
+                label: "Loot",
+                href: "/loot",
+                image: "/lootCollectionLogo.png"
+              },
+              {
+                label: "mLoot",
+                href: "/collections/mloot",
+                image: "/mLootCollectionLogo.png"
+              },
+              {
+                label: "Genesis",
+                href: "/collections/genesis",
+                image: "/genesisCollectionLogo.png"
+              }
+            ]}
+          />
 
           {false && (
             <Link href="/">
