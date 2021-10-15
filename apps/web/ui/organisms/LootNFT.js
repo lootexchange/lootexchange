@@ -80,18 +80,20 @@ const getColor = greatness => {
   return colors[5];
 };
 
-const Greatness = ({ greatness, item }) => (
+const Greatness = ({ greatness, item, showRarity }) => (
   <Flex justifyContent="center" alignItems="center">
-    <Flex
-      display="none"
-      mr={2}
-      justifyContent="center"
-      alignItems="center"
-      width={8}
-      height={8}
-      borderRadius="100%"
-      bg={rarityColor(item)}
-    />
+    {showRarity && (
+      <Flex
+        display="none"
+        mr={2}
+        justifyContent="center"
+        alignItems="center"
+        width={8}
+        height={8}
+        borderRadius="100%"
+        bg={rarityColor(item)}
+      />
+    )}
     <P fontSize={11} minWidth={15} textAlign="right">
       {greatness}
     </P>
@@ -105,12 +107,12 @@ const NFT = ({ bag, lens, noData, type, address, ...props }) => {
 
   useEffect(() => {
     const getMetadata = async () => {
-      setMetaData(getGreatness(bag.id));
+      console.log(bag);
+      setMetaData(bag.metadata || getGreatness(bag.id));
     };
 
     getMetadata();
-  }, []);
-  console.log(metaData);
+  }, [bag]);
 
   useEffect(() => {
     setViz(true);
@@ -199,6 +201,7 @@ const NFT = ({ bag, lens, noData, type, address, ...props }) => {
                 {attribute.value}
               </P>
               <Greatness
+                showRarity={type !== "synthLoot"}
                 item={attribute.value}
                 greatness={metaData ? metaData.greatness[attribute.key] : 0}
               />
@@ -243,6 +246,7 @@ const NFT = ({ bag, lens, noData, type, address, ...props }) => {
               borderRadius="100px"
             >
               <Greatness
+                showRarity={type !== "synthLoot"}
                 item={lootRarity(items.map(i => i.value))}
                 greatness={metaData ? metaData.scores.greatness : 0}
               />
