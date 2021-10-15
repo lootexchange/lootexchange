@@ -33,9 +33,7 @@ const getMetadata = token => {
   };
   for (let keyPrefix in items) {
     // not really sure what needs to happen if it's an address
-    let tokenId = ethers.utils.isAddress(token)
-      ? token
-      : BigNumber.from(token).toString();
+    let tokenId = BigNumber.from(token).toString();
 
     const rand = random(keyPrefix + tokenId);
     const greatness = rand.mod(21);
