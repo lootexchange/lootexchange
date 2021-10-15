@@ -1,5 +1,9 @@
 const { BigNumber } = require("@ethersproject/bignumber");
 const { id } = require("@ethersproject/hash");
+const { toUtf8Bytes } = require("@ethersproject/strings");
+import { keccak256 } from "@ethersproject/keccak256";
+
+
 
 let items = {}
 
@@ -236,18 +240,17 @@ const nameSuffixes = [
   "Moon",
 ];
 
-const getWeapon = (tokenId) => pluck(tokenId, "WEAPON");
-const getChest = (tokenId) => pluck(tokenId, "CHEST");
-const getHead = (tokenId) => pluck(tokenId, "HEAD");
-const getWaist = (tokenId) => pluck(tokenId, "WAIST");
-const getFoot = (tokenId) => pluck(tokenId, "FOOT");
-const getHand = (tokenId) => pluck(tokenId, "HAND");
-const getNeck = (tokenId) => pluck(tokenId, "NECK");
-const getRing = (tokenId) => pluck(tokenId, "RING");
-
 const random = (input) => BigNumber.from(id(input));
 
-const getMetadata = (id) => {
+function toHex(str) {
+  var result = '0x';
+  for (var i=0; i<str.length; i++) {
+    result += str.charCodeAt(i).toString(16);
+  }
+  return result;
+}
+
+const getMetadata = (input) => {
   let meta = {
     "items": {},
     "itemOrders":{},
@@ -261,8 +264,7 @@ const getMetadata = (id) => {
   }
   for(let keyPrefix in items) {
     let sourceArray = items[keyPrefix]
-    let tokenId = BigNumber.from(id);
-    const rand = random(keyPrefix + tokenId.toString());
+    let rand = input.slice(0,2)!=='0x' ? random(keyPrefix + input) : BigNumber.from(keccak256(toHex(keyPrefix)+input.slice(2)));
     let output = sourceArray[rand.mod(sourceArray.length).toNumber()];
     const greatness = rand.mod(21);
     meta.scores.greatness += greatness.toNumber();
