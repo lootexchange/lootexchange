@@ -104,40 +104,63 @@ export const ItemCard = ({ bag, price, exchangeRate }) => (
   </Flex>
 );
 
-const ReviewStep = ({ bag, exchangeRate }) => (
-  <>
-    <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
-    <Hr my={4} />
+const round = num => Math.round(num * 10000) / 10000;
 
-    <H2 mb={4} fontSize={16}>
-      Distribution
-    </H2>
-    <Flex mb={4}>
-      <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">Seller</H3>
-        <Flex mt={3} justifyContent="space-between">
-          <Owner
-            name={bag.shortName}
-            address={bag.owner}
-            avatar={bag.ownerAvatar}
-          />
-        </Flex>
-      </Box>
-      {bag.source === "LootExchange" ? (
-        <Price cost={shortenNumber(bag.price * 0.99)} sub="99%" />
-      ) : (
-        <Price cost={shortenNumber(bag.price * 0.975)} sub="97.5%" />
-      )}
-    </Flex>
+const getPayout = order => {
+  if (!order) {
+    return {
+      seller: 0,
+      royalty: 0,
+      marketPlace: 0
+    };
+  }
 
-    <Flex>
-      <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">
-          {bag.source === "LootExchange" ? "Community Treasury" : "Marketplace"}
-        </H3>
-        <Flex mt={3} justifyContent="space-between">
-          {bag.source === "LootExchange" ? (
-            <>
+  let isExchange =
+    order.feeRecipient == "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18";
+
+  let hasRoyalty = order.makerRelayerFee >= 500;
+  let fee = order.makerRelayerFee / 10000;
+
+  return {
+    seller: round(1 - fee),
+    royalty: hasRoyalty ? 0.05 : 0,
+    marketPlace: hasRoyalty ? round(fee - 0.05) : fee
+  };
+};
+
+const ReviewStep = ({ bag, exchangeRate }) => {
+  let { seller, royalty, marketPlace } = getPayout(bag.sellOrder);
+  console.log(marketPlace);
+  return (
+    <>
+      <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
+      <Hr my={4} />
+
+      <H2 mb={4} fontSize={16}>
+        Distribution
+      </H2>
+      <Flex mb={4}>
+        <Box flex={1}>
+          <H3 color="rgba(255,255,255,0.7)">Seller</H3>
+          <Flex mt={3} justifyContent="space-between">
+            <Owner
+              name={bag.shortName}
+              address={bag.owner}
+              avatar={bag.ownerAvatar}
+            />
+          </Flex>
+        </Box>
+        <Price
+          cost={shortenNumber(bag.price * seller)}
+          sub={seller * 100 + "%"}
+        />
+      </Flex>
+
+      {royalty > 0 && (
+        <Flex mb={4}>
+          <Box flex={1}>
+            <H3 color="rgba(255,255,255,0.7)">Community Treasury</H3>
+            <Flex mt={3} justifyContent="space-between">
               <Box maxWidth={350} mr={3} flex={1}>
                 <P fontSize={14}>
                   Community controlled treasury for funding projects in the
@@ -153,20 +176,37 @@ const ReviewStep = ({ bag, exchangeRate }) => (
                   </P>
                 </a>
               </Box>
-            </>
-          ) : (
-            <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
-          )}
+            </Flex>
+          </Box>
+          <Price
+            cost={shortenNumber(bag.price * royalty)}
+            sub={royalty * 100 + "%"}
+          />
         </Flex>
-      </Box>
-      {bag.source === "LootExchange" ? (
-        <Price cost={shortenNumber(bag.price * 0.01)} sub="1%" />
-      ) : (
-        <Price cost={shortenNumber(bag.price * 0.025)} sub="2.5%" />
       )}
-    </Flex>
-  </>
-);
+
+      <Flex>
+        <Box flex={1}>
+          <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
+          <Flex mt={3} justifyContent="space-between">
+            {bag.source === "LootExchange" ? (
+              <Logo
+                width={Math.floor(257 / 2.5)}
+                height={Math.floor(98 / 2.5)}
+              />
+            ) : (
+              <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+            )}
+          </Flex>
+        </Box>
+        <Price
+          cost={shortenNumber(bag.price * marketPlace)}
+          sub={marketPlace * 100 + "%"}
+        />
+      </Flex>
+    </>
+  );
+};
 
 const WaitingForConfirmation = ({ bag, exchangeRate }) => {
   let web3Provider = eth.provider.provider;
