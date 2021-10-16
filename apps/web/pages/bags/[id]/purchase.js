@@ -115,9 +115,6 @@ const getPayout = order => {
     };
   }
 
-  let isExchange =
-    order.feeRecipient == "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18";
-
   let hasRoyalty = order.makerRelayerFee >= 500;
   let fee = order.makerRelayerFee / 10000;
 
@@ -130,7 +127,6 @@ const getPayout = order => {
 
 const ReviewStep = ({ bag, exchangeRate }) => {
   let { seller, royalty, marketPlace } = getPayout(bag.sellOrder);
-  console.log(marketPlace);
   return (
     <>
       <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
