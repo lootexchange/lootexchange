@@ -115,13 +115,15 @@ const getPayout = order => {
     };
   }
 
-  let hasRoyalty = order.makerRelayerFee >= 500;
   let fee = order.makerRelayerFee / 10000;
+  let isOpenSea =
+    order.feeRecipient == "0x5b3256965e7c3cf26e11fcaf296dfc8807c01073";
+  let openSeaFee = 0.025;
 
   return {
     seller: round(1 - fee),
-    royalty: hasRoyalty ? 0.05 : 0,
-    marketPlace: hasRoyalty ? round(fee - 0.05) : fee
+    royalty: isOpenSea ? fee - openSeaFee : fee,
+    marketPlace: isOpenSea ? openSeaFee : 0
   };
 };
 
@@ -152,34 +154,32 @@ const ReviewStep = ({ bag, exchangeRate }) => {
         />
       </Flex>
 
-      {royalty > 0 && (
-        <Flex mb={4}>
-          <Box flex={1}>
-            <H3 color="rgba(255,255,255,0.7)">Community Treasury</H3>
-            <Flex mt={3} justifyContent="space-between">
-              <Box maxWidth={350} mr={3} flex={1}>
-                <P fontSize={14}>
-                  Community controlled treasury for funding projects in the
-                  lootosphere.
+      <Flex mb={4}>
+        <Box flex={1}>
+          <H3 color="rgba(255,255,255,0.7)">Community Treasury</H3>
+          <Flex mt={3} justifyContent="space-between">
+            <Box maxWidth={350} mr={3} flex={1}>
+              <P fontSize={14}>
+                Community controlled treasury for funding projects in the
+                lootosphere.
+              </P>
+              <a
+                href="https://treasury.loot.exchange/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <P mt={1} fontSize={16} color="rgba(100,100,150)">
+                  read more
                 </P>
-                <a
-                  href="https://treasury.loot.exchange/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <P mt={1} fontSize={16} color="rgba(100,100,150)">
-                    read more
-                  </P>
-                </a>
-              </Box>
-            </Flex>
-          </Box>
-          <Price
-            cost={shortenNumber(bag.price * royalty)}
-            sub={royalty * 100 + "%"}
-          />
-        </Flex>
-      )}
+              </a>
+            </Box>
+          </Flex>
+        </Box>
+        <Price
+          cost={shortenNumber(bag.price * royalty)}
+          sub={royalty * 100 + "%"}
+        />
+      </Flex>
 
       <Flex>
         <Box flex={1}>
