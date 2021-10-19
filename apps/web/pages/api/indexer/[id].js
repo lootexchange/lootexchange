@@ -247,6 +247,10 @@ const getRing = (tokenId) => pluck(tokenId, "RING");
 
 const random = (input) => BigNumber.from(id(input));
 
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.toLowerCase().slice(1);
+}
+
 const getMetadata = (id) => {
   let scores = {
     "greatness":0,
@@ -270,32 +274,51 @@ const getMetadata = (id) => {
     if (greatness.gt(14)) {
       scores.orders++
       let order = suffixes[rand.mod(suffixes.length).toNumber()]
-      meta.itemOrders[keyPrefix.toLowerCase()] = order
+      //meta.itemOrders[keyPrefix.toLowerCase()] = order
       meta.attributes.push({
-        "key": `${keyPrefix} Order`,
+        "key": `${capitalize(keyPrefix)} Order`,
         "category": "Item Orders",
-        "value": order
+        "value": order.slice(3)
       })
       output = output + " " + order;
     }
     if (greatness.gte(19)) {
-      meta.scores.names++
+      scores.names++
       const name = ["", ""];
       name[0] = namePrefixes[rand.mod(namePrefixes.length).toNumber()];
       name[1] = nameSuffixes[rand.mod(nameSuffixes.length).toNumber()];
       if (greatness.eq(19)) {
         output = '"' + name[0] + " " + name[1] + '" ' + output;
       } else {
-        meta.scores.plusones++  
+        scores.plusones++  
         output = '"' + name[0] + " " + name[1] + '" ' + output + " +1";
       }
     }
-    meta.items[keyPrefix.toLowerCase()] = output
+    meta.attributes.push({
+      "key": `${capitalize(keyPrefix)}`,
+      "category": "Items",
+      "value": output
+    })
   }
   meta.attributes.push({
     "key": "Greatness",
-    "category": "Scores",
+    "category": "Properties",
     "value": scores.greatness
+  })
+  meta.attributes.push({
+    "key": "Orders",
+    "category": "Properties",
+    "value": scores.orders
+  })
+  meta.attributes.push({
+    "key": "Names",
+    "category": "Properties",
+    "value": scores.names
+  })
+  meta.attributes.push({
+    "key": "Plus Ones",
+    "category": "Properties",
+    "value": scores.plusones
   })
   return meta
 }
