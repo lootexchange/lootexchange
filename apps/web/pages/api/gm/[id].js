@@ -66,6 +66,12 @@ const api = async (req, res) => {
         "name": `Genesis Mana #${id}`,
         "description": "This item is Genesis Mana used in Loot (for Adventurers)",
         "image": `https://www.loot.exchange/api/image/${id}`,
+        "collection": {
+          "id":"genesis-mana",
+          "name":"Genesis Mana",
+          "description":"Genesis Mana is a Mint Pass for a Genesis Adventurer (for Loot). Upon collecting a perfect set of 8 Genesis Mana from a single Order, corresponding to all 8 item types (i.e. weapon, head armor, chest armor, etc), players can resurrect a Genesis Adventurer using the 2nd smart contract. Thus returned to defend its original Order, each Genesis Adventurer will entitle the owner to benefits and rewards, including unique access to claiim derivative projects, airdropped ERC20 tokens similar to $AGLD and more.",
+          "image":"https://lh3.googleusercontent.com/PBMCkL2BsftmHR3CnOO5DRHdBYpKcOjFZpymCDu-l2fVzffixhHU8S0qWrONuXWDMOdZn0QgsepGFjKwEqJO5aAk4LzlhTdM3Hdc=s130"
+        },
         "attributes":[]
       }
       meta.attributes.push({
