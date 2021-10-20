@@ -9,7 +9,7 @@ import { NavItem } from "./index";
 import GlobalSearch from "./GlobalSearch";
 import Account from "./Account";
 
-const Sidebar = ({ open, onClose }) => {
+const Sidebar = ({ open, onClose, collections }) => {
   const currentUser = useCurrentUser();
 
   const logOut = async () => {
@@ -110,13 +110,15 @@ const Sidebar = ({ open, onClose }) => {
             </Flex>
           )}
 
-          <Flex mt={4}>
-            <Link href={`/`}>
-              <a>
-                <NavItem>Loot Bags</NavItem>
-              </a>
-            </Link>
-          </Flex>
+          {collections.map(item => (
+            <Flex mt={4} key={item.href}>
+              <Link href={item.href}>
+                <a>
+                  <NavItem>{item.label}</NavItem>
+                </a>
+              </Link>
+            </Flex>
+          ))}
         </Box>
         <Box flex={1} />
         {currentUser && (

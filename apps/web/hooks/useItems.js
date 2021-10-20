@@ -48,7 +48,7 @@ const useItems = ({ collection, sort, filter, source, owner, skip, item }) => {
   useEffect(() => {
     setItems([]);
     setOffset(0);
-  }, [filter, owner, skip, item, sort]);
+  }, [filter, owner, skip, item, sort, collection]);
 
   return {
     fetchMore: fetchNextItems,

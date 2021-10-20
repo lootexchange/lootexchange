@@ -13,6 +13,24 @@ export const NavItem = ({ ...props }) => (
   <P color="textSecondary" fontWeight={600} fontSize={2} {...props} />
 );
 
+const collections = [
+  {
+    label: "Loot",
+    href: "/collections/loot",
+    image: "/lootCollectionLogo-small.png"
+  },
+  {
+    label: "mLoot",
+    href: "/collections/mloot",
+    image: "/mLootCollectionLogo-small.png"
+  },
+  {
+    label: "Genesis",
+    href: "/collections/genesis",
+    image: "/genesisCollectionLogo-small.png"
+  }
+];
+
 const Header = () => {
   const currentUser = useCurrentUser();
   const [open, setOpen] = useState(false);
@@ -25,7 +43,11 @@ const Header = () => {
       position="relative"
       alignItems={["flex-start", "flex-start", "center", "center"]}
     >
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      <Sidebar
+        open={open}
+        onClose={() => setOpen(false)}
+        collections={collections}
+      />
       <Link href="/">
         <a>
           <Logo width={257 / 2.5} height={98 / 2.5} />
@@ -62,28 +84,12 @@ const Header = () => {
             button={
               <NavItem>
                 <Flex alignItems="center">
-                  <Box mr={1}>Bags</Box>
+                  <Box mr={1}>Collections</Box>
                   <FaCaretDown />
                 </Flex>
               </NavItem>
             }
-            items={[
-              {
-                label: "Loot",
-                href: "/loot",
-                image: "/lootCollectionLogo.png"
-              },
-              {
-                label: "mLoot",
-                href: "/collections/mloot",
-                image: "/mLootCollectionLogo.png"
-              },
-              {
-                label: "Genesis",
-                href: "/collections/genesis",
-                image: "/genesisCollectionLogo.png"
-              }
-            ]}
+            items={collections}
           />
 
           {false && (

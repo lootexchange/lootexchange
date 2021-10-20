@@ -70,7 +70,7 @@ const Bag = () => {
   const router = useRouter();
   const { id } = router.query;
   const [metaData, setMetaData] = useState(null);
-  const { bag, owner, transfers } = useBag(id);
+  const { bag, owner } = useBag(id);
 
   useEffect(() => {
     const getMetadata = async () => {
@@ -153,7 +153,7 @@ const Bag = () => {
             </Box>
             <P fontSize={12} lineHeight={1.9} mt={-1}>
               You bag is listed on open sea. If you relist and someone buys your
-              bag from Loot exchange, you&apos;ll pay 1% in transaction fees!
+              bag from Loot exchange, you&apos;ll pay 0% in transaction fees!
             </P>
           </Flex>
         </PriceBox>
@@ -227,8 +227,7 @@ const Bag = () => {
                     </a>
                   </Link>
                 </Box>
-
-                {getCallToAction()}
+                <PriceBox item={bag} />
               </Pane>
               <Pane
                 flex={1}

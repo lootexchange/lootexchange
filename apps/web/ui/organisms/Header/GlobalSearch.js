@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import eth from "../../../ethers";
 import Input from "./SearchInput";
 import { shortenAddress } from "@utils";
+import { useRouter } from "next/router";
 
 const SearchContainer = styled.div`
   position: absolute;
@@ -34,7 +35,9 @@ const ItemWrapper = styled(Box)`
 `;
 
 const routeMap = {
-  bag: "bags",
+  loot: "collections/loot",
+  genesis: "collections/genesis",
+  mLoot: "collections/mloot",
   address: "adventurers",
   item: "items"
 };
@@ -67,12 +70,28 @@ const GlobalSearch = props => {
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 300);
   const [results, setResults] = useState([]);
+  const router = useRouter();
 
   const handleSearch = async () => {
     let bagNum = parseInt(debouncedQuery);
 
-    if (bagNum && bagNum > 0 && bagNum < 7801) {
-      return setResults([{ type: "bag", label: "Bag " + bagNum, id: bagNum }]);
+    if (bagNum && bagNum > 0 && bagNum < 8001) {
+      let genesis = {
+        type: "genesis",
+        label: "Genesis Adventurer #" + bagNum,
+        id: bagNum
+      };
+
+      return setResults([
+        { type: "loot", label: "Loot Bag #" + bagNum, id: bagNum },
+        ...(bagNum < 2540 && [genesis])
+      ]);
+    }
+
+    if (bagNum && bagNum >= 8001 && bagNum < 124411) {
+      return setResults([
+        { type: "mLoot", label: "mLoot Bag #" + bagNum, id: bagNum }
+      ]);
     }
 
     if (ethers.utils.isAddress(debouncedQuery)) {
@@ -123,6 +142,11 @@ const GlobalSearch = props => {
 
   const handleKeyDown = e => {
     if (e.keyCode === 13) {
+      let result = results[0];
+
+      router.push(`/${routeMap[result.type]}/${result.id}`);
+      setResults([]);
+      setQuery("");
     }
   };
 
