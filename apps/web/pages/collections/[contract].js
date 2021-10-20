@@ -20,6 +20,7 @@ import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
 import ItemSelector from "@ui/organisms/ItemSelector";
 import NFT from "@ui/organisms/GenericNFT";
+import LootNFT from "@ui/organisms/NFTs/Loot";
 
 import { useRouter } from "next/router";
 import loot from "../../public/community.png";
@@ -62,20 +63,25 @@ const GenericGrid = styled(Box)`
 `;
 
 const Collection = () => {
-  const contract = useContractName();
+  const { contract, readableName } = useContractName();
   const collection = useCollection(contract);
 
   const [lens, setLens] = useState("characters");
   const [isSticky, setIsSticky] = useState(false);
   const itemsRef = useRef(null);
   const [filter, setFilter] = useState("forSale");
+  const [sort, setSort] = useState("Price");
 
   const [item, setItem] = useState(null);
   const { floor, items, loading, fetchMore, moreLeft, total } = useItems({
     collection: contract,
+    sort,
     filter,
     item
   });
+
+  let ItemGrid = collection && collection.loot ? Grid : GenericGrid;
+  let Item = collection ? collection.Item || NFT : NFT;
 
   const [sentryRef] = useInfiniteScroll({
     loading,
@@ -100,7 +106,7 @@ const Collection = () => {
       const stickyElm = document.querySelector("#items");
       window.scrollTo(0, stickyElm.offsetTop - 83);
     }
-  }, [items]);
+  }, [filter, sort, item]);
 
   return (
     <Flex flex={1} flexDirection="column" bg="background">
@@ -116,7 +122,7 @@ const Collection = () => {
           height={200}
           overflow="hidden"
         >
-          {collection ? (
+          {collection && collection.cover ? (
             <img
               src={collection.cover}
               style={{
@@ -237,11 +243,13 @@ const Collection = () => {
               { key: "All Bags", value: "all" }
             ]}
           />
-          <ItemSelector
-            item={item}
-            onChange={newItem => setItem(newItem)}
-            display={["none", "block", "block", "block"]}
-          />
+          {collection && collection.hasItemSearch && (
+            <ItemSelector
+              item={item}
+              onChange={newItem => setItem(newItem)}
+              display={["none", "block", "block", "block"]}
+            />
+          )}
         </Flex>
         <Flex>
           <Select
@@ -270,15 +278,18 @@ const Collection = () => {
         </Flex>
       </Flex>
       <Box p={3} pt={0} minHeight="calc(100vh - 82px)" id="items">
-        <GenericGrid>
+        <ItemGrid>
           {items.map(item => (
-            <Link href={`/collecton/${contract}/${item.id}`} key={item.id}>
+            <Link
+              href={`/collections/${readableName}/${item.id}`}
+              key={item.id}
+            >
               <a>
-                <NFT item={item} />
+                <Item item={item} />
               </a>
             </Link>
           ))}
-        </GenericGrid>
+        </ItemGrid>
         {(loading || moreLeft) && (
           <Flex ref={sentryRef} py={3} justifyContent="center">
             <Loader size={50} />

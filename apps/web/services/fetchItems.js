@@ -5,10 +5,10 @@ import { gweiToEth } from "@utils";
 
 export const formatToken = token => {
   let id = Number(token.tokenId);
-  console.log(token);
 
   return {
     ...token,
+    id,
     isForSale: !!token.listingPrice,
     source: token.listingSource,
     price: token.listingSource ? gweiToEth(token.listingPrice) : 0
@@ -33,6 +33,7 @@ const fetchBags = async ({
       owner: owner ? owner.toLowerCase() : null,
       offset: offset * limit,
       limit: limit,
+      sort: sort == "Greatness" ? "_Greatness" : null,
       forSale: filter !== "all" ? true : null,
       source: filter == "LootExchange" || filter == "OpenSea" ? filter : null,
       ...(item && {

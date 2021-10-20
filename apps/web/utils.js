@@ -1,4 +1,13 @@
 import { ethers } from "ethers";
+import weapon from "./public/attributes/sword.svg";
+import hand from "./public/attributes/hand.svg";
+import waist from "./public/attributes/waist.svg";
+import ring from "./public/attributes/ring.svg";
+import head from "./public/attributes/head.svg";
+import foot from "./public/attributes/foot.svg";
+import chest from "./public/attributes/chest.svg";
+import neck from "./public/attributes/neck.svg";
+
 export const shortenAddress = address => {
   return address.slice(0, 3) + "..." + address.slice(-3);
 };
@@ -60,7 +69,7 @@ export const shortenNumber = (value, precision = 5) => {
 
 export const gweiToEth = gwei => Number(ethers.utils.formatEther(gwei));
 
-const positions = [
+export const positions = [
   "weapon",
   "chest",
   "head",
@@ -70,6 +79,17 @@ const positions = [
   "neck",
   "ring"
 ];
+
+export const positionToIcon = {
+  weapon: weapon,
+  chest: chest,
+  head: head,
+  waist: waist,
+  foot: foot,
+  hand: hand,
+  neck: neck,
+  ring: ring
+};
 
 export const sortItems = items => {
   return items

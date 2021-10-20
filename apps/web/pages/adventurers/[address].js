@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Flex, Box, P, Grid, Select } from "@ui";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import NFT from "@ui/organisms/LootNFT";
+import NFT from "@ui/organisms/NFTs/Loot";
 import Owner from "@ui/organisms/Owner";
 import Header from "@ui/organisms/Header";
 import SynthLootNFT from "@ui/organisms/SynthLootNFT";
@@ -60,11 +60,11 @@ const Adventurer = ({}) => {
           {bags.map(loot => (
             <Link
               key={loot.tokenId}
-              href={`/bags/${loot.tokenId}`}
+              href={`/collections/loot/${loot.tokenId}`}
               style={{ textDecoration: "none" }}
             >
               <a>
-                <NFT bag={loot} lens={lens} noName />
+                <NFT item={loot} />
               </a>
             </Link>
           ))}

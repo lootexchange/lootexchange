@@ -32,7 +32,7 @@ import { formatEther } from "@ethersproject/units";
 import Header from "@ui/organisms/Header";
 import CollectionStats from "@ui/organisms/CollectionStats";
 import ItemSelector from "@ui/organisms/ItemSelector";
-import NFT from "@ui/organisms/LootNFT";
+import NFT from "@ui/organisms/NFTs/Loot";
 import loot from "../public/community.png";
 import useInfiniteScroll from "react-infinite-scroll-hook";
 import useExchangeRate from "@hooks/useExchangeRate";
@@ -75,8 +75,8 @@ const StatGrid = styled.div`
   max-width: 920px;
   width: 100%;
 
-  @media (max-width: 420px) {
-    grid-template-columns: 1fr;
+  @media (max-width: 832px) {
+    grid-template-columns: 1fr 1fr;
   }
 
   & > div {
@@ -150,34 +150,34 @@ const Home = () => {
           //bg="#140F0F"
           bg="#1e2b4d"
           p={4}
-          py={5}
+          pt={[4, 5]}
           pb={"100px"}
           flexDirection="column"
           alignItems="center"
         >
-          <Box maxWidth={920} width={["100%", "100%", "920px"]}>
+          <Box maxWidth={920} width={["100%", "100%", "100%", "920px"]}>
             <Flex>
               <img src="/exchangeIcon.svg" width={50} />
               <H1
                 ml={4}
                 fontFamily="body"
-                fontSize={24}
+                fontSize={[16, 24]}
                 fontWeight={900}
                 maxWidth="640px"
               >
-                Buy, Sell, and explore
+                Buy, sell, and explore
                 <br /> all things Loot
               </H1>
             </Flex>
             <P
               mt={3}
-              fontSize={16}
+              fontSize={[14, 16]}
               fontWeight={200}
               color="textSecondary"
               maxWidth="640px"
             >
-              0% fee marketplace, 5% to community owned treasury, and window
-              into the wild world of loot
+              A Loot community marketplace with 0% marketplace fees and
+              community royalties. The adventure awaits.
             </P>
           </Box>
         </Flex>{" "}
@@ -207,7 +207,7 @@ const Home = () => {
                 </Box>
               </a>
             </Pane>
-            <Pane bg="black">
+            <Pane bg="black" display={["none", "none", "block", "block"]}>
               <a href="https://www.royaltydao.com/">
                 <Box p={3}>
                   <P mb={1} color="textSecondary">
@@ -221,7 +221,7 @@ const Home = () => {
               </a>
             </Pane>
             <Pane bg="black">
-              <Link href="/loot">
+              <Link href="/collections/loot">
                 <a>
                   <Box p={3}>
                     <P mb={1} color="textSecondary">
@@ -254,16 +254,18 @@ const Home = () => {
               <CollectionCard
                 image="/mLootCard.png"
                 name={"mLoot"}
-                description={`More loot. A Larger supply of loot that can be used to play with`}
+                description={`More Adventurers to start your journey.`}
               />
             </a>
           </Link>
-          <Link href="/loot">
+          <Link href="/collections/loot">
             <a>
               <CollectionCard
                 image="/lootbag.png"
                 name={"Loot"}
-                description={"The OG bag of loot. Has a power of it's own"}
+                description={
+                  "The original Adventurers. Only 8,000 exist. Are you worthy of such power?"
+                }
               />
             </a>
           </Link>
@@ -272,7 +274,9 @@ const Home = () => {
               <CollectionCard
                 image="/genesis.png"
                 name={"Genesis"}
-                description={"Rare adventures resurected to lead an order"}
+                description={
+                  "The 2,540 champions of the loot ancentral orders."
+                }
               />
             </a>
           </Link>
@@ -285,14 +289,14 @@ const Home = () => {
 
         <Grid>
           {bags.slice(0, 6).map(bag => (
-            <Link href={`/bags/${bag.id}`} key={bag.id}>
+            <Link href={`/collections/loot/${bag.id}`} key={bag.id}>
               <a>
-                <NFT bag={bag} lens={lens} />
+                <NFT item={bag} />
               </a>
             </Link>
           ))}
         </Grid>
-        <Link href="/loot">
+        <Link href="/collection/loot">
           <a>
             <P mt={3}>See All</P>
           </a>

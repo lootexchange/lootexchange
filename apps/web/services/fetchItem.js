@@ -1,11 +1,26 @@
-import lootAPI from "./lootAPI";
+import api from "@api";
 import fetchPrices from "./fetchPrices";
-import { formatToken, withPrice } from "./fetchBags";
+import { gweiToEth } from "@utils";
 
-const fetchBag = async id => {
+const formatToken = token => {
+  let id = Number(token.tokenId);
+
+  return {
+    ...token,
+    isForSale: !!token.listingPrice,
+    source: token.listingSource,
+    price: token.listingSource ? gweiToEth(token.listingPrice) : 0,
+    image:
+      token.image ||
+      `https://loot.exchange/images/${process.env.NEXT_PUBLIC_LOOT_CONTRACT}/${id}.svg`,
+    id
+  };
+};
+
+const fetchItem = async (collection, id) => {
   let [data, orders] = await Promise.all([
-    lootAPI(`/tokens/${id}`),
-    lootAPI(`/tokens/${id}/orders`)
+    api(collection, `tokens/${id}`),
+    api(collection, `tokens/${id}/orders`)
   ]);
 
   let formattedToken = formatToken(data.token);
@@ -21,5 +36,4 @@ const fetchBag = async id => {
 
   return formattedToken;
 };
-
-export default fetchBag;
+export default fetchItem;

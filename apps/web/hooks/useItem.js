@@ -9,7 +9,7 @@ const useItem = (collection, id) => {
   const currentUser = useCurrentUser();
 
   if (item && currentUser) {
-    owner.isOwnBag = item.owner === currentUser.address;
+    owner.isOwnItem = item.owner === currentUser.address;
   }
 
   useEffect(() => {
@@ -19,10 +19,10 @@ const useItem = (collection, id) => {
       setItem(item);
     };
 
-    if (id) {
+    if (id && collection) {
       getItem();
     }
-  }, [id]);
+  }, [collection, id]);
 
   return { item, owner };
 };

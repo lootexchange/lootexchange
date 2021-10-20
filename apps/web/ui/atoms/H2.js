@@ -4,7 +4,7 @@ const H2 = ({ ...props }) => (
   <Heading
     as="h2"
     color="white"
-    fontSize="32px"
+    fontSize={["28px", "32px"]}
     fontFamily="body"
     fontWeight={600}
     {...props}
