@@ -11,14 +11,14 @@ export default function handler(req, res) {
     axios.get(url).then((response) => {
         if(response.data) {
             let meta = {
-                "name": `${response.data.name}`,
-                "description": `${response.data.description}`, 
-                "image": `${response.data.image_url}`,
+                "name": response.data.name,
+                "description": response.data.description, 
+                "image": response.data.image_url,
                 "collection": {
-                    "id":`${response.data.collection.slug}`,
-                    "name": `${response.data.collection.name}`,
-                    "description": `${response.data.collection.description}`,
-                    "image": `${response.data.collection.image_url}`,
+                    "id":response.data.collection.slug,
+                    "name": response.data.collection.name,
+                    "description": response.data.collection.description,
+                    "image": response.data.collection.image_url,
                 },
                 "attributes":response.data.traits.map(trait => {
                     return {
