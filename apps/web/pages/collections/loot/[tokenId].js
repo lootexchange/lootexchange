@@ -17,12 +17,26 @@ import getGreatness from "../../../services/getGreatness";
 import { sortItems } from "@utils";
 
 const Bag = () => {
+  const [claimables, setClaimables] = useState(null);
+
   let contract = nameToContractMap.loot;
   const collection = useCollection(contract);
   const router = useRouter();
   const { tokenId: id } = router.query;
   const [metaData, setMetaData] = useState(null);
   const { item, owner } = useItem(contract, id);
+
+  useEffect(() => {
+    const fetchClaimables = async () => {
+      let result = await fetch(
+        `https://loot-watcher.herokuapp.com/bags/${id}/projects`
+      ).then(res => res.json());
+    };
+
+    if (false) {
+      fetchClaimables();
+    }
+  }, [id]);
 
   useEffect(() => {
     const getMetadata = async () => {
@@ -54,7 +68,7 @@ const Bag = () => {
       }
       rightColumn={
         <>
-          <PriceBox item={item} owner={owner} />
+          <PriceBox item={item} owner={owner} collection={collection} />
           <AttributeTable
             attributes={attributes}
             item={item}
