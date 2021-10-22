@@ -262,7 +262,10 @@ const getMetadata = (id) => {
     "greatness":0,
     "orders":0,
     "names":0,
-    "plusones":0
+    "plusones":0,
+    "divines":0,
+    "demons":0,
+    "dragons":0
   }
   let meta = {
     "name": `Bag #${id}`,
@@ -312,6 +315,15 @@ const getMetadata = (id) => {
       "value": output
     })
     bagItems.push(output)
+    if(output.toLowerCase().search("dragon")>=0) {
+      scores.dragons++
+    }
+    if(output.toLowerCase().search("demon")>=0) {
+      scores.demons++
+    }
+    if(output.toLowerCase().search("divine")>=0) {
+      scores.divines++
+    }
   }
   meta.attributes.push({
     "key": "Greatness",
@@ -337,6 +349,21 @@ const getMetadata = (id) => {
     "key": "Rarity",
     "category": "Properties",
     "value": rarityDescription(lootRarity(bagItems.map(i => i)))
+  })
+  meta.attributes.push({
+    "category": "Properties",
+    "key": `Dragons`,
+    "value": scores.dragons
+  })
+  meta.attributes.push({
+    "category": "Properties",
+    "key": `Demons`,
+    "value": scores.demons
+  })
+  meta.attributes.push({
+    "category": "Properties",
+    "key": `Divines`,
+    "value": scores.divines
   })
   return meta
 }
