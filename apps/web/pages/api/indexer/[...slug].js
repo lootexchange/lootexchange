@@ -10,6 +10,7 @@ export default function handler(req, res) {
     let url = `${base}/${contract}/${tokenId}`
     axios.get(url).then((response) => {
         if(response.data) {
+            console.log(response.data)
             let meta = {
                 "name": response.data.name,
                 "description": response.data.description, 
@@ -19,6 +20,8 @@ export default function handler(req, res) {
                     "name": response.data.collection.name,
                     "description": response.data.collection.description,
                     "image": response.data.collection.image_url,
+                    "royalty_amount": response.data.collection.dev_seller_fee_basis_points,
+                    "royalty_recipient": response.data.collection.payout_address
                 },
                 "attributes":response.data.traits.map(trait => {
                     return {
