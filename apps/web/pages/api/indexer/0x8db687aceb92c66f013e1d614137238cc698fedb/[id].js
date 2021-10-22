@@ -3,14 +3,14 @@ const { id } = require("@ethersproject/hash");
 import { request, gql } from 'graphql-request'
 
 let items = [
+  'weapon',
   'chest',
+  'head',
+  'waist',
   'foot',
   'hand',
-  'head',
   'neck',
-  'ring',
-  'waist',
-  'weapon'
+  'ring'
 ]
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.toLowerCase().slice(1);
