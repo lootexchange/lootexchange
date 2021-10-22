@@ -15,6 +15,7 @@ let items = [
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.toLowerCase().slice(1);
 }
+const random = input => BigNumber.from(id(input));
 
 const api = async (req, res) => {
   const { id } = req.query
@@ -31,6 +32,14 @@ const api = async (req, res) => {
       ring,
       waist,
       weapon,
+      chestGM { lootTokenId { id } },
+      footGM { lootTokenId { id } },
+      handGM { lootTokenId { id } },
+      headGM { lootTokenId { id } },
+      neckGM { lootTokenId { id } },
+      ringGM { lootTokenId { id } },
+      waistGM { lootTokenId { id } },
+      weaponGM { lootTokenId { id } },
       order,
       orderCount,
       tokenURI
@@ -54,7 +63,8 @@ const api = async (req, res) => {
       }
       let scores = {
         "names":0,
-        "plusones":0
+        "plusones":0,
+        "greatness":0
       }
       for(let item of items) {
         meta.attributes.push({
@@ -68,6 +78,15 @@ const api = async (req, res) => {
         if(data.adventurers[0][item].slice(0,1)=='"') {
           scores.names++
         }
+        let originId = data.adventurers[0][`${item}GM`].lootTokenId.id
+        meta.attributes.push({
+          "category": "Item Origin Bags",
+          "key": `${capitalize(item)} Origin Bag`,
+          "value": originId
+        })
+        console.log(data.adventurers[0][`${item}GM`].lootTokenId)
+        let rand = random(item.toUpperCase() + originId);
+        scores.greatness += rand.mod(21).toNumber();
       }
       meta.attributes.push({
         "category": "Properties",
@@ -89,7 +108,15 @@ const api = async (req, res) => {
         "key": `Names`,
         "value": scores.names
       })
+      meta.attributes.push({
+        "category": "Properties",
+        "key": `Greatness`,
+        "value": scores.greatness
+      })
       console.log(meta)
+      console.log(data.adventurers[0].weaponGM.lootTokenId)
+      // const rand = random(itemType.split(" ")[0].toUpperCase() + data.manas[0].lootTokenId.id);
+      // const greatness = rand.mod(21);
       res.status(200).json(meta);
     } else {
       res.status(200).json({error: "Not found"});
