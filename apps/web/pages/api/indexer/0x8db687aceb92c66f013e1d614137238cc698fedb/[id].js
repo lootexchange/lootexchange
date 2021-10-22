@@ -32,16 +32,18 @@ const api = async (req, res) => {
       waist,
       weapon,
       order,
-      orderCount
+      orderCount,
+      tokenURI
     }
   }`).then((data) => {
     console.log(data.adventurers)
     //res.status(200).json(data);
     if(data.adventurers && data.adventurers.length>0) {
+      let tokenURI = JSON.parse(Buffer.from(data.adventurers[0].tokenURI.split('data:application/json;base64,')[1], 'base64').toString())
       let meta = {
         "name": `Genesis Adventurer #${id}`,
         "description": "This item is a Genesis Adventurer used in Loot (for Adventurers)",
-        "image": `https://www.loot.exchange/api/image/${id}`,
+        "image": tokenURI.image,
         "collection": {
           "id":"genesisadventurer",
           "name":"Genesis Adventurers",
@@ -93,6 +95,7 @@ const api = async (req, res) => {
       res.status(200).json({error: "Not found"});
     }
   }).catch((e)=>{
+    console.log(e)
     res.status(200).json({error: "Unknown error"});
   })
 };

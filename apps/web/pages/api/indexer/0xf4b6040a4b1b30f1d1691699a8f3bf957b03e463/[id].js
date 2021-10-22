@@ -46,9 +46,13 @@ const api = async (req, res) => {
   const { id } = req.query
   // let meta = await getMetadata(id)
   // console.log(meta)
+  //https://api.thegraph.com/subgraphs/id/QmUFhiZjMsWK4tznnHFNn5utZpfQdCS9rWbqSFfgzTXFt2
+  //request('https://api.thegraph.com/subgraphs/id/QmUFhiZjMsWK4tznnHFNn5utZpfQdCS9rWbqSFfgzTXFt2', gql`{
   request('https://api.thegraph.com/subgraphs/name/treppers/genesisproject', gql`{
     manas(where: {id: ${id}}) {
       id,
+      OGMinterAddress,
+      tokenURI,
       lootTokenId {
         id
       },
@@ -59,13 +63,13 @@ const api = async (req, res) => {
       inventoryId
     }
   }`).then((data) => {
-    console.log(data.manas)
     //res.status(200).json(data);
     if(data.manas && data.manas.length>0) {
+      let tokenURI = JSON.parse(Buffer.from(data.manas[0].tokenURI.split('data:application/json;base64,')[1], 'base64').toString())
       let meta = {
         "name": `Genesis Mana #${id}`,
         "description": "This item is Genesis Mana used in Loot (for Adventurers)",
-        "image": `https://www.loot.exchange/api/image/${id}`,
+        "image": tokenURI.image,
         "collection": {
           "id":"genesis-mana",
           "name":"Genesis Mana",
