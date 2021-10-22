@@ -80,9 +80,9 @@ const api = async (req, res) => {
         }
         let originId = data.adventurers[0][`${item}GM`].lootTokenId.id
         meta.attributes.push({
-          "category": "Item Origin Bags",
+          "category": "Origin Bags",
           "key": `${capitalize(item)} Origin Bag`,
-          "value": originId
+          "value": parseInt(originId)
         })
         console.log(data.adventurers[0][`${item}GM`].lootTokenId)
         let rand = random(item.toUpperCase() + originId);

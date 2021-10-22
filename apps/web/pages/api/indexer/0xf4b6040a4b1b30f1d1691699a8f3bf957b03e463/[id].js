@@ -98,14 +98,14 @@ const api = async (req, res) => {
       meta.attributes.push({
         "category": "Properties",
         "key": `Loot Bag ID`,
-        "value": bagId
+        "value": parseInt(bagId)
       })
       const rand = random(itemType.split(" ")[0].toUpperCase() + data.manas[0].lootTokenId.id);
       const greatness = rand.mod(21);
       meta.attributes.push({
         "category": "Properties",
         "key": `Greatness`,
-        "value": greatness.toString()
+        "value": greatness.toNumber()
       })
       meta.attributes.push({
         "category": "Properties",
