@@ -11,7 +11,14 @@ const customCollectionData = {
       "https://lh3.googleusercontent.com/_oDa2m5z64Qf8RXbQFylP7MaDRwUXbJAchbDIFQqlVA8mdZ0feG4JHcMQwrYa7jTesY98RITIAfeAIGgHenvuMuU3zHmM15sRfTfQIE=h600",
     image: "/genesisCollectionLogo-medium.png",
     Item: GenesisItem,
-    loot: true
+    loot: true,
+    royalty: 0.025,
+
+    royaltyRecipient: {
+      name: "Royalty",
+      description: "Royalty goes to Genesis community treasury and founders",
+      link: "https://genesisproject.xyz/"
+    }
   },
   // mLoot
   "0x1dfe7ca09e99d10835bf73044a23b73fc20623df": {
@@ -19,7 +26,8 @@ const customCollectionData = {
 
     image: "/mLootCollectionLogo-medium.png",
     Item: MLootItem,
-    loot: true
+    loot: true,
+    royalty: 0
   },
 
   // Loot
@@ -29,7 +37,15 @@ const customCollectionData = {
     image: "/lootCollectionLogo-medium.png",
     Item: LootItem,
     loot: true,
-    hasItemSearch: true
+    hasItemSearch: true,
+    royalty: 0.05,
+
+    royaltyRecipient: {
+      name: "Community Tresury",
+      description:
+        "Community controlled treasury for funding projects in the lootosphere.",
+      link: "https://royaltydao.loot.exchange"
+    }
   }
 };
 
@@ -40,10 +56,10 @@ const useCollection = id => {
   useEffect(() => {
     const fetchCollection = async () => {
       let result = await api(id, "");
-      console.log(result);
 
       setCollection({
         ...result.collection,
+        royalty: 0,
         ...customCollectionData[id]
       });
     };

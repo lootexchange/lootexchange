@@ -36,7 +36,7 @@ const Price = ({ price }) => (
   </>
 );
 
-const PriceBox = ({ item, owner }) => {
+const PriceBox = ({ item, owner, collection = {} }) => {
   const { isForSale, source } = item;
   const isOwn = owner.isOwnItem;
 
@@ -44,11 +44,13 @@ const PriceBox = ({ item, owner }) => {
     return null;
   }
 
+  let collectionId = collection ? collection.id : 0;
+
   const getCallToAction = () => {
     if (!isOwn && isForSale) {
       return (
         <Link
-          href={`/collections/${item.collection}/${item.id}/purchase`}
+          href={`/collections/${collectionId}/${item.id}/purchase`}
           passHref
         >
           <BuyButton bg="#ffffff69" color="white">
@@ -62,7 +64,7 @@ const PriceBox = ({ item, owner }) => {
       return (
         <Flex>
           <Link
-            href={`/collections/${item.collection}/${item.id}/sell?initialPrice=${item.price}`}
+            href={`/collections/${collectionId}/${item.id}/sell?initialPrice=${item.price}`}
             passHref
           >
             <BuyButton bg="#ffffff69" color="white" mr={2}>
@@ -92,10 +94,7 @@ const PriceBox = ({ item, owner }) => {
     if (isOwn && !isForSale) {
       return (
         <>
-          <Link
-            href={`/collections/${item.collection}/${item.id}/sell`}
-            passHref
-          >
+          <Link href={`/collections/${collectionId}/${item.id}/sell`} passHref>
             <BuyButton bg="#ffffff69" color="white" mr={2}>
               Sell
             </BuyButton>
@@ -108,7 +107,7 @@ const PriceBox = ({ item, owner }) => {
       return (
         <>
           <Link
-            href={`/collections/${item.collection}/${item.id}/sell?initialPrice=${item.price}`}
+            href={`/collections/${collectionId}/${item.id}/sell?initialPrice=${item.price}`}
             passHref
           >
             <BuyButton bg="#ffffff69" color="white" mr={2}>
@@ -139,7 +138,7 @@ const PriceBox = ({ item, owner }) => {
   );
 };
 
-const BuyBox = ({ item, owner }) => (
+const BuyBox = ({ item, owner, collection }) => (
   <Pane
     mb={4}
     display="flex"
@@ -166,7 +165,7 @@ const BuyBox = ({ item, owner }) => (
       </Link>
     </Box>
 
-    <PriceBox item={item} owner={owner} />
+    <PriceBox item={item} owner={owner} collection={collection} />
   </Pane>
 );
 

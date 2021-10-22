@@ -112,7 +112,7 @@ const Bag = () => {
       }
       rightColumn={
         <>
-          <PriceBox item={item} owner={owner} />
+          <PriceBox item={item} owner={owner} collection={collection} />
           <AttributeTable
             attributes={items}
             item={item}
