@@ -270,7 +270,7 @@ export default function ListingModal({
           // TODO: Dynamically set price
           basePrice: parseEther(listPrice.toString()),
           // TODO: Dynamically (or not) set fee
-          fee: 100,
+          fee: 500,
           // The fee recipient on the maker's order should never be the zero address.
           // Even if the fee is 0, the fee recipient should be set to the maker's address.
           // TODO: Dynamically set the fee recipient as the Treasury Executor address

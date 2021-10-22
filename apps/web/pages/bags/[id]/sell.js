@@ -108,7 +108,7 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
           />
         </Flex>
       </Box>
-      <Price cost={shortenNumber(listPrice * 0.99)} sub="99%" />
+      <Price cost={shortenNumber(listPrice * 0.95)} sub="95%" />
     </Flex>
 
     <Flex>
@@ -132,7 +132,7 @@ const ReviewStep = ({ bag, listPrice = "0", setListPrice }) => (
           </Box>
         </Flex>
       </Box>
-      <Price cost={shortenNumber(listPrice * 0.01)} sub="1%" />
+      <Price cost={shortenNumber(listPrice * 0.05)} sub="5%" />
     </Flex>
   </>
 );
