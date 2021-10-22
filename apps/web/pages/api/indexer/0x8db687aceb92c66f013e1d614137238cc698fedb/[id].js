@@ -64,7 +64,10 @@ const api = async (req, res) => {
       let scores = {
         "names":0,
         "plusones":0,
-        "greatness":0
+        "greatness":0,
+        "divines":0,
+        "demons":0,
+        "dragons":0
       }
       for(let item of items) {
         meta.attributes.push({
@@ -87,6 +90,15 @@ const api = async (req, res) => {
         console.log(data.adventurers[0][`${item}GM`].lootTokenId)
         let rand = random(item.toUpperCase() + originId);
         scores.greatness += rand.mod(21).toNumber();
+        if(data.adventurers[0][item].toLowerCase().search("dragon")>=0) {
+          scores.dragons++
+        }
+        if(data.adventurers[0][item].toLowerCase().search("demon")>=0) {
+          scores.demons++
+        }
+        if(data.adventurers[0][item].toLowerCase().search("divine")>=0) {
+          scores.divines++
+        }
       }
       meta.attributes.push({
         "category": "Properties",
@@ -112,6 +124,21 @@ const api = async (req, res) => {
         "category": "Properties",
         "key": `Greatness`,
         "value": scores.greatness
+      })
+      meta.attributes.push({
+        "category": "Properties",
+        "key": `Dragons`,
+        "value": scores.dragons
+      })
+      meta.attributes.push({
+        "category": "Properties",
+        "key": `Demons`,
+        "value": scores.demons
+      })
+      meta.attributes.push({
+        "category": "Properties",
+        "key": `Divines`,
+        "value": scores.divines
       })
       console.log(meta)
       console.log(data.adventurers[0].weaponGM.lootTokenId)
