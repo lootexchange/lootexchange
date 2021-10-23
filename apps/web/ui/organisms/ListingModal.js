@@ -17,6 +17,8 @@ export default function ListingModal({
   collection,
   tokenId,
   listPrice,
+  feeRecipient,
+  fee,
   onComplete
 }) {
   let [isOpen, setIsOpen] = useState(false);
@@ -271,13 +273,11 @@ export default function ListingModal({
           basePrice: parseEther(listPrice.toString()),
           // TODO: Dynamically (or not) set fee
           fee: 500,
+          fee,
           // The fee recipient on the maker's order should never be the zero address.
           // Even if the fee is 0, the fee recipient should be set to the maker's address.
           // TODO: Dynamically set the fee recipient as the Treasury Executor address
-          feeRecipient:
-            process.env.NEXT_PUBLIC_CHAIN_ID == 4
-              ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
-              : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18",
+          feeRecipient: feeRecipient || signerAddress,
           // Set listing time 2 minutes in the past to make sure on-chain validation passes
           listingTime: Math.floor(Date.now() / 1000) - 120,
           // TODO: Dynamically set expiration time

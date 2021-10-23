@@ -376,6 +376,8 @@ const Purchase = () => {
                     signer={eth.provider.getSigner()}
                     collection={collection.id}
                     tokenId={id}
+                    feeRecipient={collection.royaltyRecipient.address}
+                    fee={collection.royalty ? collection.royalty * 10_000 : 0}
                     listPrice={listPrice}
                   />
                 )}

@@ -27,7 +27,8 @@ const customCollectionData = {
     image: "/mLootCollectionLogo-medium.png",
     Item: MLootItem,
     loot: true,
-    royalty: 0
+    royalty: 0,
+    royaltyRecipient: {}
   },
 
   // Loot
@@ -44,7 +45,11 @@ const customCollectionData = {
       name: "Community Tresury",
       description:
         "Community controlled treasury for funding projects in the lootosphere.",
-      link: "https://royaltydao.loot.exchange"
+      link: "https://royaltydao.loot.exchange",
+      address:
+        process.env.NEXT_PUBLIC_CHAIN_ID == 4
+          ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
+          : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18"
     }
   }
 };
