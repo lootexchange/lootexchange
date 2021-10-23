@@ -9,7 +9,7 @@ import useContractName, { nameToContractMap } from "@hooks/useContractName";
 import PriceBox from "@ui/organisms/Item/PriceBox";
 import AttributeTable from "@ui/organisms/Item/AttributeTable";
 import Item from "@ui/organisms/Item";
-import { orders } from "@ui/organisms/NFTs/genesis";
+import { orders } from "@ui/organisms/NFTs/Genesis";
 
 import { Pane, Flex, P, Box } from "@ui";
 import NFT from "@ui/organisms/NFT";
