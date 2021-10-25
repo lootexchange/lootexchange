@@ -136,6 +136,7 @@ const api = async (req, res) => {
       res.status(200).json({error: "Not found"});
     }
   }).catch((e)=>{
+    console.log(e);
     res.status(200).json({error: "Unknown error"});
   })
 };
