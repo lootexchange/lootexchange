@@ -96,19 +96,21 @@ const api = async (req, res) => {
         "key": `Order`,
         "value": suffixes[data.manas[0].suffixId.id][0]
       })
-      let bagId = data.manas[0].lootTokenId.id
-      meta.attributes.push({
-        "category": "Properties",
-        "key": `Loot Bag ID`,
-        "value": parseInt(bagId)
-      })
-      const rand = random(itemType.split(" ")[0].toUpperCase() + data.manas[0].lootTokenId.id);
-      const greatness = rand.mod(21);
-      meta.attributes.push({
-        "category": "Properties",
-        "key": `Greatness`,
-        "value": greatness.toNumber()
-      })
+      if (data.manas[0].lootTokenId) {
+        let bagId = data.manas[0].lootTokenId.id
+        meta.attributes.push({
+          "category": "Properties",
+          "key": `Loot Bag ID`,
+          "value": parseInt(bagId)
+        })
+        const rand = random(itemType.split(" ")[0].toUpperCase() + data.manas[0].lootTokenId.id);
+        const greatness = rand.mod(21);
+        meta.attributes.push({
+          "category": "Properties",
+          "key": `Greatness`,
+          "value": greatness.toNumber()
+        })
+      }
       meta.attributes.push({
         "category": "Properties",
         "key": `Rarity`,
