@@ -83,15 +83,17 @@ const api = async (req, res) => {
         if(data.adventurers[0][item].slice(0,1)=='"') {
           scores.names++
         }
-        let originId = data.adventurers[0][`${item}GM`].lootTokenId.id
-        meta.attributes.push({
-          "category": "Origin Bags",
-          "key": `${capitalize(item)} Origin Bag`,
-          "value": parseInt(originId)
-        })
-        console.log(data.adventurers[0][`${item}GM`].lootTokenId)
-        let rand = random(item.toUpperCase() + originId);
-        scores.greatness += rand.mod(21).toNumber();
+        if (data.adventurers[0][`${item}GM`].lootTokenId) {
+          let originId = data.adventurers[0][`${item}GM`].lootTokenId.id
+          meta.attributes.push({
+            "category": "Origin Bags",
+            "key": `${capitalize(item)} Origin Bag`,
+            "value": parseInt(originId)
+          })
+          console.log(data.adventurers[0][`${item}GM`].lootTokenId)
+          let rand = random(item.toUpperCase() + originId);
+          scores.greatness += rand.mod(21).toNumber();
+        }
         if(data.adventurers[0][item].toLowerCase().search("dragon")>=0) {
           scores.dragons++
         }
@@ -143,7 +145,6 @@ const api = async (req, res) => {
         "value": scores.divines
       })
       console.log(meta)
-      console.log(data.adventurers[0].weaponGM.lootTokenId)
       // const rand = random(itemType.split(" ")[0].toUpperCase() + data.manas[0].lootTokenId.id);
       // const greatness = rand.mod(21);
       res.status(200).json(meta);
