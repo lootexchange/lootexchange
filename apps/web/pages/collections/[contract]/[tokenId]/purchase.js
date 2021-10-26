@@ -104,69 +104,105 @@ export const ItemCard = ({ bag, price, exchangeRate, collection }) => (
   </Flex>
 );
 
-const ReviewStep = ({ bag, exchangeRate }) => (
-  <>
-    <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
-    <Hr my={4} />
+const round = num => Math.round(num * 10000) / 10000;
 
-    <H2 mb={4} fontSize={16}>
-      Distribution
-    </H2>
-    <Flex mb={4}>
-      <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">Seller</H3>
-        <Flex mt={3} justifyContent="space-between">
-          <Owner
-            name={bag.shortName}
-            address={bag.owner}
-            avatar={bag.ownerAvatar}
-          />
-        </Flex>
-      </Box>
-      {bag.source === "LootExchange" ? (
-        <Price cost={shortenNumber(bag.price * 0.99)} sub="99%" />
-      ) : (
-        <Price cost={shortenNumber(bag.price * 0.975)} sub="97.5%" />
-      )}
-    </Flex>
+const getPayout = baseOrder => {
+  if (!baseOrder) {
+    return {
+      seller: 0,
+      royalty: 0,
+      marketPlace: 0
+    };
+  }
+  let order = baseOrder.custom_data;
 
-    <Flex>
-      <Box flex={1}>
-        <H3 color="rgba(255,255,255,0.7)">
-          {bag.source === "LootExchange" ? "Community Treasury" : "Marketplace"}
-        </H3>
-        <Flex mt={3} justifyContent="space-between">
-          {bag.source === "LootExchange" ? (
-            <>
-              <Box maxWidth={350} mr={3} flex={1}>
-                <P fontSize={14}>
-                  Community controlled treasury for funding projects in the
-                  lootosphere.
+  let fee = order.makerRelayerFee / 10000;
+  let isOpenSea =
+    order.feeRecipient == "0x5b3256965e7c3cf26e11fcaf296dfc8807c01073";
+  let openSeaFee = 0.025;
+
+  return {
+    seller: round(1 - fee),
+    royalty: isOpenSea ? fee - openSeaFee : fee,
+    marketPlace: isOpenSea ? openSeaFee : 0
+  };
+};
+
+const ReviewStep = ({ bag, exchangeRate, collection }) => {
+  let { seller, royalty, marketPlace } = getPayout(bag.sellOrder);
+  return (
+    <>
+      <ItemCard bag={bag} price={bag.price} exchangeRate={exchangeRate} />
+      <Hr my={4} />
+
+      <H2 mb={4} fontSize={16}>
+        Distribution
+      </H2>
+      <Flex mb={4}>
+        <Box flex={1}>
+          <H3 color="rgba(255,255,255,0.7)">Seller</H3>
+          <Flex mt={3} justifyContent="space-between">
+            <Owner
+              name={bag.shortName}
+              address={bag.owner}
+              avatar={bag.ownerAvatar}
+            />
+          </Flex>
+        </Box>
+        <Price
+          cost={shortenNumber(bag.price * seller)}
+          sub={seller * 100 + "%"}
+        />
+      </Flex>
+
+      <Flex mb={4}>
+        <Box flex={1}>
+          <H3 color="rgba(255,255,255,0.7)">
+            {collection.royaltyRecipient.name}
+          </H3>
+          <Flex mt={3} justifyContent="space-between">
+            <Box maxWidth={350} mr={3} flex={1}>
+              <P fontSize={14}>{collection.royaltyRecipient.description}</P>
+              <a
+                href={collection.royaltyRecipient.link}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <P mt={1} fontSize={16} color="rgba(100,100,150)">
+                  read more
                 </P>
-                <a
-                  href="https://treasury.loot.exchange/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <P mt={1} fontSize={16} color="rgba(100,100,150)">
-                    read more
-                  </P>
-                </a>
-              </Box>
-            </>
-          ) : (
-            <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
-          )}
-        </Flex>
-      </Box>
-      {bag.source === "LootExchange" ? (
-        <Price cost={shortenNumber(bag.price * 0.01)} sub="1%" />
-      ) : (
-        <Price cost={shortenNumber(bag.price * 0.025)} sub="2.5%" />
-      )}
-    </Flex>
-  </>
-);
+              </a>
+            </Box>
+          </Flex>
+        </Box>
+        <Price
+          cost={shortenNumber(bag.price * royalty)}
+          sub={royalty * 100 + "%"}
+        />
+      </Flex>
+
+      <Flex>
+        <Box flex={1}>
+          <H3 color="rgba(255,255,255,0.7)">Marketplace</H3>
+          <Flex mt={3} justifyContent="space-between">
+            {bag.source === "LootExchange" ? (
+              <Logo
+                width={Math.floor(257 / 2.5)}
+                height={Math.floor(98 / 2.5)}
+              />
+            ) : (
+              <Image src={openSea} width={640 / 6.5} height={146 / 6.5} />
+            )}
+          </Flex>
+        </Box>
+        <Price
+          cost={shortenNumber(bag.price * marketPlace)}
+          sub={marketPlace * 100 + "%"}
+        />
+      </Flex>
+    </>
+  );
+};
 
 const WaitingForConfirmation = ({ bag, exchangeRate }) => {
   let web3Provider = eth.provider.provider;
@@ -231,7 +267,6 @@ const STEPS = {
 
 const Purchase = () => {
   const { contract, collection: c, readableName } = useContractName();
-  console.log(contract, c);
   const collection = useCollection(c);
   const router = useRouter();
   const currentUser = useCurrentUser();
