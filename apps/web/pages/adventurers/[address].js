@@ -6,10 +6,23 @@ import NFT from "@ui/organisms/NFTs/Loot";
 import Owner from "@ui/organisms/Owner";
 import Header from "@ui/organisms/Header";
 import SynthLootNFT from "@ui/organisms/SynthLootNFT";
+
+import GenesisItem from "@ui/organisms/NFTs/Genesis";
+import MLootItem from "@ui/organisms/NFTs/mLoot";
+import LootItem from "@ui/organisms/NFTs/Loot";
+import GenericNFT from "@ui/organisms/GenericNFT";
+import { GenericGrid } from "../collections/[contract]";
+
 import { FaEye } from "react-icons/fa";
 
 import useWallet from "@hooks/useWallet";
-import useBags from "@hooks/useBags";
+import useAddressTokens from "@hooks/useAddressTokens";
+
+const itemMap = {
+  genesisadventurer: GenesisItem,
+  "more-loot": MLootItem,
+  loot: LootItem
+};
 
 const Adventurer = ({}) => {
   const router = useRouter();
@@ -17,27 +30,17 @@ const Adventurer = ({}) => {
 
   const [lens, setLens] = useState("characters");
 
-  const { bags } = useBags({
-    owner: address,
-    skip: !address,
-    limit: 400,
-    filter: "all"
-  });
+  const tokens = useAddressTokens(address);
 
   const wallet = useWallet(address);
-  const bagsHeld = bags.length;
+  const bagsHeld = tokens.length + 1;
 
   return (
     <Flex flex={1} flexDirection="column" bg="black">
       <Header />
       <Flex justifyContent="space-between" p={3} pb={2}>
-        <Box>
+        <Box mb={3}>
           <Owner address={address || ""} name={wallet.shortName || ""} large />
-          <Box mt={3}>
-            <P>
-              {bagsHeld} {bagsHeld > 1 || bagsHeld == 0 ? "Bags" : "Bag"}
-            </P>
-          </Box>
         </Box>
         <Box>
           <Select
@@ -57,20 +60,46 @@ const Adventurer = ({}) => {
       </Flex>
       <Box p={3} pt={0}>
         <Grid>
-          {bags.map(loot => (
-            <Link
-              key={loot.tokenId}
-              href={`/collections/loot/${loot.tokenId}`}
-              style={{ textDecoration: "none" }}
-            >
-              <a>
-                <NFT item={loot} />
-              </a>
-            </Link>
-          ))}
-
           {address && <SynthLootNFT address={address} />}
+          {tokens
+            .filter(token => !!itemMap[token.collection])
+            .map(loot => {
+              let Item = itemMap[loot.collection] || GenericNFT;
+
+              return (
+                <Link
+                  key={loot.collection + loot.tokenId}
+                  href={`/collections/loot/${loot.tokenId}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <a>
+                    <Item item={loot} />
+                  </a>
+                </Link>
+              );
+            })}
         </Grid>
+
+        <GenericGrid style={{ marginTop: 24 }}>
+          {false &&
+            tokens
+              .filter(token => !itemMap[token.collection])
+              .map(loot => {
+                let Item = itemMap[loot.collection] || GenericNFT;
+
+                return (
+                  <Link
+                    key={loot.tokenId}
+                    href={`/collections/loot/${loot.tokenId}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <a>
+                      <Item item={loot} />
+                    </a>
+                  </Link>
+                );
+              })}
+        </GenericGrid>
       </Box>
     </Flex>
   );

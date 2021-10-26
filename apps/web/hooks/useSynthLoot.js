@@ -12,7 +12,7 @@ const useSynthLoot = address => {
 
       setSynthLoot({
         attributes: Object.keys(data.items).map(key => ({
-          key: key,
+          key: key[0].toUpperCase() + key.slice(1),
           value: data.items[key]
         })),
         name: "Bag " + shortenAddress(address),

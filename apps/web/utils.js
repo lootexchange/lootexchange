@@ -70,25 +70,25 @@ export const shortenNumber = (value, precision = 5) => {
 export const gweiToEth = gwei => Number(ethers.utils.formatEther(gwei));
 
 export const positions = [
-  "weapon",
-  "chest",
-  "head",
-  "waist",
-  "foot",
-  "hand",
-  "neck",
-  "ring"
+  "Weapon",
+  "Chest",
+  "Head",
+  "Waist",
+  "Foot",
+  "Hand",
+  "Neck",
+  "Ring"
 ];
 
 export const positionToIcon = {
-  weapon: weapon,
-  chest: chest,
-  head: head,
-  waist: waist,
-  foot: foot,
-  hand: hand,
-  neck: neck,
-  ring: ring
+  Weapon: weapon,
+  Chest: chest,
+  Head: head,
+  Waist: waist,
+  Foot: foot,
+  Hand: hand,
+  Neck: neck,
+  Ring: ring
 };
 
 export const sortItems = items => {

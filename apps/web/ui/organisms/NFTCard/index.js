@@ -53,12 +53,13 @@ export const CardMedia = ({ children, ...props }) => (
 export const CardContent = ({ ...props }) => (
   <Box
     p={3}
-    pt={[5, 3, 3, 3]}
+    pt={[4, 3, 3, 3]}
     pb={4}
     flex={1}
     style={{
       borderLeft: "1px solid rgba(255, 255, 255, 0.2)"
     }}
+    borderLeftWidth={[0, "1px"]}
     {...props}
   />
 );

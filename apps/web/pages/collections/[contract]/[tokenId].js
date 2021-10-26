@@ -12,8 +12,8 @@ import Item from "@ui/organisms/Item";
 import { Pane } from "@ui";
 
 const ItemScreen = () => {
-  const { contract, readableName } = useContractName();
-  const collection = useCollection(contract);
+  const { collection: c, contract, readableName } = useContractName();
+  const collection = useCollection(c);
   const router = useRouter();
   const { tokenId: id } = router.query;
   const { item, owner } = useItem(contract, id);

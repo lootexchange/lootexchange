@@ -24,7 +24,7 @@ const ItemSelector = ({ item, onChange }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [debouncedQuery] = useDebounce(query, 300);
 
-  const attributes = useAttributes();
+  const attributes = useAttributes("loot");
   const items = attributes && sortItems(attributes);
 
   useEffect(() => {

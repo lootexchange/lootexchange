@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "@api";
 import { parse } from "svg-parser";
 import { Box, Flex, P } from "@ui";
 import {
@@ -29,31 +30,17 @@ const Loot = ({ item: bag }) => {
   }, [bag]);
 
   useEffect(() => {
-    const parseImage = async () => {
-      try {
-        let result = await fetch(bag.image).then(res => res.text());
-        let parsedSvg = parse(result);
+    const fetchAttributes = async () => {
+      let result = await api(
+        bag.contract,
+        `tokens/${bag.id}/attributes`,
+        "contracts"
+      );
 
-        let nodes = parsedSvg.children[0].children
-          .filter(tag => {
-            return tag.tagName == "text";
-          })
-          .map(node => node.children[0].value);
-
-        let newItems = nodes.map((item, i) => {
-          return {
-            key: positions[i],
-            value: item
-          };
-        });
-
-        setItems(newItems);
-      } catch (err) {
-        console.log(err);
-      }
+      setItems(sortItems(result.attributes));
     };
 
-    parseImage();
+    fetchAttributes();
   }, [bag]);
 
   return (
@@ -88,12 +75,13 @@ const Loot = ({ item: bag }) => {
             <LootAttribute
               attribute={attribute}
               key={attribute.key}
-              greatness={metaData ? metaData.greatness[attribute.key] : 0}
+              greatness={
+                metaData ? metaData.greatness[attribute.key.toLowerCase()] : 0
+              }
               showRarity={false}
             />
           ))}
         </CardContent>
-        {bag.isForSale && <Source source={bag.source} />}
       </CardBody>
       <CardFooter
         name={bag.name}

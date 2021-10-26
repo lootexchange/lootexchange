@@ -19,16 +19,16 @@ import getGreatness from "../../../services/getGreatness";
 import { sortItems, positions } from "@utils";
 
 const Bag = () => {
-  let contract = nameToContractMap.genesis;
+  let genesis = nameToContractMap.genesisadventurer;
 
   const [items, setItems] = useState([]);
   const [order, setOrder] = useState(null);
 
-  const collection = useCollection(contract);
+  const collection = useCollection(genesis.collection);
   const router = useRouter();
   const { tokenId: id } = router.query;
   const [metaData, setMetaData] = useState(null);
-  const { item, owner } = useItem(contract, id);
+  const { item, owner } = useItem(genesis.contract, id);
 
   useEffect(() => {
     const getMetadata = async () => {

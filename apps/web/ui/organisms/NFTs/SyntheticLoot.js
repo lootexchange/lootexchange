@@ -47,7 +47,9 @@ const SyntheticLoot = ({ bag, address }) => {
             <LootAttribute
               attribute={attribute}
               key={attribute.key}
-              greatness={metaData ? metaData.greatness[attribute.key] : 0}
+              greatness={
+                metaData ? metaData.greatness[attribute.key.toLowerCase()] : 0
+              }
               showRarity={false}
             />
           ))}
