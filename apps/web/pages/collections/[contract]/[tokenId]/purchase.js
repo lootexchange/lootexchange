@@ -230,8 +230,9 @@ const STEPS = {
 };
 
 const Purchase = () => {
-  const { contract, readableName } = useContractName();
-  const collection = useCollection(contract);
+  const { contract, collection: c, readableName } = useContractName();
+  console.log(contract, c);
+  const collection = useCollection(c);
   const router = useRouter();
   const currentUser = useCurrentUser();
   const [step, setStep] = useState(STEPS.review);
@@ -260,9 +261,9 @@ const Purchase = () => {
       setStep(STEPS.waitingForConfirmation);
       const buyOrder = Builders.Erc721.SingleItem.matchingBuy(
         await eth.signer.getAddress(),
-        bag.sellOrder
+        bag.sellOrder.custom_data
       );
-      Helpers.Wyvern.match(eth.signer, buyOrder, bag.sellOrder)
+      Helpers.Wyvern.match(eth.signer, buyOrder, bag.sellOrder.custom_data)
         .then(async tx => {
           setStep(STEPS.waitingforTransaction);
           let receipt = await tx.wait();
@@ -296,7 +297,14 @@ const Purchase = () => {
         display={["none", "none", "block", "block"]}
       >
         <Box p={3} position="absolute" top={0}>
-          <Logo width={Math.floor(257 / 2.3)} height={Math.floor(98 / 2.3)} />
+          <Link href="/">
+            <a>
+              <Logo
+                width={Math.floor(257 / 2.3)}
+                height={Math.floor(98 / 2.3)}
+              />
+            </a>
+          </Link>
         </Box>
         {bag && (
           <Flex
@@ -344,7 +352,7 @@ const Purchase = () => {
       >
         <Flex justifyContent="space-between" mb={4}>
           <H2 fontSize={16}>Checkout</H2>
-          <Link href={`/bags/${bag && bag.id}`}>
+          <Link href={`/collections/${bag.collection}/${bag && bag.id}`}>
             <a>
               <FaTimes />
             </a>

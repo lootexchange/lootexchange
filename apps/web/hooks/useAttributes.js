@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { attributes as attributesAtom } from "../atoms";
-import lootAPI from "../services/lootAPI";
+import api from "@api";
 import { sort } from "fast-sort";
 
 const useAttributes = id => {
@@ -9,7 +9,8 @@ const useAttributes = id => {
 
   useEffect(() => {
     const fetchAttributes = async () => {
-      let data = await lootAPI("/attributes");
+      let data = await api(id, "attributes");
+      console.log(data);
 
       setAttributes(
         data.attributes.map(attribute => {

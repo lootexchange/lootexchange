@@ -105,7 +105,7 @@ const LootAttributeTable = ({
               )}
               {showGreatness && (
                 <P width={column} textAlign="right">
-                  {metaData ? metaData.greatness[item.key] : 0}
+                  {metaData ? metaData.greatness[item.key.toLowerCase()] : 0}
                 </P>
               )}
             </Flex>

@@ -18,9 +18,9 @@ import getGreatness from "../../../services/getGreatness";
 import { sortItems, positions } from "@utils";
 
 const Bag = () => {
-  let contract = nameToContractMap.mloot;
+  let { collection: c, contract } = nameToContractMap["more-loot"];
   const [items, setItems] = useState([]);
-  const collection = useCollection(contract);
+  const collection = useCollection(c);
   const router = useRouter();
   const { tokenId: id } = router.query;
   const [metaData, setMetaData] = useState(null);

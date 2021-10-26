@@ -38,8 +38,11 @@ import useInfiniteScroll from "react-infinite-scroll-hook";
 import useExchangeRate from "@hooks/useExchangeRate";
 import { formatMoney } from "@utils";
 import { useEtherBalance } from "@usedapp/core";
+import useCollection from "@hooks/useCollection";
 
-import useBagData from "../hooks/useBags";
+import { nameToContractMap } from "@hooks/useContractName";
+
+import useItems from "../hooks/useItems";
 
 const IconButton = ({ icon, ...props }) => (
   <Box
@@ -140,7 +143,10 @@ const Home = () => {
   );
 
   const [item, setItem] = useState(null);
-  const { floor, bags, loading, fetchMore, moreLeft, total } = useBagData({});
+  const { items, loading, fetchMore, moreLeft } = useItems({
+    collection: nameToContractMap.loot.collection
+  });
+  const collection = useCollection(nameToContractMap.loot.collection);
 
   return (
     <Flex flex={1} flexDirection="column" bg="background">
@@ -227,9 +233,11 @@ const Home = () => {
                     <P mb={1} color="textSecondary">
                       Loot Floor
                     </P>
-                    <H2>Ξ{floor}</H2>
+                    <H2>Ξ{collection ? collection.floor : 0}</H2>
                     <P mt={-1} color="textSecondary">
-                      {formatMoney(floor * exchangeRate)}
+                      {collection
+                        ? formatMoney(collection.floor * exchangeRate)
+                        : 0}
                     </P>
                   </Box>
                 </a>
@@ -249,7 +257,7 @@ const Home = () => {
           Loot Collections
         </H2>
         <CollectionGrid>
-          <Link href="/collections/mloot">
+          <Link href="/collections/more-loot">
             <a>
               <CollectionCard
                 image="/mLootCard.png"
@@ -269,7 +277,7 @@ const Home = () => {
               />
             </a>
           </Link>
-          <Link href="/collections/genesis">
+          <Link href="/collections/genesisadventurer">
             <a>
               <CollectionCard
                 image="/genesis.png"
@@ -288,7 +296,7 @@ const Home = () => {
         </H2>
 
         <Grid>
-          {bags.slice(0, 6).map(bag => (
+          {items.slice(0, 6).map(bag => (
             <Link href={`/collections/loot/${bag.id}`} key={bag.id}>
               <a>
                 <NFT item={bag} />
@@ -296,7 +304,7 @@ const Home = () => {
             </Link>
           ))}
         </Grid>
-        <Link href="/collection/loot">
+        <Link href="/collections/loot">
           <a>
             <P mt={3}>See All</P>
           </a>

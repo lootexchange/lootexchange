@@ -3,10 +3,11 @@ import api from "@api";
 import GenesisItem from "@ui/organisms/NFTs/Genesis";
 import MLootItem from "@ui/organisms/NFTs/mLoot";
 import LootItem from "@ui/organisms/NFTs/Loot";
+import { gweiToEth } from "@utils";
 
 const customCollectionData = {
   // genesis
-  "0x8db687aceb92c66f013e1d614137238cc698fedb": {
+  genesisadventurer: {
     cover:
       "https://lh3.googleusercontent.com/_oDa2m5z64Qf8RXbQFylP7MaDRwUXbJAchbDIFQqlVA8mdZ0feG4JHcMQwrYa7jTesY98RITIAfeAIGgHenvuMuU3zHmM15sRfTfQIE=h600",
     image: "/genesisCollectionLogo-medium.png",
@@ -21,18 +22,19 @@ const customCollectionData = {
     }
   },
   // mLoot
-  "0x1dfe7ca09e99d10835bf73044a23b73fc20623df": {
+  "more-loot": {
     cover: "/community.png",
 
     image: "/mLootCollectionLogo-medium.png",
     Item: MLootItem,
     loot: true,
+    hasItemSearch: true,
     royalty: 0,
     royaltyRecipient: {}
   },
 
   // Loot
-  [process.env.NEXT_PUBLIC_LOOT_CONTRACT]: {
+  loot: {
     cover: "/community.png",
 
     image: "/lootCollectionLogo-medium.png",
@@ -64,6 +66,8 @@ const useCollection = id => {
 
       setCollection({
         ...result.collection,
+        floor: gweiToEth(result.collection.floor_price),
+        count: result.collection.token_count,
         royalty: 0,
         ...customCollectionData[id]
       });

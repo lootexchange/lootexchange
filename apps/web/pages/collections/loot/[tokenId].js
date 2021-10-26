@@ -19,8 +19,8 @@ import { sortItems } from "@utils";
 const Bag = () => {
   const [claimables, setClaimables] = useState(null);
 
-  let contract = nameToContractMap.loot;
-  const collection = useCollection(contract);
+  let { collection: c, contract } = nameToContractMap.loot;
+  const collection = useCollection(c);
   const router = useRouter();
   const { tokenId: id } = router.query;
   const [metaData, setMetaData] = useState(null);
@@ -59,7 +59,7 @@ const Bag = () => {
           bag={{
             ...item,
             characterImage: `https://api.lootcharacter.com/imgs/bags/${(
-              "0000" + (item ? item.tokenId : 0)
+              "0000" + (item ? item.id : 0)
             ).slice(-4)}.png`
           }}
           lens="characters"

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "@api";
 import { parse } from "svg-parser";
 import { Box, Flex, P } from "@ui";
 import {
@@ -37,38 +38,33 @@ export const orders = [
 const Genesis = ({ item: bag }) => {
   const [items, setItems] = useState([]);
   const [order, setOrder] = useState(null);
+  const [greatness, setGreatness] = useState(null);
 
   useEffect(() => {
-    const parseImage = async () => {
-      try {
-        let result = await fetch(bag.image).then(res => res.text());
-        let parsedSvg = parse(result);
+    const fetchAttributes = async () => {
+      let result = await api(
+        bag.contract,
+        `tokens/${bag.id}/attributes`,
+        "contracts"
+      );
 
-        let nodes = parsedSvg.children[0].children.filter(tag => {
-          return tag.tagName == "text";
-        });
+      let order = result.attributes.find(attribute => {
+        return attribute.category === "Properties" && attribute.key === "Order";
+      }).value;
 
-        let itemNodes = nodes.slice(0, -1).map(node => node.children[0].value);
+      let greatness = result.attributes.find(attribute => {
+        return (
+          attribute.category === "Properties" && attribute.key === "Greatness"
+        );
+      }).value;
 
-        let name = nodes[nodes.length - 1].children[0].value;
-        let match = name.match(/(?<=Genesis Adventurer ).*(?= #)/g)[0];
+      setGreatness(greatness);
 
-        setOrder(match);
-
-        let newItems = itemNodes.map((item, i) => {
-          return {
-            key: positions[i],
-            value: item
-          };
-        });
-
-        setItems(newItems);
-      } catch (err) {
-        console.log(err);
-      }
+      setOrder("of " + order);
+      setItems(sortItems(result.attributes));
     };
 
-    parseImage();
+    fetchAttributes();
   }, [bag]);
 
   return (
@@ -119,14 +115,14 @@ const Genesis = ({ item: bag }) => {
             />
           ))}
         </CardContent>
-
-        {bag.isForSale && <Source source={bag.source} />}
       </CardBody>
       <CardFooter
-        name={bag.name}
+        name={`GA #${bag.id}`}
         image={"/genesisCollectionLogo-small.png"}
         price={bag.price}
-      />
+      >
+        <Greatness greatness={greatness ? greatness : 0} />
+      </CardFooter>
     </CardContainer>
   );
 };

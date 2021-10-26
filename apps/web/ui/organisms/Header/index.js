@@ -21,12 +21,12 @@ const collections = [
   },
   {
     label: "mLoot",
-    href: "/collections/mloot",
+    href: "/collections/more-loot",
     image: "/mLootCollectionLogo-small.png"
   },
   {
     label: "Genesis",
-    href: "/collections/genesis",
+    href: "/collections/genesisadventurer",
     image: "/genesisCollectionLogo-small.png"
   }
 ];

@@ -212,8 +212,8 @@ const STEPS = {
 };
 
 const Purchase = () => {
-  const { contract, readableName } = useContractName();
-  const collection = useCollection(contract);
+  const { contract, collection: c, readableName } = useContractName();
+  const collection = useCollection(c);
   const router = useRouter();
   const { tokenId: id, initialPrice } = router.query;
   const { item: itemData, owner } = useItem(contract, id);
@@ -257,7 +257,14 @@ const Purchase = () => {
         display={["none", "none", "block", "block"]}
       >
         <Box p={3} position="absolute" top={0}>
-          <Logo width={257 / 2.3} height={98 / 2.3} />
+          <Link href="/">
+            <a>
+              <Logo
+                width={Math.floor(257 / 2.3)}
+                height={Math.floor(98 / 2.3)}
+              />
+            </a>
+          </Link>
         </Box>
         {bag && (
           <Flex
@@ -305,7 +312,8 @@ const Purchase = () => {
       >
         <Flex justifyContent="space-between" mb={4}>
           <H2 fontSize={16}>List your bag</H2>
-          <Link href={`/bags/${bag && bag.id}`}>
+
+          <Link href={`/collections/${bag.collection}/${bag && bag.id}`}>
             <a>
               <FaTimes />
             </a>
@@ -374,7 +382,7 @@ const Purchase = () => {
                   <ListingModal
                     onComplete={() => setStep(STEPS.completed)}
                     signer={eth.provider.getSigner()}
-                    collection={collection.id}
+                    collection={contract}
                     tokenId={id}
                     feeRecipient={collection.royaltyRecipient.address}
                     fee={collection.royalty ? collection.royalty * 10_000 : 0}

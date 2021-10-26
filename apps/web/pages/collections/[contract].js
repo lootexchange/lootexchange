@@ -43,7 +43,7 @@ const IconButton = ({ icon, ...props }) => (
   </Box>
 );
 
-const GenericGrid = styled(Box)`
+export const GenericGrid = styled(Box)`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
@@ -63,8 +63,8 @@ const GenericGrid = styled(Box)`
 `;
 
 const Collection = () => {
-  const { contract, readableName } = useContractName();
-  const collection = useCollection(contract);
+  const { collection: c, contract, readableName } = useContractName();
+  const collection = useCollection(c);
 
   const [lens, setLens] = useState("characters");
   const [isSticky, setIsSticky] = useState(false);
@@ -74,7 +74,7 @@ const Collection = () => {
 
   const [item, setItem] = useState(null);
   const { floor, items, loading, fetchMore, moreLeft, total } = useItems({
-    collection: contract,
+    collection: c,
     sort,
     filter,
     item
@@ -205,7 +205,10 @@ const Collection = () => {
       <Flex flexDirection="column" alignItems="center" mb={4}>
         <H2 mb={3}>{collection && collection.name}</H2>
 
-        <CollectionStats floor={floor} total={total} />
+        <CollectionStats
+          floor={collection ? collection.floor : 0}
+          total={collection ? collection.count : 0}
+        />
       </Flex>
       <Flex
         justifyContent="space-between"
@@ -224,34 +227,6 @@ const Collection = () => {
         }}
       >
         <Flex>
-          {false && (
-            <Select
-              mr={3}
-              icon={<FaBars size={14} color="rgba(255,255,255,0.9)" />}
-            >
-              <option value="all">filters</option>
-            </Select>
-          )}
-
-          <RadioGroup
-            mr={3}
-            value={filter}
-            onChange={newVal => setFilter(newVal)}
-            options={[
-              { key: "Loot Exchange", value: "LootExchange" },
-              { key: "For Sale", value: "forSale" },
-              { key: "All Bags", value: "all" }
-            ]}
-          />
-          {collection && collection.hasItemSearch && (
-            <ItemSelector
-              item={item}
-              onChange={newItem => setItem(newItem)}
-              display={["none", "block", "block", "block"]}
-            />
-          )}
-        </Flex>
-        <Flex>
           <Select
             mr={3}
             display={["none", "none", "block", "block"]}
@@ -261,6 +236,15 @@ const Collection = () => {
             <option value="Price">Price</option>
             <option value="Greatness">Greatness</option>
           </Select>
+          {collection && collection.hasItemSearch && (
+            <ItemSelector
+              item={item}
+              onChange={newItem => setItem(newItem)}
+              display={["none", "block", "block", "block"]}
+            />
+          )}
+        </Flex>
+        <Flex>
           <Select
             display={["none", "none", "block", "block"]}
             onChange={e => setLens(e.target.value)}
@@ -279,16 +263,17 @@ const Collection = () => {
       </Flex>
       <Box p={3} pt={0} minHeight="calc(100vh - 82px)" id="items">
         <ItemGrid>
-          {items.map(item => (
-            <Link
-              href={`/collections/${readableName}/${item.id}`}
-              key={item.id}
-            >
-              <a>
-                <Item item={item} />
-              </a>
-            </Link>
-          ))}
+          {collection &&
+            items.map(item => (
+              <Link
+                href={`/collections/${readableName}/${item.id}`}
+                key={item.id}
+              >
+                <a>
+                  <Item item={item} />
+                </a>
+              </Link>
+            ))}
         </ItemGrid>
         {(loading || moreLeft) && (
           <Flex ref={sentryRef} py={3} justifyContent="center">

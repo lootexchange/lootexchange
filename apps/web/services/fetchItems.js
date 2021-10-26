@@ -1,17 +1,17 @@
 import api from "@api";
 import fetchPrices from "./fetchPrices";
-export const BAGS_PER_PAGE = 25;
+export const BAGS_PER_PAGE = 20;
 import { gweiToEth } from "@utils";
 
 export const formatToken = token => {
-  let id = Number(token.tokenId);
+  let id = Number(token.token_id);
 
   return {
     ...token,
     id,
-    isForSale: !!token.listingPrice,
-    source: token.listingSource,
-    price: token.listingSource ? gweiToEth(token.listingPrice) : 0
+    tokenId: token.token_id,
+    isForSale: !!token.floor_price,
+    price: token.floor_price ? gweiToEth(token.floor_price) : 0
   };
 };
 
@@ -33,9 +33,8 @@ const fetchBags = async ({
       owner: owner ? owner.toLowerCase() : null,
       offset: offset * limit,
       limit: limit,
-      sort: sort == "Greatness" ? "_Greatness" : null,
-      forSale: filter !== "all" ? true : null,
-      source: filter == "LootExchange" || filter == "OpenSea" ? filter : null,
+      sort_by: sort == "Greatness" ? "_Greatness" : null,
+      sort_direction: sort === "Greatness" ? "desc" : "asc",
       ...(item && {
         [`_${item.key}`]: item.value
       })

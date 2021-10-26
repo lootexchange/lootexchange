@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box, Flex } from "@ui";
+import api from "@api";
 import {
   CardContainer,
   CardBody,
@@ -17,6 +18,7 @@ import getGreatness from "../../../services/getGreatness";
 
 const Loot = ({ item: bag }) => {
   const [metaData, setMetaData] = useState(null);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     const getMetadata = async () => {
@@ -26,7 +28,19 @@ const Loot = ({ item: bag }) => {
     getMetadata();
   }, [bag]);
 
-  let items = bag && bag.attributes ? sortItems(bag.attributes) : [];
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      let result = await api(
+        bag.contract,
+        `tokens/${bag.id}/attributes`,
+        "contracts"
+      );
+
+      setItems(sortItems(result.attributes));
+    };
+
+    fetchAttributes();
+  }, [bag]);
 
   let characterImage = `https://api.lootcharacter.com/imgs/bags/${(
     "0000" + bag.tokenId
@@ -39,8 +53,6 @@ const Loot = ({ item: bag }) => {
           <img
             src={characterImage}
             style={{
-              //padding:
-              // lens == "loot" || (!viz && lens == "characters") ? 10 : 0,
               width: "100%",
               height: "100%",
               position: "absolute",
@@ -63,12 +75,13 @@ const Loot = ({ item: bag }) => {
             <LootAttribute
               attribute={attribute}
               key={attribute.key}
-              greatness={metaData ? metaData.greatness[attribute.key] : 0}
+              greatness={
+                metaData ? metaData.greatness[attribute.key.toLowerCase()] : 0
+              }
               showRarity={true}
             />
           ))}
         </CardContent>
-        {bag.isForSale && <Source source={bag.source} />}
       </CardBody>
       <CardFooter
         name={bag.name}
