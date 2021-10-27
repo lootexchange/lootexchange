@@ -29,7 +29,7 @@ const fetchItem = async (collection, id) => {
       orders[0] &&
       orders[0].feeRecipient === "0x5b3256965e7c3cf26e11fcaf296dfc8807c01073"
         ? "OpenSea"
-        : "LootExchnage",
+        : "LootExchange",
     owner: owners.owners[0].owner,
     attributes: attributes.attributes
   });
