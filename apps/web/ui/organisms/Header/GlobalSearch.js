@@ -84,7 +84,7 @@ const GlobalSearch = props => {
 
       return setResults([
         { type: "loot", label: "Loot Bag #" + bagNum, id: bagNum },
-        ...(bagNum < 2540 ? [] : [genesis])
+        ...(bagNum > 2540 ? [] : [genesis])
       ]);
     }
 
