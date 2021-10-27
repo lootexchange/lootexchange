@@ -172,34 +172,33 @@ const Collection = () => {
             )}
           </Flex>
         </Box>
-        <Box sx={{ visibility: ["hidden", "unset", "unset", "unset"] }}>
-          <Flex mt={2}>
-            <a
-              target="_blank"
-              href="https://discord.com/invite/NXEntTSHgy"
-              rel="noreferrer"
-            >
-              <IconButton mr={2} icon={<FaDiscord size={20} />} />
-            </a>
-            <a
-              target="_blank"
-              href="https://twitter.com/lootproject"
-              rel="noreferrer"
-            >
-              <IconButton mr={2} icon={<FaTwitter size={20} />} />
-            </a>
-            <a target="_blank" href="https://lootproject.com" rel="noreferrer">
-              <IconButton mr={2} icon={<FaHome size={20} />} />
-            </a>
-            <a
-              target="_blank"
-              href="https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7#code"
-              rel="noreferrer"
-            >
-              <IconButton mr={2} icon={<FaEthereum size={20} />} />
-            </a>
-          </Flex>
-        </Box>
+
+        {collection && (
+          <Box sx={{ visibility: ["hidden", "unset", "unset", "unset"] }}>
+            <Flex mt={2}>
+              {collection.discord && (
+                <a target="_blank" href={collection.discord} rel="noreferrer">
+                  <IconButton mr={2} icon={<FaDiscord size={20} />} />
+                </a>
+              )}
+              {collection.twitter && (
+                <a target="_blank" href={collection.twitter} rel="noreferrer">
+                  <IconButton mr={2} icon={<FaTwitter size={20} />} />
+                </a>
+              )}
+              {collection.twitter && (
+                <a target="_blank" href={collection.home} rel="noreferrer">
+                  <IconButton mr={2} icon={<FaHome size={20} />} />
+                </a>
+              )}
+              {collection.etherscan && (
+                <a target="_blank" href={collection.etherscan} rel="noreferrer">
+                  <IconButton mr={2} icon={<FaEthereum size={20} />} />
+                </a>
+              )}
+            </Flex>
+          </Box>
+        )}
       </Box>
 
       <Flex flexDirection="column" alignItems="center" mb={4}>
