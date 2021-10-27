@@ -286,8 +286,8 @@ export default function ListingModal({
         });
         sellOrder = await Helpers.Order.sign(signer, sellOrder);
 
-        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/orders`, {
-          orders: [sellOrder]
+        await axios.post(`https://reservoir-core-production.up.railway.app/orders/wyvern-v2`, {
+          orders: [sellOrder] 
         });
 
         // Set success
