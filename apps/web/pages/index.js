@@ -36,7 +36,7 @@ import NFT from "@ui/organisms/NFTs/Loot";
 import loot from "../public/community.png";
 import useInfiniteScroll from "react-infinite-scroll-hook";
 import useExchangeRate from "@hooks/useExchangeRate";
-import { formatMoney } from "@utils";
+import { formatMoney, shortenNumber } from "@utils";
 import { useEtherBalance } from "@usedapp/core";
 import useCollection from "@hooks/useCollection";
 
@@ -204,7 +204,12 @@ const Home = () => {
                   <P mb={1} color="textSecondary">
                     Treasury
                   </P>
-                  <H2>Ξ{treasury ? formatEther(treasury) : 0}</H2>
+                  <H2>
+                    Ξ
+                    {treasury
+                      ? shortenNumber(Number(formatEther(treasury || 0)))
+                      : 0}
+                  </H2>
                   <P mt={-1} color="textSecondary">
                     {treasury
                       ? formatMoney(formatEther(treasury) * exchangeRate)
@@ -233,7 +238,9 @@ const Home = () => {
                     <P mb={1} color="textSecondary">
                       Loot Floor
                     </P>
-                    <H2>Ξ{collection ? collection.floor : 0}</H2>
+                    <H2>
+                      Ξ{collection ? shortenNumber(collection.floor || 0) : 0}
+                    </H2>
                     <P mt={-1} color="textSecondary">
                       {collection
                         ? formatMoney(collection.floor * exchangeRate)
