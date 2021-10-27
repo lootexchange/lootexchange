@@ -69,7 +69,7 @@ const Adventurer = ({}) => {
               return (
                 <Link
                   key={loot.collection + loot.tokenId}
-                  href={`/collections/loot/${loot.tokenId}`}
+                  href={`/collections/${loot.collection}/${loot.tokenId}`}
                   style={{ textDecoration: "none" }}
                 >
                   <a>
