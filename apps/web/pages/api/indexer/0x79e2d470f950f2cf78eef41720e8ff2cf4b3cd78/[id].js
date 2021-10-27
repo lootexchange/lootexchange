@@ -268,13 +268,15 @@ const getMetadata = (id) => {
     "name": `Bag #${id}`,
     "description": "Loot is randomized adventurer gear generated and stored on chain. Stats, images, and other functionality are intentionally omitted for others to interpret. Feel free to use Loot in any way you want.",
     "image": `https://www.loot.exchange/api/image/${id}`,
+    "community": "loot",
     "collection": {
       "id":"loot",
       "name":"Loot (for Adventurers)",
       "description": "Loot is randomized adventurer gear generated and stored on chain. Stats, images, and other functionality are intentionally omitted for others to interpret. Feel free to use Loot in any way you want.",
       "image":"https://lh3.googleusercontent.com/g-NFUWjS4IGgym8PHBxyhg5-G_B4x-IHgPKRkxo00JQFE3LOd-95yU2uhrokITVmV7KHEav6OMfAhfJ4roC5hwP-0tI9dMRd9wQLdw=s130",
       "royalty_amount": "0",
-      "royalty_recipient": null
+      "royalty_recipient": null,
+      "community": "loot",
     },
     "attributes":[]
   }

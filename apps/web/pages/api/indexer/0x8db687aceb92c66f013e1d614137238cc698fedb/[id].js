@@ -53,13 +53,15 @@ const api = async (req, res) => {
         "name": `Genesis Adventurer #${id}`,
         "description": "This item is a Genesis Adventurer used in Loot (for Adventurers)",
         "image": tokenURI.image,
+        "community": "loot",
         "collection": {
           "id":"genesisadventurer",
           "name":"Genesis Adventurers",
           "description":"You’ve collected a complete set of Genesis Loot (\"Genesis Mana\"), one for each item type, all of the same Order. You carry this precious Genesis Loot on your back, and climb to the top of the mountain to attempt to resurrect a Genesis Adventurer. You throw the bag in the fire — a Genesis Adventurer emerges from the flames. Thus returned to defend its original Order, each Genesis Adventurer will entitle the owner to benefits and rewards, including unique access to claim derivative projects, airdropped ERC20 tokens similar to $AGLD and more.",
           "image":"https://lh3.googleusercontent.com/46LiRFAvwemkfLlRZIp4WbK21gWUWzFKIhes-FRfjAKdQeXbEue2cICtiQjZ_hT8GXgf28TfxyVYu5098vcpW9-KHsB9cZSuwVci=s130",
           "royalty_amount": "250",
-          "royalty_recipient": "0x96f47d56f25d2ba629db1f55db0517dee67640e1"
+          "royalty_recipient": "0x96f47d56f25d2ba629db1f55db0517dee67640e1",
+          "community": "loot",
         },
         "attributes":[]
       }

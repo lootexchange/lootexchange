@@ -15,13 +15,15 @@ export default function handler(req, res) {
                 "name": response.data.name,
                 "description": response.data.description, 
                 "image": response.data.image_url,
+                "community": "loot",
                 "collection": {
                     "id":response.data.collection.slug,
                     "name": response.data.collection.name,
                     "description": response.data.collection.description,
                     "image": response.data.collection.image_url,
                     "royalty_amount": response.data.collection.dev_seller_fee_basis_points,
-                    "royalty_recipient": response.data.collection.payout_address
+                    "royalty_recipient": response.data.collection.payout_address,
+                    "community": "loot",
                 },
                 "attributes":response.data.traits.map(trait => {
                     return {
