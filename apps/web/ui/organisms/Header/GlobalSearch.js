@@ -36,8 +36,8 @@ const ItemWrapper = styled(Box)`
 
 const routeMap = {
   loot: "collections/loot",
-  genesis: "collections/genesis",
-  mLoot: "collections/mloot",
+  genesis: "collections/genesisadventurer",
+  mLoot: "collections/more-loot",
   address: "adventurers",
   item: "items"
 };
