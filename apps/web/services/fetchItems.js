@@ -15,8 +15,35 @@ export const formatToken = token => {
   };
 };
 
+const sortToParams = {
+  priceLow: {
+    sort_direction: "asc",
+    sort_by: "floor_price"
+  },
+
+  priceHigh: {
+    sort_direction: "desc",
+    sort_by: "floor_price"
+  },
+  tokenId: {
+    sort_direction: "asc",
+    sort_by: "token_id"
+  },
+  greatness: {
+    sort_by: "_Greatness",
+    sort_direction: "desc"
+  }
+};
+
 const removeEmpty = obj =>
   Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+
+const renameFilters = (filters = {}) =>
+  Object.fromEntries(
+    Object.entries(filters)
+      .filter(([_, v]) => !!v)
+      .map(([key, value]) => [`_${key}`, value])
+  );
 
 const fetchBags = async ({
   offset = 0,
@@ -28,16 +55,14 @@ const fetchBags = async ({
   owner,
   limit = BAGS_PER_PAGE
 }) => {
+  console.log(filter);
   let params = new URLSearchParams(
     removeEmpty({
       owner: owner ? owner.toLowerCase() : null,
       offset: offset * limit,
       limit: limit,
-      sort_by: sort == "Greatness" ? "_Greatness" : null,
-      sort_direction: sort === "Greatness" ? "desc" : "asc",
-      ...(item && {
-        [`_${item.key}`]: item.value
-      })
+      ...sortToParams[sort],
+      ...renameFilters(filter)
     })
   ).toString();
 

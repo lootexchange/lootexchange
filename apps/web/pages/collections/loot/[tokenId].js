@@ -18,6 +18,7 @@ import { sortItems } from "@utils";
 
 const Bag = () => {
   const [claimables, setClaimables] = useState(null);
+  const [items, setItems] = useState([]);
 
   let { collection: c, contract } = nameToContractMap.loot;
   const collection = useCollection(c);
@@ -48,8 +49,20 @@ const Bag = () => {
     }
   }, [id]);
 
-  let attributes =
-    item && item.attributes.length ? sortItems(item.attributes) : [];
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      let result = await fetch("/api/metadata/" + id).then(res => res.json());
+
+      let items = Object.entries(result.items).map(([key, value]) => ({
+        key: key,
+        value: value
+      }));
+
+      setItems(sortItems(items));
+    };
+
+    fetchAttributes();
+  }, [id]);
 
   return (
     <Item
@@ -69,11 +82,7 @@ const Bag = () => {
       rightColumn={
         <>
           <PriceBox item={item} owner={owner} collection={collection} />
-          <AttributeTable
-            attributes={attributes}
-            item={item}
-            metaData={metaData}
-          />
+          <AttributeTable attributes={items} item={item} metaData={metaData} />
         </>
       }
     />

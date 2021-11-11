@@ -36,6 +36,7 @@ const useItems = ({ collection, sort, filter, source, owner, skip, item }) => {
     setItems([...items, ...results]);
 
     setOffset(offset + 1);
+
     setLoading(false);
   };
 

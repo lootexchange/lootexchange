@@ -5,11 +5,14 @@ import MLootItem from "@ui/organisms/NFTs/mLoot";
 import LootItem from "@ui/organisms/NFTs/Loot";
 import { gweiToEth } from "@utils";
 
-const customCollectionData = {
+export const customCollectionData = {
   // genesis
   genesisadventurer: {
     cover:
       "https://lh3.googleusercontent.com/_oDa2m5z64Qf8RXbQFylP7MaDRwUXbJAchbDIFQqlVA8mdZ0feG4JHcMQwrYa7jTesY98RITIAfeAIGgHenvuMuU3zHmM15sRfTfQIE=h600",
+
+    filterPreference: ["Weapon", "Chest", "Order"],
+
     image: "/genesisCollectionLogo-medium.png",
     Item: GenesisItem,
     loot: true,
@@ -30,6 +33,7 @@ const customCollectionData = {
   "more-loot": {
     cover: "/community.png",
 
+    filterPreference: ["Item"],
     image: "/mLootCollectionLogo-medium.png",
     Item: MLootItem,
     loot: true,
@@ -46,6 +50,8 @@ const customCollectionData = {
   // Loot
   loot: {
     cover: "/community.png",
+
+    filterPreference: ["Rarity", "Item"],
 
     image: "/lootCollectionLogo-medium.png",
     Item: LootItem,

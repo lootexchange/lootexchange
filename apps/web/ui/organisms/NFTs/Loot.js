@@ -30,13 +30,16 @@ const Loot = ({ item: bag }) => {
 
   useEffect(() => {
     const fetchAttributes = async () => {
-      let result = await api(
-        bag.contract,
-        `tokens/${bag.id}/attributes`,
-        "contracts"
+      let result = await fetch("/api/metadata/" + bag.id).then(res =>
+        res.json()
       );
 
-      setItems(sortItems(result.attributes));
+      let items = Object.entries(result.items).map(([key, value]) => ({
+        key: key,
+        value: value
+      }));
+
+      setItems(sortItems(items));
     };
 
     fetchAttributes();

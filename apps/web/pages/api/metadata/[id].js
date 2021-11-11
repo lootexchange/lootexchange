@@ -3,9 +3,7 @@ const { id } = require("@ethersproject/hash");
 const { toUtf8Bytes } = require("@ethersproject/strings");
 import { keccak256 } from "@ethersproject/keccak256";
 
-
-
-let items = {}
+let items = {};
 
 items.WEAPON = [
   "Warhammer",
@@ -25,7 +23,7 @@ items.WEAPON = [
   "Grimoire",
   "Chronicle",
   "Tome",
-  "Book",
+  "Book"
 ];
 
 items.CHEST = [
@@ -43,7 +41,7 @@ items.CHEST = [
   "Ornate Chestplate",
   "Plate Mail",
   "Chain Mail",
-  "Ring Mail",
+  "Ring Mail"
 ];
 
 items.HEAD = [
@@ -61,7 +59,7 @@ items.HEAD = [
   "Divine Hood",
   "Silk Hood",
   "Linen Hood",
-  "Hood",
+  "Hood"
 ];
 
 items.WAIST = [
@@ -79,7 +77,7 @@ items.WAIST = [
   "Silk Sash",
   "Wool Sash",
   "Linen Sash",
-  "Sash",
+  "Sash"
 ];
 
 items.FOOT = [
@@ -97,7 +95,7 @@ items.FOOT = [
   "Silk Slippers",
   "Wool Shoes",
   "Linen Shoes",
-  "Shoes",
+  "Shoes"
 ];
 
 items.HAND = [
@@ -115,7 +113,7 @@ items.HAND = [
   "Silk Gloves",
   "Wool Gloves",
   "Linen Gloves",
-  "Gloves",
+  "Gloves"
 ];
 
 items.NECK = ["Necklace", "Amulet", "Pendant"];
@@ -125,7 +123,7 @@ items.RING = [
   "Silver Ring",
   "Bronze Ring",
   "Platinum Ring",
-  "Titanium Ring",
+  "Titanium Ring"
 ];
 
 const suffixes = [
@@ -144,7 +142,7 @@ const suffixes = [
   "of the Fox",
   "of Detection",
   "of Reflection",
-  "of the Twins",
+  "of the Twins"
 ];
 
 const namePrefixes = [
@@ -216,7 +214,7 @@ const namePrefixes = [
   "Woe",
   "Wrath",
   "Light's",
-  "Shimmering",
+  "Shimmering"
 ];
 
 const nameSuffixes = [
@@ -237,64 +235,73 @@ const nameSuffixes = [
   "Peak",
   "Form",
   "Sun",
-  "Moon",
+  "Moon"
 ];
 
-const random = (input) => BigNumber.from(id(input));
+const random = input => BigNumber.from(id(input));
 
 function toHex(str) {
-  var result = '0x';
-  for (var i=0; i<str.length; i++) {
+  var result = "0x";
+  for (var i = 0; i < str.length; i++) {
     result += str.charCodeAt(i).toString(16);
   }
   return result;
 }
 
-const getMetadata = (input) => {
+const getMetadata = input => {
   let meta = {
-    "items": {},
-    "itemOrders":{},
-    "scores":{
-      "greatness":0,
-      "orders":0,
-      "names":0,
-      "plusones":0
+    items: {},
+    itemOrders: {},
+    scores: {
+      greatness: 0,
+      orders: 0,
+      names: 0,
+      plusones: 0
     },
-    "greatness": {}
-  }
-  for(let keyPrefix in items) {
-    let sourceArray = items[keyPrefix]
-    let rand = input.slice(0,2)!=='0x' ? random(keyPrefix + input) : BigNumber.from(keccak256(toHex(keyPrefix)+input.slice(2)));
+    greatness: {}
+  };
+  for (let keyPrefix in items) {
+    let sourceArray = items[keyPrefix];
+    let rand =
+      input.slice(0, 2) !== "0x"
+        ? random(keyPrefix + input)
+        : BigNumber.from(keccak256(toHex(keyPrefix) + input.slice(2)));
     let output = sourceArray[rand.mod(sourceArray.length).toNumber()];
     const greatness = rand.mod(21);
     meta.scores.greatness += greatness.toNumber();
     meta.greatness[keyPrefix.toLowerCase()] = greatness.toNumber();
     if (greatness.gt(14)) {
-      meta.scores.orders++
-      let order = suffixes[rand.mod(suffixes.length).toNumber()]
-      meta.itemOrders[keyPrefix.toLowerCase()] = order
+      meta.scores.orders++;
+      let order = suffixes[rand.mod(suffixes.length).toNumber()];
+      meta.itemOrders[keyPrefix.toLowerCase()] = order;
       output = output + " " + order;
     }
     if (greatness.gte(19)) {
-      meta.scores.names++
+      meta.scores.names++;
       const name = ["", ""];
       name[0] = namePrefixes[rand.mod(namePrefixes.length).toNumber()];
       name[1] = nameSuffixes[rand.mod(nameSuffixes.length).toNumber()];
       if (greatness.eq(19)) {
         output = '"' + name[0] + " " + name[1] + '" ' + output;
       } else {
-        meta.scores.plusones++  
+        meta.scores.plusones++;
         output = '"' + name[0] + " " + name[1] + '" ' + output + " +1";
       }
     }
-    meta.items[keyPrefix.toLowerCase()] = output
+    meta.items[titleCase(keyPrefix)] = output;
   }
-  return meta
-}
+  return meta;
+};
+
+const titleCase = str =>
+  str
+    .split(" ")
+    .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+    .join(" ");
 
 const api = async (req, res) => {
-  const { id } = req.query
-  let meta = getMetadata(id)
+  const { id } = req.query;
+  let meta = getMetadata(id);
   res.status(200).json(meta);
 };
 

@@ -21,6 +21,7 @@ import CollectionStats from "@ui/organisms/CollectionStats";
 import ItemSelector from "@ui/organisms/ItemSelector";
 import NFT from "@ui/organisms/GenericNFT";
 import LootNFT from "@ui/organisms/NFTs/Loot";
+import FilterBar from "@ui/organisms/FilterBar";
 
 import { useRouter } from "next/router";
 import loot from "../../public/community.png";
@@ -31,7 +32,7 @@ import useInfiniteScroll from "react-infinite-scroll-hook";
 
 import useBagData from "@hooks/useBags";
 
-const IconButton = ({ icon, ...props }) => (
+export const IconButton = ({ icon, ...props }) => (
   <Box
     p={3}
     borderRadius="default"
@@ -69,8 +70,8 @@ const Collection = () => {
   const [lens, setLens] = useState("characters");
   const [isSticky, setIsSticky] = useState(false);
   const itemsRef = useRef(null);
-  const [filter, setFilter] = useState("forSale");
-  const [sort, setSort] = useState("Price");
+  const [filter, setFilter] = useState({});
+  const [sort, setSort] = useState("priceLow");
 
   const [item, setItem] = useState(null);
   const { floor, items, loading, fetchMore, moreLeft, total } = useItems({
@@ -91,6 +92,10 @@ const Collection = () => {
   });
 
   useEffect(() => {
+    setFilter({});
+  }, [c]);
+
+  useEffect(() => {
     if (itemsRef && itemsRef.current) {
       const observer = new IntersectionObserver(
         ([e]) => setIsSticky(!e.isIntersecting),
@@ -102,11 +107,11 @@ const Collection = () => {
   }, [itemsRef && itemsRef.current]);
 
   useEffect(() => {
-    if (items && items.length && isSticky) {
+    if (isSticky) {
       const stickyElm = document.querySelector("#items");
-      window.scrollTo(0, stickyElm.offsetTop - 83);
+      window.scrollTo(0, stickyElm.offsetTop - 87);
     }
-  }, [filter, sort, item]);
+  }, [filter, sort]);
 
   return (
     <Flex flex={1} flexDirection="column" bg="background">
@@ -226,24 +231,21 @@ const Collection = () => {
         }}
       >
         <Flex>
+          <FilterBar id={c} onChange={setFilter} />
+        </Flex>
+        <Flex>
           <Select
             mr={3}
             display={["none", "none", "block", "block"]}
             onChange={e => setSort(e.target.value)}
             icon={<FaSort color="rgba(255,255,255,0.9)" />}
           >
-            <option value="Price">Price</option>
-            <option value="Greatness">Greatness</option>
+            <option value="priceLow">Lowest Price</option>
+            <option value="priceHigh">Highest Price</option>
+            <option value="tokenId">Token Id</option>
+            <option value="greatness">Greatness</option>
           </Select>
-          {collection && collection.hasItemSearch && (
-            <ItemSelector
-              item={item}
-              onChange={newItem => setItem(newItem)}
-              display={["none", "block", "block", "block"]}
-            />
-          )}
-        </Flex>
-        <Flex>
+
           <Select
             display={["none", "none", "block", "block"]}
             onChange={e => setLens(e.target.value)}
@@ -260,7 +262,7 @@ const Collection = () => {
           </Select>
         </Flex>
       </Flex>
-      <Box p={3} pt={0} minHeight="calc(100vh - 82px)" id="items">
+      <Box p={3} pt={0} mt={1} id="items" minHeight="calc(100vh - 87px)">
         <ItemGrid>
           {collection &&
             items.map(item => (
@@ -274,10 +276,13 @@ const Collection = () => {
               </Link>
             ))}
         </ItemGrid>
-        {(loading || moreLeft) && (
-          <Flex ref={sentryRef} py={3} justifyContent="center">
-            <Loader size={50} />
-          </Flex>
+
+        <Flex py={3} justifyContent="center">
+          {loading && <Loader size={50} />}
+        </Flex>
+
+        {moreLeft && !loading && (
+          <Flex ref={sentryRef} justifyContent="center" />
         )}
       </Box>
 

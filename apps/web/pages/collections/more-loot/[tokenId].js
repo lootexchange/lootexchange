@@ -35,37 +35,22 @@ const Bag = () => {
       getMetadata();
     }
   }, [id]);
-  console.log(items);
 
   useEffect(() => {
-    const parseImage = async () => {
-      try {
-        let result = await fetch(item.image).then(res => res.text());
-        let parsedSvg = parse(result);
+    const fetchAttributes = async () => {
+      let result = await fetch("/api/metadata/" + id).then(res => res.json());
 
-        let nodes = parsedSvg.children[0].children
-          .filter(tag => {
-            return tag.tagName == "text";
-          })
-          .map(node => node.children[0].value);
+      let items = Object.entries(result.items).map(([key, value]) => ({
+        key: key,
+        value: value
+      }));
 
-        let newItems = nodes.map((item, i) => {
-          return {
-            key: positions[i],
-            value: item
-          };
-        });
-
-        setItems(newItems);
-      } catch (err) {
-        console.log(err);
-      }
+      setItems(sortItems(items));
     };
+    alert(id);
 
-    if (item) {
-      parseImage();
-    }
-  }, [item]);
+    fetchAttributes();
+  }, [id]);
 
   return (
     <Item
