@@ -93,7 +93,7 @@ export default class WyvernHelper {
           buyOrder.s,
           sellOrder.r,
           sellOrder.s,
-          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000009bf09d9a82f7343222712105893183617051B976",
         ],
         {
           value:
