@@ -47,7 +47,6 @@ const Bag = () => {
 
       setItems(sortItems(items));
     };
-    alert(id);
 
     fetchAttributes();
   }, [id]);
