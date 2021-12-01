@@ -3,8 +3,7 @@ node_modules
 
 # Secrets
 .env
-apps/web/.env.development
-apps/web/.env.production
+
 
 # Typescript artifacts
 dist
