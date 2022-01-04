@@ -1,6 +1,7 @@
-import { Flex, Box, P, Image } from "@ui";
-import ether from "../../public/ether.png";
+import { Box, Flex, Image, P } from "@ui";
+
 import { abbreviateNumber } from "@utils";
+import ether from "../../public/ether.png";
 
 const Leadin = props => (
   <P fontSize="12px" fontWeight="300" color="white" {...props} />
@@ -16,7 +17,7 @@ const CollectionStats = ({ total = 7800, floor, ...props }) => (
       {...props.sx}
     >
       <Box p={2} px={4} textAlign="center" borderRight="1px solid black">
-        <Leadin>Bags</Leadin>
+        <Leadin>Items</Leadin>
         <P>{abbreviateNumber(total)}</P>
       </Box>
       <Box p={2} px={4} textAlign="center">

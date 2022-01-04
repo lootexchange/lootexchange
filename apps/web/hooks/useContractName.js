@@ -7,6 +7,10 @@ export const nameToContractMapOld = {
 };
 
 export const nameToContractMap = {
+  lootexplorers: {
+    collection: "lootexplorers",
+    contract: "0x508d06b8f3a4b0fd363239ce61e0c4b0b82f3626"
+  },
   "more-loot": {
     collection: "more-loot",
     contract: "0x1dfe7ca09e99d10835bf73044a23b73fc20623df"

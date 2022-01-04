@@ -1,11 +1,51 @@
-import { useState, useEffect } from "react";
-import api from "@api";
+import { useEffect, useState } from "react";
+
 import GenesisItem from "@ui/organisms/NFTs/Genesis";
-import MLootItem from "@ui/organisms/NFTs/mLoot";
 import LootItem from "@ui/organisms/NFTs/Loot";
+import MLootItem from "@ui/organisms/NFTs/mLoot";
+import api from "@api";
 import { gweiToEth } from "@utils";
 
 export const customCollectionData = {
+  "genesis-mana": {
+    image:
+      "https://lh3.googleusercontent.com/_oDa2m5z64Qf8RXbQFylP7MaDRwUXbJAchbDIFQqlVA8mdZ0feG4JHcMQwrYa7jTesY98RITIAfeAIGgHenvuMuU3zHmM15sRfTfQIE=h600",
+    name: "Genesis Mana"
+  },
+  lootrealms: {
+    image:
+      "https://lh3.googleusercontent.com/_oDa2m5z64Qf8RXbQFylP7MaDRwUXbJAchbDIFQqlVA8mdZ0feG4JHcMQwrYa7jTesY98RITIAfeAIGgHenvuMuU3zHmM15sRfTfQIE=h600",
+    cover:
+      "https://lh3.googleusercontent.com/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs=h600",
+    royalty: 0.025,
+
+    royaltyRecipient: {
+      name: "Bored Ape Creators"
+    },
+    discord: "https://discord.com/invite/KuYyKXam9G",
+    twitter: "https://twitter.com/lootproject",
+    home: "https://lootproject.com",
+    etherscan:
+      "https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7"
+  },
+
+  // Loot
+  boredapeyachtclub: {
+    image: "/byaclogotransparent.png",
+    cover:
+      "https://lh3.googleusercontent.com/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs=h600",
+    royalty: 0.025,
+
+    royaltyRecipient: {
+      name: "Bored Ape Creators"
+    },
+    discord: "https://discord.com/invite/KuYyKXam9G",
+    twitter: "https://twitter.com/lootproject",
+    home: "https://lootproject.com",
+    etherscan:
+      "https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7"
+  },
+
   // genesis
   genesisadventurer: {
     cover:

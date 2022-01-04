@@ -1,47 +1,46 @@
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import styled from "@emotion/styled";
 import {
-  FaEye,
-  FaFilter,
-  FaArrowDown,
-  FaBars,
-  FaStore,
-  FaInfo,
-  FaSort,
-  FaTwitter,
-  FaDiscord,
-  FaEthereum,
-  FaHome,
-  FaSword
-} from "react-icons/fa";
-import {
-  Flex,
   Box,
+  Flex,
   Grid,
-  Select,
-  P,
+  H1,
+  H2,
   Image,
   Loader,
+  P,
   Pane,
-  H2,
-  H1,
-  RadioGroup
+  RadioGroup,
+  Select
 } from "@ui";
-import { formatEther } from "@ethersproject/units";
-import Header from "@ui/organisms/Header";
-import CollectionStats from "@ui/organisms/CollectionStats";
-import ItemSelector from "@ui/organisms/ItemSelector";
-import NFT from "@ui/organisms/NFTs/Loot";
-import loot from "../public/community.png";
-import useInfiniteScroll from "react-infinite-scroll-hook";
-import useExchangeRate from "@hooks/useExchangeRate";
+import {
+  FaArrowDown,
+  FaBars,
+  FaDiscord,
+  FaEthereum,
+  FaEye,
+  FaFilter,
+  FaHome,
+  FaInfo,
+  FaSort,
+  FaStore,
+  FaSword,
+  FaTwitter
+} from "react-icons/fa";
 import { formatMoney, shortenNumber } from "@utils";
-import { useEtherBalance } from "@usedapp/core";
-import useCollection from "@hooks/useCollection";
+import { useEffect, useRef, useState } from "react";
 
+import CollectionStats from "@ui/organisms/CollectionStats";
+import Header from "@ui/organisms/Header";
+import ItemSelector from "@ui/organisms/ItemSelector";
+import Link from "next/link";
+import NFT from "@ui/organisms/NFTs/Loot";
+import { formatEther } from "@ethersproject/units";
+import loot from "../public/community.png";
 import { nameToContractMap } from "@hooks/useContractName";
-
+import styled from "@emotion/styled";
+import useCollection from "@hooks/useCollection";
+import { useEtherBalance } from "@usedapp/core";
+import useExchangeRate from "@hooks/useExchangeRate";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 import useItems from "../hooks/useItems";
 
 const IconButton = ({ icon, ...props }) => (
@@ -61,6 +60,22 @@ const CollectionGrid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 24px;
   max-width: 920px;
+  width: 100%;
+
+  @media (max-width: 620px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const DerivativeGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 24px;
+  max-width: 1200px;
   width: 100%;
 
   @media (max-width: 620px) {
@@ -117,6 +132,7 @@ const CollectionCard = ({ image, name, description }) => (
             right: 0,
             bottom: 0,
             left: 0,
+            height: "100%",
             objectFit: "cover"
           }}
         />
@@ -226,7 +242,7 @@ const Home = () => {
                   </P>
                   <H2>0</H2>
                   <P mt={-1} color="textSecondary">
-                    0 closed
+                    1 closed
                   </P>
                 </Box>
               </a>
@@ -257,11 +273,11 @@ const Home = () => {
         p={3}
         alignItems="center"
         flexDirection="column"
-        pb={5}
+        pb={4}
         pt={"100px"}
       >
         <H2 my={4} color="textSecondary" fontSize={24}>
-          Loot Collections
+          Bag Collections
         </H2>
         <CollectionGrid>
           <Link href="/collections/more-loot">
@@ -296,6 +312,51 @@ const Home = () => {
             </a>
           </Link>
         </CollectionGrid>
+      </Flex>
+
+      <Flex p={3} alignItems="center" flexDirection="column" pb={5}>
+        <H2 my={4} color="textSecondary" fontSize={24}>
+          Derivative Collections
+        </H2>
+        <DerivativeGrid>
+          <Link href="/collections/lootrealms">
+            <a>
+              <CollectionCard
+                image="/realms.svg"
+                name={"Realms"}
+                description={`Land for your adventurer`}
+              />
+            </a>
+          </Link>
+          <Link href="/collections/loot">
+            <a>
+              <CollectionCard
+                image="/lootexplorers.jpeg"
+                name={"Loot Explorers"}
+                description={"Loot explorers"}
+              />
+            </a>
+          </Link>
+          <Link href="/collections/genesis-mana">
+            <a>
+              <CollectionCard
+                image="/mana.png"
+                name={"Genesis Mana"}
+                description={"the mana"}
+              />
+            </a>
+          </Link>
+
+          <Link href="/collections/genesisadventurer">
+            <a>
+              <CollectionCard
+                image="/rings.png"
+                name={"Rings"}
+                description={"the rings"}
+              />
+            </a>
+          </Link>
+        </DerivativeGrid>
       </Flex>
       <Box p={[3, 4]} alignItems="center" flexDirection="column">
         <H2 mb={3} color="textSecondary" fontSize={24}>

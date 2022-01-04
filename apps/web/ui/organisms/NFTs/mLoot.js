@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import api from "@api";
-import { parse } from "svg-parser";
 import { Box, Flex, P } from "@ui";
 import {
-  CardContainer,
   CardBody,
-  CardMedia,
+  CardContainer,
   CardContent,
   CardFooter,
-  LootAttribute,
+  CardMedia,
   Greatness,
+  LootAttribute,
   Source
 } from "../NFTCard";
+import { positions, sortItems } from "@utils";
+import { useEffect, useState } from "react";
 
-import { sortItems, positions } from "@utils";
-import { lootRarity } from "loot-rarity";
+import api from "@api";
 import getGreatness from "../../../services/getGreatness";
+import { lootRarity } from "loot-rarity";
+import { parse } from "svg-parser";
 
 const Loot = ({ item: bag }) => {
   const [metaData, setMetaData] = useState(null);
@@ -46,32 +46,46 @@ const Loot = ({ item: bag }) => {
     fetchAttributes();
   }, [bag]);
 
+  let characterImage = "/api/image/swag/0/" + bag.tokenId;
+
   return (
     <CardContainer>
       <CardBody>
         <CardMedia>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            position="absolute"
-            top={0}
-            bottom={0}
-            right={0}
-            left={0}
-          >
-            <Box mb={2}>
-              <img
-                src="/mLootCollectionLogo-medium.png"
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: "50%"
-                }}
-              />
-            </Box>
-            <P color="textSecondary">mLoot</P>
-          </Flex>
+          <img
+            src={characterImage}
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              inset: 0,
+              objectFit: "cover"
+            }}
+          />
+          {false && (
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              position="absolute"
+              top={0}
+              bottom={0}
+              right={0}
+              left={0}
+            >
+              <Box mb={2}>
+                <img
+                  src="/mLootCollectionLogo-medium.png"
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: "50%"
+                  }}
+                />
+              </Box>
+              <P color="textSecondary">mLoot</P>
+            </Flex>
+          )}
         </CardMedia>
         <CardContent>
           {items.map(attribute => (

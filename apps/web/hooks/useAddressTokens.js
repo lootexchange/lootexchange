@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import api from "@api";
 import { formatToken } from "../services/fetchItems";
 
-const useAddressTokens = address => {
+const useAddressTokens = (address, collection) => {
   const [tokens, setTokens] = useState([]);
   useEffect(() => {
     const getTokens = async () => {
       let [loot, mLoot, genesis] = await Promise.all([
-        api(address, "tokens" + "?collection_id=loot", "users"),
-        api(address, "tokens" + "?collection_id=more-loot", "users"),
-        api(address, "tokens" + "?collection_id=genesisadventurer", "users")
+        api(address, "tokens", "users")
       ]);
 
-      setTokens(
-        [...loot.tokens, ...mLoot.tokens, ...genesis.tokens].map(formatToken)
-      );
+      setTokens([...loot.tokens].map(formatToken));
+
+      false &&
+        setTokens(
+          [...loot.tokens, ...mLoot.tokens, ...genesis.tokens].map(formatToken)
+        );
     };
 
     if (address) {

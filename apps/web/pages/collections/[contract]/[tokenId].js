@@ -1,22 +1,19 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { useRouter } from "next/router";
-import useItem from "@hooks/useItem";
-import useCollection from "@hooks/useCollection";
-import useContractName from "@hooks/useContractName";
-
-import PriceBox from "@ui/organisms/Item/PriceBox";
 import AttributeTable from "@ui/organisms/Item/AttributeTable";
 import Item from "@ui/organisms/Item";
-
 import { Pane } from "@ui";
+import PriceBox from "@ui/organisms/Item/PriceBox";
+import useCollection from "@hooks/useCollection";
+import useContractName from "@hooks/useContractName";
+import useItem from "@hooks/useItem";
+import { useRouter } from "next/router";
 
 const ItemScreen = () => {
-  const { collection: c, contract, readableName } = useContractName();
-  const collection = useCollection(c);
   const router = useRouter();
-  const { tokenId: id } = router.query;
+  const { tokenId: id, contract } = router.query;
   const { item, owner } = useItem(contract, id);
+  let collection = {};
 
   return (
     <Item

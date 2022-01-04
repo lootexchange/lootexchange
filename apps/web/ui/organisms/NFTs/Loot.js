@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
 import { Box, Flex } from "@ui";
-import api from "@api";
 import {
-  CardContainer,
   CardBody,
-  CardMedia,
+  CardContainer,
   CardContent,
   CardFooter,
-  LootAttribute,
+  CardMedia,
   Greatness,
+  LootAttribute,
   Source
 } from "../NFTCard";
+import { useEffect, useState } from "react";
 
-import { sortItems } from "@utils";
-import { lootRarity } from "loot-rarity";
+import api from "@api";
 import getGreatness from "../../../services/getGreatness";
+import { lootRarity } from "loot-rarity";
+import { sortItems } from "@utils";
 
 const Loot = ({ item: bag }) => {
   const [metaData, setMetaData] = useState(null);
@@ -45,9 +45,11 @@ const Loot = ({ item: bag }) => {
     fetchAttributes();
   }, [bag]);
 
-  let characterImage = `https://api.lootcharacter.com/imgs/bags/${(
+  let chsaracterImage = `https://api.lootcharacter.com/imgs/bags/${(
     "0000" + bag.tokenId
   ).slice(-4)}.png`;
+
+  let characterImage = "/api/image/swag/0/" + bag.tokenId;
 
   return (
     <CardContainer>
@@ -63,15 +65,17 @@ const Loot = ({ item: bag }) => {
               objectFit: "cover"
             }}
           />
-          <Box
-            position="absolute"
-            bottom={0}
-            zIndex={10}
-            height="10%"
-            left={0}
-            right={0}
-            bg="black"
-          />
+          {false && (
+            <Box
+              position="absolute"
+              bottom={0}
+              zIndex={10}
+              height="10%"
+              left={0}
+              right={0}
+              bg="black"
+            />
+          )}
         </CardMedia>
         <CardContent>
           {items.map(attribute => (

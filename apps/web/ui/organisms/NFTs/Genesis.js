@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
-import api from "@api";
-import { parse } from "svg-parser";
 import { Box, Flex, P } from "@ui";
 import {
-  CardContainer,
   CardBody,
-  CardMedia,
+  CardContainer,
   CardContent,
   CardFooter,
-  LootAttribute,
+  CardMedia,
   Greatness,
+  LootAttribute,
   Source
 } from "../NFTCard";
+import { positions, sortItems } from "@utils";
+import { useEffect, useState } from "react";
 
-import { sortItems, positions } from "@utils";
+import api from "@api";
+import { parse } from "svg-parser";
 
 export const orders = [
   "",
@@ -67,43 +67,57 @@ const Genesis = ({ item: bag }) => {
     fetchAttributes();
   }, [bag]);
 
+  let characterImage = "/api/image/swag/2/" + bag.tokenId;
+
   return (
     <CardContainer>
       <CardBody>
         <CardMedia>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            position="absolute"
-            top={0}
-            bottom={0}
-            right={0}
-            left={0}
-          >
-            <Box p={4}>
-              {order ? (
-                <img
-                  src={`/ordersLarge/${orders.indexOf(order)}.png`}
-                  style={{
-                    width: "100%"
-                  }}
-                />
-              ) : (
-                <img
-                  src={`/defaultOrder.png`}
-                  style={{
-                    width: "100%"
-                  }}
-                />
-              )}
-            </Box>
-            <P color="textSecondary" textAlign="center">
-              Genesis Adventurer
-              <br />
-              {order ? order : "of ___"}
-            </P>
-          </Flex>
+          <img
+            src={characterImage}
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              inset: 0,
+              objectFit: "contain"
+            }}
+          />
+          {false && (
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              position="absolute"
+              top={0}
+              bottom={0}
+              right={0}
+              left={0}
+            >
+              <Box p={4}>
+                {order ? (
+                  <img
+                    src={`/ordersLarge/${orders.indexOf(order)}.png`}
+                    style={{
+                      width: "100%"
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={`/defaultOrder.png`}
+                    style={{
+                      width: "100%"
+                    }}
+                  />
+                )}
+              </Box>
+              <P color="textSecondary" textAlign="center">
+                Genesis Adventurer
+                <br />
+                {order ? order : "of ___"}
+              </P>
+            </Flex>
+          )}
         </CardMedia>
         <CardContent>
           {items.map(attribute => (

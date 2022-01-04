@@ -1,36 +1,35 @@
-import { useState, useEffect, useRef } from "react";
-import styled from "@emotion/styled";
-import Link from "next/link";
+import { Box, Flex, Grid, H2, Image, Loader, RadioGroup, Select } from "@ui";
 import {
-  FaEye,
-  FaFilter,
   FaArrowDown,
   FaBars,
-  FaStore,
-  FaInfo,
-  FaSort,
-  FaTwitter,
   FaDiscord,
   FaEthereum,
+  FaEye,
+  FaFilter,
   FaHome,
-  FaSword
+  FaInfo,
+  FaSort,
+  FaStore,
+  FaSword,
+  FaTwitter
 } from "react-icons/fa";
-import { Flex, Box, Grid, Select, Image, Loader, H2, RadioGroup } from "@ui";
-import Header from "@ui/organisms/Header";
-import CollectionStats from "@ui/organisms/CollectionStats";
-import ItemSelector from "@ui/organisms/ItemSelector";
-import NFT from "@ui/organisms/GenericNFT";
-import LootNFT from "@ui/organisms/NFTs/Loot";
-import FilterBar from "@ui/organisms/FilterBar";
+import { useEffect, useRef, useState } from "react";
 
-import { useRouter } from "next/router";
+import CollectionStats from "@ui/organisms/CollectionStats";
+import FilterBar from "@ui/organisms/FilterBar";
+import Header from "@ui/organisms/Header";
+import ItemSelector from "@ui/organisms/ItemSelector";
+import Link from "next/link";
+import LootNFT from "@ui/organisms/NFTs/Loot";
+import NFT from "@ui/organisms/GenericNFT";
 import loot from "../../public/community.png";
+import styled from "@emotion/styled";
+import useBagData from "@hooks/useBags";
 import useCollection from "@hooks/useCollection";
-import useItems from "@hooks/useItems";
 import useContractName from "@hooks/useContractName";
 import useInfiniteScroll from "react-infinite-scroll-hook";
-
-import useBagData from "@hooks/useBags";
+import useItems from "@hooks/useItems";
+import { useRouter } from "next/router";
 
 export const IconButton = ({ icon, ...props }) => (
   <Box
@@ -51,15 +50,15 @@ export const GenericGrid = styled(Box)`
   grid-gap: 24px;
 
   @media (min-width: 920px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
   @media (min-width: 1520px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   }
 
   @media (min-width: 2100px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   }
 `;
 
@@ -81,7 +80,7 @@ const Collection = () => {
     item
   });
 
-  let ItemGrid = collection && collection.loot ? Grid : GenericGrid;
+  let ItemGrid = collection && collection.Item ? Grid : GenericGrid;
   let Item = collection ? collection.Item || NFT : NFT;
 
   const [sentryRef] = useInfiniteScroll({
@@ -267,7 +266,7 @@ const Collection = () => {
           {collection &&
             items.map(item => (
               <Link
-                href={`/collections/${readableName}/${item.id}`}
+                href={`/collections/${item.contract}/${item.id}`}
                 key={item.id}
               >
                 <a>

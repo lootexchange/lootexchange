@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { useDebounce } from "use-debounce";
-import styled from "@emotion/styled";
 import { Box, P } from "@ui";
-import Link from "next/link";
-import { ethers } from "ethers";
-import eth from "../../../ethers";
+import { useEffect, useState } from "react";
+
 import Input from "./SearchInput";
+import Link from "next/link";
+import eth from "../../../ethers";
+import { ethers } from "ethers";
 import { shortenAddress } from "@utils";
+import styled from "@emotion/styled";
+import { useDebounce } from "use-debounce";
 import { useRouter } from "next/router";
 
 const SearchContainer = styled.div`
@@ -35,9 +36,9 @@ const ItemWrapper = styled(Box)`
 `;
 
 const routeMap = {
-  loot: "collections/loot",
-  genesis: "collections/genesisadventurer",
-  mLoot: "collections/more-loot",
+  loot: "collections/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7",
+  genesis: "collections/0x8db687aceb92c66f013e1d614137238cc698fedb",
+  mLoot: "collections/0x1dfe7ca09e99d10835bf73044a23b73fc20623df",
   address: "adventurers",
   item: "items"
 };

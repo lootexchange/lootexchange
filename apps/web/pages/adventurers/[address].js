@@ -1,27 +1,27 @@
+import { Box, Flex, Grid, P, Select } from "@ui";
 import { useEffect, useState } from "react";
-import { Flex, Box, P, Grid, Select } from "@ui";
+
+import AssetItem from "@ui/organisms/NFTs/Asset";
+import { FaEye } from "react-icons/fa";
+import { GenericGrid } from "../collections/[contract]";
+import GenericNFT from "@ui/organisms/GenericNFT";
+import GenesisItem from "@ui/organisms/NFTs/Genesis";
+import Header from "@ui/organisms/Header";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import LootItem from "@ui/organisms/NFTs/Loot";
+import MLootItem from "@ui/organisms/NFTs/mLoot";
 import NFT from "@ui/organisms/NFTs/Loot";
 import Owner from "@ui/organisms/Owner";
-import Header from "@ui/organisms/Header";
 import SynthLootNFT from "@ui/organisms/SynthLootNFT";
-
-import GenesisItem from "@ui/organisms/NFTs/Genesis";
-import MLootItem from "@ui/organisms/NFTs/mLoot";
-import LootItem from "@ui/organisms/NFTs/Loot";
-import GenericNFT from "@ui/organisms/GenericNFT";
-import { GenericGrid } from "../collections/[contract]";
-
-import { FaEye } from "react-icons/fa";
-
-import useWallet from "@hooks/useWallet";
 import useAddressTokens from "@hooks/useAddressTokens";
+import { useRouter } from "next/router";
+import useWallet from "@hooks/useWallet";
 
 const itemMap = {
   genesisadventurer: GenesisItem,
   "more-loot": MLootItem,
-  loot: LootItem
+  loot: LootItem,
+  "genesis-mana": AssetItem
 };
 
 const Adventurer = ({}) => {
@@ -64,7 +64,7 @@ const Adventurer = ({}) => {
           {tokens
             .filter(token => !!itemMap[token.collection])
             .map(loot => {
-              let Item = itemMap[loot.collection] || GenericNFT;
+              let Item = itemMap[loot.collection] || AssetItem;
 
               return (
                 <Link
