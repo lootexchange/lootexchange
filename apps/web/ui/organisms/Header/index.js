@@ -29,6 +29,7 @@ const collections = [
     href: "/collections/genesisadventurer",
     image: "/genesisCollectionLogo-small.png",
   },
+  ,
   {
     label: "Realms",
     href: "/collections/genesisadventurer",
