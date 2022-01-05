@@ -17,18 +17,38 @@ const collections = [
   {
     label: "Loot",
     href: "/collections/loot",
-    image: "/lootCollectionLogo-small.png"
+    image: "/lootCollectionLogo-small.png",
   },
   {
     label: "mLoot",
     href: "/collections/more-loot",
-    image: "/mLootCollectionLogo-small.png"
+    image: "/mLootCollectionLogo-small.png",
   },
   {
     label: "Genesis",
     href: "/collections/genesisadventurer",
-    image: "/genesisCollectionLogo-small.png"
-  }
+    image: "/genesisCollectionLogo-small.png",
+  },
+  {
+    label: "Realms",
+    href: "/collections/genesisadventurer",
+    image: "/genesisCollectionLogo-small.png",
+  },
+  {
+    label: "Rings",
+    href: "/collections/genesisadventurer",
+    image: "/genesisCollectionLogo-small.png",
+  },
+  {
+    label: "Loot Explorers",
+    href: "/collections/genesisadventurer",
+    image: "/genesisCollectionLogo-small.png",
+  },
+  {
+    label: "Genesis Mana",
+    href: "/collections/genesisadventurer",
+    image: "/genesisCollectionLogo-small.png",
+  },
 ];
 
 const Header = () => {
