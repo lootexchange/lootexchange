@@ -150,7 +150,7 @@ export const customCollectionData = {
   },
 
   // Rings
-  lootrings: {
+  "rings-for-loot": {
     cover: "/rings_header.png",
 
     //filterPreference: ["Rarity", "Item"],
@@ -175,7 +175,7 @@ export const customCollectionData = {
   },
 
   // Loot Explorers
-  lootexplorers: {
+  "loot-explorer": {
     cover: "/lootexplorers_header.png",
 
     //filterPreference: ["Rarity", "Item"],

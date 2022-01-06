@@ -328,7 +328,7 @@ const Home = () => {
               />
             </a>
           </Link>
-          <Link href="/collections/lootexplorers">
+          <Link href="/collections/loot-explorer">
             <a>
               <CollectionCard
                 image="/lootexplorers_image.png"
@@ -349,7 +349,7 @@ const Home = () => {
             </a>
           </Link>
 
-          <Link href="/collections/lootrings">
+          <Link href="/collections/rings-for-loot">
             <a>
               <CollectionCard
                 image="/rings_image.png"

@@ -26,12 +26,12 @@ export const nameToContractMap = {
     contract: "0x7AFe30cB3E53dba6801aa0EA647A0EcEA7cBe18d",
   },
 
-  lootexplorers: {
+  "loot-explorer": {
     collection: "lootexplorers",
     contract: "0x508d06B8f3A4B0Fd363239Ce61e0C4b0B82f3626",
   },
 
-  lootrings: {
+  "rings-for-loot": {
     collection: "lootrings",
     contract: "0x73c5013Fa9701425be4a436cA0CeC1C0898e6F14",
   },
