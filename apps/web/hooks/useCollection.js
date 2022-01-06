@@ -105,7 +105,7 @@ export const customCollectionData = {
     //filterPreference: ["Weapon", "Chest", "Order"],
 
     image: "/genesis_mana_icon.png",
-    Item: AssetItem,
+    //Item: AssetItem,
     loot: true,
     //royalty: 0.025,
 
@@ -130,7 +130,7 @@ export const customCollectionData = {
     //filterPreference: ["Rarity", "Item"],
 
     image: "/realms_icon.png",
-    Item: AssetItem,
+    //Item: GenericNFT,
     loot: true,
     hasItemSearch: true,
     //royalty: 0.05,
@@ -156,7 +156,7 @@ export const customCollectionData = {
     //filterPreference: ["Rarity", "Item"],
 
     image: "/rings_icon.png",
-    Item: AssetItem,
+    //Item: AssetItem,
     loot: true,
     hasItemSearch: true,
     //royalty: 0.05,
