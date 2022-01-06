@@ -32,23 +32,23 @@ const collections = [
   ,
   {
     label: "Realms",
-    href: "/collections/genesisadventurer",
-    image: "/genesisCollectionLogo-small.png",
+    href: "/collections/lootrealms",
+    image: "/realms_icon.png",
   },
   {
-    label: "Rings",
-    href: "/collections/genesisadventurer",
-    image: "/genesisCollectionLogo-small.png",
+    label: "Rings (for Loot)",
+    href: "/collections/lootrings",
+    image: "/rings_icon.png",
   },
   {
     label: "Loot Explorers",
-    href: "/collections/genesisadventurer",
-    image: "/genesisCollectionLogo-small.png",
+    href: "/collections/lootexplorers",
+    image: "/lootexplorers_icon.png",
   },
   {
     label: "Genesis Mana",
-    href: "/collections/genesisadventurer",
-    image: "/genesisCollectionLogo-small.png",
+    href: "/collections/genesis-mana",
+    image: "/genesis_mana_icon.png",
   },
 ];
 

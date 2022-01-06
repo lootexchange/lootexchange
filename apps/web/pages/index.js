@@ -331,16 +331,18 @@ const Home = () => {
           <Link href="/collections/lootexplorers">
             <a>
               <CollectionCard
-                image="/lootexplorers.jpeg"
+                image="/lootexplorers_image.png"
                 name={"Loot Explorers"}
-                description={"Loot explorers"}
+                description={
+                  "8000 unique Explorers characters with distinct classes, decked out with Genesis gear."
+                }
               />
             </a>
           </Link>
           <Link href="/collections/genesis-mana">
             <a>
               <CollectionCard
-                image="/mana.png"
+                image="/genesis_mana_image_3.svg"
                 name={"Genesis Mana"}
                 description={"the mana"}
               />
@@ -350,9 +352,11 @@ const Home = () => {
           <Link href="/collections/lootrings">
             <a>
               <CollectionCard
-                image="/rings.png"
-                name={"Rings"}
-                description={"the rings"}
+                image="/rings_image.png"
+                name={"Rings (for Loot)"}
+                description={
+                  "The first and largest 3D interpretation of an entire category in Loot."
+                }
               />
             </a>
           </Link>

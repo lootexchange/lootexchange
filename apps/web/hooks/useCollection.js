@@ -41,7 +41,9 @@ export const customCollectionData = {
       name: "Royalty",
       description: "Royalty goes to Genesis community treasury and founders",
       link: "https://genesisproject.xyz/",
+      // FILL IN address: "",
     },
+
     discord: "https://discord.com/invite/YUYyPSuwfU",
     twitter: "https://twitter.com/genesisloot",
     home: "https://genesisproject.xyz",
@@ -82,7 +84,7 @@ export const customCollectionData = {
       name: "Community Tresury",
       description:
         "Community controlled treasury for funding projects in the lootosphere.",
-      link: "https://royaltydao.loot.exchange",
+      link: "https://royaltydao.com",
       address:
         process.env.NEXT_PUBLIC_CHAIN_ID == 4
           ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
@@ -97,118 +99,103 @@ export const customCollectionData = {
 
   // Genesis-Mana
   "genesis-mana": {
-    cover: "/community.png",
+    cover:
+      "https://lh3.googleusercontent.com/_oDa2m5z64Qf8RXbQFylP7MaDRwUXbJAchbDIFQqlVA8mdZ0feG4JHcMQwrYa7jTesY98RITIAfeAIGgHenvuMuU3zHmM15sRfTfQIE=h600",
 
-    //filterPreference: ["Rarity", "Item"],
+    //filterPreference: ["Weapon", "Chest", "Order"],
 
-    image: "/lootCollectionLogo-medium.png",
+    image: "/genesis_mana_icon.png",
     Item: AssetItem,
     loot: true,
-    hasItemSearch: true,
-    royalty: 0.05,
+    //royalty: 0.025,
 
     royaltyRecipient: {
-      name: "Community Tresury",
-      description:
-        "Community controlled treasury for funding projects in the lootosphere.",
-      link: "https://royaltydao.loot.exchange",
-      address:
-        process.env.NEXT_PUBLIC_CHAIN_ID == 4
-          ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
-          : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18",
+      name: "Royalty",
+      description: "Royalty goes to Genesis community treasury and founders",
+      link: "https://genesisproject.xyz/",
+      // FILL IN address: "",
     },
-    discord: "https://discord.com/invite/KuYyKXam9G",
-    twitter: "https://twitter.com/lootproject",
-    home: "https://lootproject.com",
+
+    discord: "https://discord.com/invite/YUYyPSuwfU",
+    twitter: "https://twitter.com/genesisloot",
+    home: "https://genesisproject.xyz",
     etherscan:
-      "https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7",
+      "https://etherscan.io/token/0xf4b6040a4b1b30f1d1691699a8f3bf957b03e463",
   },
 
   // Realms
   lootrealms: {
-    cover: "/community.png",
+    cover: "/realms_header.svg",
 
     //filterPreference: ["Rarity", "Item"],
 
-    image: "/lootCollectionLogo-medium.png",
+    image: "/realms_icon.png",
     Item: AssetItem,
     loot: true,
     hasItemSearch: true,
-    royalty: 0.05,
+    //royalty: 0.05,
 
     royaltyRecipient: {
-      name: "Community Tresury",
+      name: "Loot Bibliotecha DAO",
       description:
         "Community controlled treasury for funding projects in the lootosphere.",
       link: "https://royaltydao.loot.exchange",
-      address:
-        process.env.NEXT_PUBLIC_CHAIN_ID == 4
-          ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
-          : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18",
+      //address:
     },
-    discord: "https://discord.com/invite/KuYyKXam9G",
-    twitter: "https://twitter.com/lootproject",
-    home: "https://lootproject.com",
+    discord: "https://discord.gg/P5Fm6mkf2g",
+    twitter: "https://twitter.com/LootRealms",
+    home: "https://bibliothecaforloot.com/",
     etherscan:
-      "https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7",
+      "https://etherscan.io/address/0x7afe30cb3e53dba6801aa0ea647a0ecea7cbe18d",
   },
 
   // Rings
   lootrings: {
-    cover: "/community.png",
+    cover: "/rings_header.png",
 
-    filterPreference: ["Rarity", "Item"],
+    //filterPreference: ["Rarity", "Item"],
 
-    image: "/lootCollectionLogo-medium.png",
-    Item: LootItem,
+    image: "/rings_icon.png",
+    Item: AssetItem,
     loot: true,
     hasItemSearch: true,
-    royalty: 0.05,
+    //royalty: 0.05,
 
     royaltyRecipient: {
-      name: "Community Tresury",
-      description:
-        "Community controlled treasury for funding projects in the lootosphere.",
-      link: "https://royaltydao.loot.exchange",
-      address:
-        process.env.NEXT_PUBLIC_CHAIN_ID == 4
-          ? "0x8e71a0d2CC9c48173D9a9b7d90D6036093212aFa"
-          : "0x8cFDF9E9f7EA8c0871025318407A6f1Fbc5d5a18",
+      name: "Rings DAO",
+      description: "Royalty goes to the Rings DAO",
+      //address: "0xE304d4e08D6C64A56EaFf976d8aB3AbdEdf867Ec",
+      //link: "https://royaltydao.com",
     },
-    discord: "https://discord.com/invite/KuYyKXam9G",
-    twitter: "https://twitter.com/lootproject",
-    home: "https://lootproject.com",
+    discord: "https://discord.gg/3cxrS6FbTP",
+    twitter: "https://twitter.com/RingsforLoot",
+    home: "https://rings.market/",
     etherscan:
-      "https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7",
+      "https://etherscan.io/address/0x73c5013fa9701425be4a436ca0cec1c0898e6f14#code",
   },
 
   // Loot Explorers
   lootexplorers: {
-    cover: "/community.png",
+    cover: "/lootexplorers_header.png",
 
-    filterPreference: ["Rarity", "Item"],
+    //filterPreference: ["Rarity", "Item"],
 
-    image: "/lootCollectionLogo-medium.png",
+    image: "/lootexplorers_icon.png",
     Item: LootItem,
     loot: true,
     hasItemSearch: true,
-    royalty: 0.05,
+    //royalty: 0.05,
 
     royaltyRecipient: {
-      name: "Community Tresury",
-      description:
-        "Community controlled treasury for funding projects in the lootosphere.",
-      link: "https://royaltydao.loot.exchange",
-      address:
-        process.env.NEXT_PUBLIC_CHAIN_ID == 4
-          ? "0x1dfe7ca09e99d10835bf73044a23b73fc20623df"
-          : "0x1dfe7ca09e99d10835bf73044a23b73fc20623df",
+      name: "Explorers DAO",
+      //description: "Royalty goes to the Explorers DAO",
+      address: "0xff632d1a9ee6a4109b521adb9503ffef0587b9aa",
     },
-    discord: "https://discord.com/invite/KuYyKXam9G",
-    twitter: "https://twitter.com/lootproject",
-    home: "https://lootproject.com",
+    discord: "https://discord.gg/tkKrY8kYJ4",
+    twitter: "https://twitter.com/LootExplorers",
+    home: "https://lootexplorers.quest/",
     etherscan:
-      "https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7",
+      "https://etherscan.io/address/0x508d06b8f3a4b0fd363239ce61e0c4b0b82f3626",
   },
 };
 
