@@ -9,7 +9,7 @@ import {
   P,
   Pane,
   RadioGroup,
-  Select
+  Select,
 } from "@ui";
 import {
   FaArrowDown,
@@ -23,7 +23,7 @@ import {
   FaSort,
   FaStore,
   FaSword,
-  FaTwitter
+  FaTwitter,
 } from "react-icons/fa";
 import { formatMoney, shortenNumber } from "@utils";
 import { useEffect, useRef, useState } from "react";
@@ -119,7 +119,7 @@ const CollectionCard = ({ image, name, description }) => (
     height={"100%"}
     flexDirection="column"
     sx={{
-      cursor: "pointer"
+      cursor: "pointer",
     }}
   >
     <Box height={0} paddingBottom="100%" w={1} position="relative">
@@ -133,7 +133,7 @@ const CollectionCard = ({ image, name, description }) => (
             bottom: 0,
             left: 0,
             height: "100%",
-            objectFit: "cover"
+            objectFit: "cover",
           }}
         />
       </Box>
@@ -160,7 +160,7 @@ const Home = () => {
 
   const [item, setItem] = useState(null);
   const { items, loading, fetchMore, moreLeft } = useItems({
-    collection: nameToContractMap.loot.collection
+    collection: nameToContractMap.loot.collection,
   });
   const collection = useCollection(nameToContractMap.loot.collection);
 
@@ -328,31 +328,35 @@ const Home = () => {
               />
             </a>
           </Link>
-          <Link href="/collections/loot">
+          <Link href="/collections/loot-explorer">
             <a>
               <CollectionCard
-                image="/lootexplorers.jpeg"
+                image="/lootexplorers_image.png"
                 name={"Loot Explorers"}
-                description={"Loot explorers"}
+                description={
+                  "8000 unique Explorers characters with distinct classes, decked out with Genesis gear."
+                }
               />
             </a>
           </Link>
           <Link href="/collections/genesis-mana">
             <a>
               <CollectionCard
-                image="/mana.png"
+                image="/genesis_mana_image_3.svg"
                 name={"Genesis Mana"}
                 description={"the mana"}
               />
             </a>
           </Link>
 
-          <Link href="/collections/genesisadventurer">
+          <Link href="/collections/rings-for-loot">
             <a>
               <CollectionCard
-                image="/rings.png"
-                name={"Rings"}
-                description={"the rings"}
+                image="/rings_image.png"
+                name={"Rings (for Loot)"}
+                description={
+                  "The first and largest 3D interpretation of an entire category in Loot."
+                }
               />
             </a>
           </Link>
@@ -364,7 +368,7 @@ const Home = () => {
         </H2>
 
         <Grid>
-          {items.slice(0, 6).map(bag => (
+          {items.slice(0, 6).map((bag) => (
             <Link href={`/collections/loot/${bag.id}`} key={bag.id}>
               <a>
                 <NFT item={bag} />

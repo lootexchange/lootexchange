@@ -3,10 +3,9 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3Modal from "web3modal";
 import { shortenAddress } from "@utils";
 
-// could use some love
 class Eth {
   constructor() {
-    this.provider = null;
+    this.provider = ethers.getDefaultProvider();
     this.signer = null;
     this.user = null;
     this.loaded = false;
@@ -32,7 +31,7 @@ class Eth {
       balance,
       avatar,
       address: address.toLocaleLowerCase(),
-      name: ensName || shortenAddress(address)
+      name: ensName || shortenAddress(address),
     };
   }
 
@@ -64,11 +63,11 @@ class Eth {
             pollingInterval: 20000000,
             rpc: {
               1: "https://eth-mainnet.alchemyapi.io/v2/fs4lrnWP8rKa8o1yezUnJsFo4ViE92qI",
-              4: "https://eth-rinkeby.alchemyapi.io/v2/Ps8SftArzLj8bzn10Y64bCc1IouNi99N"
-            }
-          }
-        }
-      } // required
+              4: "https://eth-rinkeby.alchemyapi.io/v2/Ps8SftArzLj8bzn10Y64bCc1IouNi99N",
+            },
+          },
+        },
+      }, // required
     });
 
     if (this.modal.cachedProvider) {
@@ -93,14 +92,14 @@ class Eth {
   }
 
   setupNetworkWatcher(provider) {
-    provider.on("accountsChanged", async accounts => {
+    provider.on("accountsChanged", async (accounts) => {
       await this.setupUser();
       this.setCurrentUser({
-        ...this.user
+        ...this.user,
       });
     });
 
-    provider.on("chainChanged", async chainId => {
+    provider.on("chainChanged", async (chainId) => {
       window.location.reload();
     });
   }

@@ -40,7 +40,7 @@ const routeMap = {
   genesis: "collections/0x8db687aceb92c66f013e1d614137238cc698fedb",
   mLoot: "collections/0x1dfe7ca09e99d10835bf73044a23b73fc20623df",
   address: "adventurers",
-  item: "items"
+  item: "items",
 };
 
 const SearchResults = ({ results, handleSelection }) => {
@@ -50,7 +50,7 @@ const SearchResults = ({ results, handleSelection }) => {
 
   return (
     <SearchContainer>
-      {results.slice(0, 8).map(result => {
+      {results.slice(0, 8).map((result) => {
         return (
           <Link
             key={result.id + result.type}
@@ -67,7 +67,7 @@ const SearchResults = ({ results, handleSelection }) => {
   );
 };
 
-const GlobalSearch = props => {
+const GlobalSearch = (props) => {
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 300);
   const [results, setResults] = useState([]);
@@ -80,18 +80,18 @@ const GlobalSearch = props => {
       let genesis = {
         type: "genesis",
         label: "Genesis Adventurer #" + bagNum,
-        id: bagNum
+        id: bagNum,
       };
 
       return setResults([
         { type: "loot", label: "Loot Bag #" + bagNum, id: bagNum },
-        ...(bagNum > 2540 ? [] : [genesis])
+        ...(bagNum > 2540 ? [] : [genesis]),
       ]);
     }
 
     if (bagNum && bagNum >= 8001 && bagNum < 124411) {
       return setResults([
-        { type: "mLoot", label: "mLoot Bag #" + bagNum, id: bagNum }
+        { type: "mLoot", label: "mLoot Bag #" + bagNum, id: bagNum },
       ]);
     }
 
@@ -100,8 +100,8 @@ const GlobalSearch = props => {
         {
           type: "address",
           label: "Wallet: " + shortenAddress(debouncedQuery),
-          id: debouncedQuery
-        }
+          id: debouncedQuery,
+        },
       ]);
     }
 
@@ -113,8 +113,8 @@ const GlobalSearch = props => {
           {
             type: "address",
             label: "Wallet: " + debouncedQuery,
-            id: address
-          }
+            id: address,
+          },
         ]);
       }
     }
@@ -125,10 +125,10 @@ const GlobalSearch = props => {
     const results = await response.json();
 
     return setResults(
-      results.map(result => ({
+      results.map((result) => ({
         type: "item",
         label: result.name,
-        id: result.id
+        id: result.id,
       }))
     );
 
@@ -141,7 +141,7 @@ const GlobalSearch = props => {
     }
   }, [debouncedQuery]);
 
-  const handleKeyDown = e => {
+  const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       let result = results[0];
 
@@ -156,11 +156,11 @@ const GlobalSearch = props => {
       <Input
         style={{
           borderBottomRightRadius: results.length ? 0 : 10,
-          borderBottomLeftRadius: results.length ? 0 : 10
+          borderBottomLeftRadius: results.length ? 0 : 10,
         }}
         value={query}
         placeholder="Search by bag #, address, or ens"
-        onChange={e => setQuery(e.target.value)}
+        onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
       />
 

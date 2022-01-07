@@ -21,7 +21,7 @@ const itemMap = {
   genesisadventurer: GenesisItem,
   "more-loot": MLootItem,
   loot: LootItem,
-  "genesis-mana": AssetItem
+  "genesis-mana": AssetItem,
 };
 
 const Adventurer = ({}) => {
@@ -44,7 +44,7 @@ const Adventurer = ({}) => {
         </Box>
         <Box>
           <Select
-            onChange={e => setLens(e.target.value)}
+            onChange={(e) => setLens(e.target.value)}
             icon={<FaEye color="rgba(255,255,255,0.9)" />}
           >
             <option value="characters">Character</option>
@@ -62,8 +62,8 @@ const Adventurer = ({}) => {
         <Grid>
           {address && <SynthLootNFT address={address} />}
           {tokens
-            .filter(token => !!itemMap[token.collection])
-            .map(loot => {
+            .filter((token) => !!itemMap[token.collection])
+            .map((loot) => {
               let Item = itemMap[loot.collection] || AssetItem;
 
               return (
@@ -83,8 +83,8 @@ const Adventurer = ({}) => {
         <GenericGrid style={{ marginTop: 24 }}>
           {false &&
             tokens
-              .filter(token => !itemMap[token.collection])
-              .map(loot => {
+              .filter((token) => !itemMap[token.collection])
+              .map((loot) => {
                 let Item = itemMap[loot.collection] || GenericNFT;
 
                 return (
