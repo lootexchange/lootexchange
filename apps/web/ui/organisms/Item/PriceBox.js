@@ -1,12 +1,13 @@
-import { H3, Flex, Box, H2, Image, P, Button, Pane } from "@ui";
-import Link from "next/link";
-import styled from "@emotion/styled";
-import Source from "@ui/organisms/Source";
-import Owner from "@ui/organisms/Owner";
+import { Box, Button, Flex, H2, H3, Image, P, Pane } from "@ui";
+
 import { FaInfoCircle } from "react-icons/fa";
 import { Helpers } from "@lootexchange/sdk";
+import Link from "next/link";
+import Owner from "@ui/organisms/Owner";
+import Source from "@ui/organisms/Source";
 import eth from "../../../ethers";
 import ether from "../../../public/ether.png";
+import styled from "@emotion/styled";
 
 const Container = ({ ...props }) => (
   <Box p={[3, 3, 4]} pt={[0, 0, 0]} bg="rgb(37 34 47)" {...props} />
@@ -80,7 +81,12 @@ const PriceBox = ({ item, owner, collection = {} }) => {
                 if (!eth.signer) {
                   await eth.connect();
                 } else {
-                  await Helpers.Wyvern.cancel(eth.signer, item.sellOrder);
+                  console.log(eth.signer, item.sellOrder);
+                  debugger;
+                  await Helpers.Wyvern.cancel(
+                    eth.signer,
+                    item.sellOrder.custom_data
+                  );
                 }
               }
             }}
