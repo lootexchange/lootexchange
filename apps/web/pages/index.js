@@ -1,47 +1,46 @@
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import styled from "@emotion/styled";
 import {
-  FaEye,
-  FaFilter,
-  FaArrowDown,
-  FaBars,
-  FaStore,
-  FaInfo,
-  FaSort,
-  FaTwitter,
-  FaDiscord,
-  FaEthereum,
-  FaHome,
-  FaSword
-} from "react-icons/fa";
-import {
-  Flex,
   Box,
+  Flex,
   Grid,
-  Select,
-  P,
+  H1,
+  H2,
   Image,
   Loader,
+  P,
   Pane,
-  H2,
-  H1,
-  RadioGroup
+  RadioGroup,
+  Select
 } from "@ui";
-import { formatEther } from "@ethersproject/units";
-import Header from "@ui/organisms/Header";
-import CollectionStats from "@ui/organisms/CollectionStats";
-import ItemSelector from "@ui/organisms/ItemSelector";
-import NFT from "@ui/organisms/NFTs/Loot";
-import loot from "../public/community.png";
-import useInfiniteScroll from "react-infinite-scroll-hook";
-import useExchangeRate from "@hooks/useExchangeRate";
+import {
+  FaArrowDown,
+  FaBars,
+  FaDiscord,
+  FaEthereum,
+  FaEye,
+  FaFilter,
+  FaHome,
+  FaInfo,
+  FaSort,
+  FaStore,
+  FaSword,
+  FaTwitter
+} from "react-icons/fa";
 import { formatMoney, shortenNumber } from "@utils";
-import { useEtherBalance } from "@usedapp/core";
-import useCollection from "@hooks/useCollection";
+import { useEffect, useRef, useState } from "react";
 
+import CollectionStats from "@ui/organisms/CollectionStats";
+import Header from "@ui/organisms/Header";
+import ItemSelector from "@ui/organisms/ItemSelector";
+import Link from "next/link";
+import NFT from "@ui/organisms/NFTs/Loot";
+import { formatEther } from "@ethersproject/units";
+import loot from "../public/community.png";
 import { nameToContractMap } from "@hooks/useContractName";
-
+import styled from "@emotion/styled";
+import useCollection from "@hooks/useCollection";
+import { useEtherBalance } from "@usedapp/core";
+import useExchangeRate from "@hooks/useExchangeRate";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 import useItems from "../hooks/useItems";
 
 const IconButton = ({ icon, ...props }) => (
@@ -290,7 +289,7 @@ const Home = () => {
                 image="/genesis.png"
                 name={"Genesis"}
                 description={
-                  "The 2,540 champions of the loot ancentral orders."
+                  "The 2,540 champions of the loot ancestral orders."
                 }
               />
             </a>
